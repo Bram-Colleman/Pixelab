@@ -1,4 +1,9 @@
-<?php  ?>
+<?php
+include_once (__DIR__ . '/classes/Db.php');
+
+$conn = Db::getConnection();
+
+?>
 <!doctype html>
 <html lang="en">
 <head>
