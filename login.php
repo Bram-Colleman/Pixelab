@@ -1,7 +1,13 @@
 <?php
-include_once (__DIR__ . '/classes/Db.php');
+//include_once (__DIR__ . '/classes/Db.php');
+include_once(__DIR__."/classes/User.php");
 
-$conn = Db::getConnection();
+//$conn = Db::getConnection();
+
+if(!empty($_POST)){
+    $user = new User();
+    $user->canLogin($_POST['email'], $_POST['password']);
+}
 
 ?>
 <!doctype html>
