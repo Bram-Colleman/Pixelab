@@ -3,8 +3,8 @@
 include_once(__DIR__."/Db.php");
 
 class User {
-
     public function login($email, $password){
+        
         function canLogin($email, $password){
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
@@ -13,10 +13,10 @@ class User {
             // get user connected to email
             $user = $statement->fetch();
             if(!$user){
-                return false;
+                throw new Exception('This user does not exist');
             }
             //verify password
-            
+
             // WHEN SIGNUP IS ADD, USE THIS CODE
             /*
             $hash =  $user["password"];
@@ -36,16 +36,16 @@ class User {
             }
             // --------------------------------------
         }
-
+    
         if(canLogin($email, $password)){
-            echo "we can login";
             // login
             session_start();
             $_SESSION["email"] = $email;
             header("Location: profile.php");
         }else{
-            //error
+            throw new Exception('Incorrect password');
         }
+
     }
 
 }
