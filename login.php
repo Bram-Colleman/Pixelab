@@ -6,7 +6,7 @@ include_once(__DIR__."/classes/User.php");
 
 if(!empty($_POST)){
     $user = new User();
-    $user->canLogin($_POST['email'], $_POST['password']);
+    $user->login($_POST['email'], $_POST['password']);
 }
 
 ?>
