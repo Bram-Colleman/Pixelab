@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!--    <link rel="stylesheet" href="./styles/style.css">-->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
-    <title>Login</title>
+    <title>Upload Post</title>
 </head>
 <body class="login-body">
 <div class="background-overlay"></div>

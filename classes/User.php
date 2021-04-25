@@ -3,9 +3,58 @@
 include_once(__DIR__."/Db.php");
 
 class User {
+    private $username;
+    private $email;
+    private $bio;
+    private $avatar;
+
+    public function __construct($username, $email, $bio = null , $avatar = null )
+    {
+        $this->username = $username;
+        $this->email = $email;
+        $this->bio = $bio;
+        $this->avatar = $avatar;
+    }
+
+    public function fetchUser() {
+
+    }
+    public function getUsername()
+    {
+        return $this->username;
+    }
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    public function getBio()
+    {
+        return $this->bio;
+    }
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setUsername($username): void
+    {
+        $this->username = $username;
+    }
+    public function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+    public function setBio($bio): void
+    {
+        $this->bio = $bio;
+    }
+    public function setAvatar($avatar): void
+    {
+        $this->avatar = $avatar;
+    }
 
     public function login($email, $password){
-        
+
         function canLogin($email, $password){
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
@@ -37,16 +86,15 @@ class User {
             }
             // --------------------------------------
         }
-    
+
         if(canLogin($email, $password)){
             // login
             session_start();
             $_SESSION["email"] = $email;
-            header("Location: profile.php");
+            header("Location: feed.php");
         }else{
             throw new Exception('Incorrect password');
         }
-
     }
 
 }

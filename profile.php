@@ -10,7 +10,7 @@ include_once("nav.php");
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!--    <link rel="stylesheet" href="./styles/style.css">-->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
-    <title>Login</title>
+    <title>Profile</title>
 </head>
 <body class="login-body">
 <div class="background-overlay"></div>
@@ -63,10 +63,6 @@ include_once("nav.php");
         </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-    <div class="login-card">
-        <p>Don't have an account? <a href="#" class="register-link">Register.</a></p>
-    </div>
         </div>
 
     </div>
