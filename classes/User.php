@@ -3,6 +3,7 @@
 include_once(__DIR__."/Db.php");
 
 class User {
+
     public function login($email, $password){
         
         function canLogin($email, $password){
