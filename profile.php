@@ -1,73 +1,99 @@
 <?php
 include_once("nav.php");
+include_once(__DIR__ . "/classes/User.php");
+
+try {
+    session_start();
+    $user = User::fetchUser($_SESSION['email']);
+} catch (Exception $e) {
+    $error = $e->getMessage();
+}
+
+if (!empty($_POST)) {
+    if (!empty($user)) {
+        $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email']);
+        header('Location: feed.php');
+    }
+}
+
+
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--    <link rel="stylesheet" href="./styles/style.css">-->
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
-    <title>Profile</title>
-</head>
-<body class="login-body">
-<div class="background-overlay"></div>
-<div class="flexbox">
-    <img class="avatar rounded-circle" src="./images/blank_avatar.png" alt="avatar">
-    <div class="login-card">
-<!--        <form method="post" action class="login-form">-->
-<!--            <input name="email" value="email@email.com" type="email" required autofocus class="login-field"/>-->
-<!--            <input name="username" value="Username" type="text" required autofocus class="login-field"/>-->
-<!--            <input name="bio" value="bio" type="text" required autofocus class="login-field"/>-->
-<!--            <input name="oldPassword" placeholder="oldPassword" type="password" required class="login-field"/>-->
-<!--            <input name="newPassword" placeholder="newPassword" type="password" required class="login-field"/>-->
-<!--            <input name="login" type="submit" value="Log in" class="login-button"/>-->
-<!--        </form>-->
-        <div style="width: 50%; padding-left: 10%">
+<?php if (!empty($user)) : ?>
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="styles/bootstrap.min.css">
 
-        <form >
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label for="inputUsername" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="inputUsername" value="Test" name="username">
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label for="inputBio" class="form-label">Bio</label>
-                        <input type="text" class="form-control" id="inputBio" value="Bio" name="bio">
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label for="inputEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="inputEmail" value="test@test.be" name="email">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="inputOldPassword" class="form-label">Old Password</label>
-                        <input type="password" class="form-control" id="inputOldPassword" name="oldPassword">
-                    </div>
-                </div>
-                <div class="col-md-6 ">
-                    <div class="mb-3">
-                        <label for="inputNewPassword" class="form-label">Old Password</label>
-                        <input type="password" class="form-control" id="inputNewPassword" name="newPassword">
-                    </div>
-                </div>
+        <title>Profile</title>
+    </head>
+    <body>
 
+    <div class="flexbox">
+        <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-12">
+                            <img class="avatar rounded-circle" src="./images/blank_avatar.png" alt="avatar"
+                                 style="width: 75%">
+                        </div>
+                    </div>
+                    <div class="col col-md-6">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="inputUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="inputUsername"
+                                       value="<?php echo $user->getUsername(); ?>" name="username">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="inputBio" class="form-label">Bio</label>
+                                <input type="text" class="form-control" id="inputBio"
+                                       value="<?php echo $user->getBio(); ?>" name="bio">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="inputEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="inputEmail"
+                                       value="<?php echo $user->getEmail(); ?>" name="email">
+                            </div>
+                        </div>
+                        <!--                                    <div class="col-md-12">-->
+                        <!--                                        <div class="mb-3">-->
+                        <!--                                            <label for="inputOldPassword" class="form-label">Password</label>-->
+                        <!--                                            <input type="password" class="form-control" id="inputOldPassword" name="oldPassword">-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                    <div class="col-md-6 ">-->
+                        <!--                                        <div class="mb-3">-->
+                        <!--                                            <label for="inputNewPassword" class="form-label">New Password</label>-->
+                        <!--                                            <input type="password" class="form-control" id="inputNewPassword" name="newPassword">-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <input type="submit" class="btn btn-primary" value="Update profile">
+                    </div>
+                </div>
+            </form>
         </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        </div>
+
 
     </div>
 
-</div>
-
-</body>
-</html>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    </body>
+    </html>
+<?php endif; ?>
