@@ -37,33 +37,34 @@ if (!empty($_POST)) {
             <form method="post">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="col-12">
-                            <img class="avatar rounded-circle" src="./images/blank_avatar.png" alt="avatar"
-                                 style="width: 75%">
-                        </div>
+                        <label for="file-input">
+                            <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 75%;" role='button'/>
+                        </label>
+                        <input id="file-input" type="file" style="display: none"/>
                     </div>
                     <div class="col col-md-6">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="inputUsername" class="form-label">Username</label>
+                                <label for="inputUsername" class="form-label fw-bold">Username</label>
                                 <input type="text" class="form-control" id="inputUsername"
                                        value="<?php echo $user->getUsername(); ?>" name="username">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="inputBio" class="form-label">Bio</label>
+                                <label for="inputBio" class="form-label fw-bold">Bio</label>
                                 <input type="text" class="form-control" id="inputBio"
                                        value="<?php echo $user->getBio(); ?>" name="bio">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="inputEmail" class="form-label">Email</label>
+                                <label for="inputEmail" class="form-label fw-bold">Email</label>
                                 <input type="email" class="form-control" id="inputEmail"
                                        value="<?php echo $user->getEmail(); ?>" name="email">
                             </div>
                         </div>
+
                         <!--                                    <div class="col-md-12">-->
                         <!--                                        <div class="mb-3">-->
                         <!--                                            <label for="inputOldPassword" class="form-label">Password</label>-->

@@ -33,7 +33,7 @@ if (!empty($_POST)) {
         <?php if (isset($error)): ?>
             <p><?php echo $error ?></p>
         <?php endif; ?>
-        <form method="post" action class="login-form">
+        <form method="post" class="login-form">
             <input name="email" placeholder="Email" type="email" required autofocus class="login-field"/>
             <input name="password" placeholder="Password" type="password" required class="login-field"/>
             <input name="login" type="submit" value="Log in" class="login-button"/>
