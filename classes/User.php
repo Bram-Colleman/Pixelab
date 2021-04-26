@@ -1,23 +1,34 @@
 <?php
 
-include_once(__DIR__."/Db.php");
+include_once(__DIR__ . "/Db.php");
 
-class User {
+class User
+{
     private $username;
     private $email;
     private $bio;
     private $avatar;
 
-    public function __construct($username, $email, $bio = null , $avatar = null )
+    public function __construct($username = null, $email = null, $bio = null, $avatar = null)
     {
-        $this->username = $username;
-        $this->email = $email;
-        $this->bio = $bio;
-        $this->avatar = $avatar;
+        $this->setUsername($username);
+        $this->setEmail($email);
+        $this->setBio($bio);
+        $this->setAvatar($avatar);
     }
 
-    public function fetchUser() {
+    public static function fetchUser($email)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
 
+        $user = $statement->fetch();
+        if (!$user) {
+            throw new Exception('This user does not exist');
+        }
+        return new User($user['username'], $user['email'], $user['bio'], $user['avatar']);
     }
     public function getUsername()
     {
@@ -36,6 +47,17 @@ class User {
         return $this->avatar;
     }
 
+    public function updateUser($username, $bio, $email)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail WHERE email = :email");
+        $statement->bindValue(":username", $username);
+        $statement->bindValue(":bio", $bio);
+        $statement->bindValue(":newEmail", $email);
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->execute();
+
+    }
     public function setUsername($username): void
     {
         $this->username = $username;
@@ -53,16 +75,17 @@ class User {
         $this->avatar = $avatar;
     }
 
-    public function login($email, $password){
-
-        function canLogin($email, $password){
+    public function login($email, $password)
+    {
+        function canLogin($email, $password)
+        {
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
             $statement->bindValue(":email", $email);
             $statement->execute();
             // get user connected to email
             $user = $statement->fetch();
-            if(!$user){
+            if (!$user) {
                 throw new Exception('This user does not exist');
             }
             //verify password
@@ -79,20 +102,20 @@ class User {
             // --------------------------------------
 
             // TO TEST DUMMY DATA, I ADDED THIS CODE
-            if($password === $user["password"]){
+            if ($password === $user["password"]) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
             // --------------------------------------
         }
 
-        if(canLogin($email, $password)){
+        if (canLogin($email, $password)) {
             // login
             session_start();
             $_SESSION["email"] = $email;
             header("Location: feed.php");
-        }else{
+        } else {
             throw new Exception('Incorrect password');
         }
     }
