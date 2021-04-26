@@ -11,8 +11,7 @@ try {
 
 if (!empty($_POST)) {
     if (!empty($user)) {
-        $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email']);
-        header('Location: feed.php');
+        $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword']);
     }
 }
 
@@ -27,11 +26,21 @@ if (!empty($_POST)) {
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="styles/bootstrap.min.css">
-
         <title>Profile</title>
     </head>
     <body>
-
+    <?php
+    if (!empty($_POST)):
+        if ($_POST['password'] != $user->getPassword()): ?>
+            <div class="container-fluid w-25 pt-1 text-center">
+                <div class="alert alert-danger" id="invalidPassword" role="alert">
+                    Incorrect password.
+                </div>
+            </div>
+    <?php
+    endif;
+        endif;
+    ?>
     <div class="flexbox">
         <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
             <form method="post">
@@ -40,7 +49,7 @@ if (!empty($_POST)) {
                         <label for="file-input">
                             <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 75%;" role='button'/>
                         </label>
-                        <input id="file-input" type="file" style="display: none"/>
+                        <input id="file-input" type="file" name="avatar" style="display: none"/>
                     </div>
                     <div class="col col-md-6">
                         <div class="col-md-12">
@@ -64,19 +73,20 @@ if (!empty($_POST)) {
                                        value="<?php echo $user->getEmail(); ?>" name="email">
                             </div>
                         </div>
-
-                        <!--                                    <div class="col-md-12">-->
-                        <!--                                        <div class="mb-3">-->
-                        <!--                                            <label for="inputOldPassword" class="form-label">Password</label>-->
-                        <!--                                            <input type="password" class="form-control" id="inputOldPassword" name="oldPassword">-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                    <div class="col-md-6 ">-->
-                        <!--                                        <div class="mb-3">-->
-                        <!--                                            <label for="inputNewPassword" class="form-label">New Password</label>-->
-                        <!--                                            <input type="password" class="form-control" id="inputNewPassword" name="newPassword">-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="inputOldPassword" class="form-label fw-bold">Current Password <span style="color: red;">*</span></label>
+                                    <input type="password" class="form-control" id="inputOldPassword" name="oldPassword" required>
+                                </div>
+                            </div>
+<!--                            <div class="col-md-6">-->
+<!--                                <div class="mb-3">-->
+<!--                                    <label for="inputNewPassword" class="form-label fw-bold">New Password</label>-->
+<!--                                    <input type="password" class="form-control" id="inputNewPassword" name="newPassword">-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
                         <input type="submit" class="btn btn-primary" value="Update profile">
                     </div>
                 </div>

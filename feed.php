@@ -57,6 +57,16 @@ $posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
                 <span>151.515 likes</span>
             </div>
         </div>
+        <!--    Description:-->
+        <div class="row" style="padding-top: .5rem">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <span><strong>Username </strong></span><span>Description</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--    comments:-->
         <div class="row" style="padding-top: .5rem">
             <div class="col-12">

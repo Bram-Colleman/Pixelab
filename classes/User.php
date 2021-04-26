@@ -8,13 +8,15 @@ class User
     private $email;
     private $bio;
     private $avatar;
+    private $password;
 
-    public function __construct($username = null, $email = null, $bio = null, $avatar = null)
+    public function __construct($username = null, $email = null, $bio = null, $avatar = null, $password = null)
     {
         $this->setUsername($username);
         $this->setEmail($email);
         $this->setBio($bio);
         $this->setAvatar($avatar);
+        $this->setPassword($password);
     }
 
     public static function fetchUser($email)
@@ -28,7 +30,7 @@ class User
         if (!$user) {
             throw new Exception('This user does not exist');
         }
-        return new User($user['username'], $user['email'], $user['bio'], $user['avatar']);
+        return new User($user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
     }
     public function getUsername()
     {
@@ -46,33 +48,46 @@ class User
     {
         return $this->avatar;
     }
-
-    public function updateUser($username, $bio, $email)
+    public function getPassword()
     {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail WHERE email = :email");
-        $statement->bindValue(":username", $username);
-        $statement->bindValue(":bio", $bio);
-        $statement->bindValue(":newEmail", $email);
-        $statement->bindValue(":email", $this->getEmail());
-        $statement->execute();
-
+        return $this->password;
     }
-    public function setUsername($username): void
+
+
+    public function updateUser($username, $bio, $email, $password)
+    {
+        if ($password === $this->getPassword()){
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail WHERE email = :email");
+            $statement->bindValue(":username", $username);
+            $statement->bindValue(":bio", $bio);
+            $statement->bindValue(":newEmail", $email);
+            $statement->bindValue(":email", $this->getEmail());
+            $statement->execute();
+
+            header('Location: feed.php');
+
+        }
+    }
+    private function setUsername($username): void
     {
         $this->username = $username;
     }
-    public function setEmail($email): void
+    private function setEmail($email): void
     {
         $this->email = $email;
     }
-    public function setBio($bio): void
+    private function setBio($bio): void
     {
         $this->bio = $bio;
     }
-    public function setAvatar($avatar): void
+    private function setAvatar($avatar): void
     {
         $this->avatar = $avatar;
+    }
+    private function setPassword($password): void
+    {
+        $this->password = $password;
     }
 
     public function login($email, $password)
