@@ -1,7 +1,8 @@
 <?php
 include_once("nav.php");
+include_once(__DIR__."/classes/Post.php");
 
-$posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+$posts = Post::fetchRecentPosts();
 ?>
 
 <!doctype html>
@@ -19,6 +20,7 @@ $posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 <script src="https://use.fontawesome.com/2dd2522a24.js"></script>
 
 <?php foreach ($posts as $post): ?>
+
     <div class="container-fluid shadow-sm"
          style="width: 35%; padding-top: 1rem; padding-bottom: 1rem; margin-top: 1.5rem;">
         <!--    username and avatar:-->
@@ -27,7 +29,7 @@ $posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
                 <img src="./images/blank_avatar.png" alt="" class="rounded-circle" style="height: 75%">
             </div>
             <div class="col-11" style="align-self: center">
-                <strong>Username</strong>
+                <strong><?php echo $post->getUser(); ?></strong>
             </div>
         </div>
         <!--    post:-->
@@ -54,7 +56,7 @@ $posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
         </div>
         <div class="row" style="padding-top: .5rem">
             <div class="col-12">
-                <span>151.515 likes</span>
+                <span><?php echo sizeof($post->getLikes()); ?> likes</span>
             </div>
         </div>
         <!--    Description:-->
@@ -62,7 +64,7 @@ $posts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
             <div class="col-12">
                 <div class="row">
                     <div class="col-12">
-                        <span><strong>Username </strong></span><span>Description</span>
+                        <span><strong><?php echo $post->getUser(); ?> </strong></span><span><?php echo $post->getDescription();?></span>
                     </div>
                 </div>
             </div>
