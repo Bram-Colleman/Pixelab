@@ -80,7 +80,7 @@ class Uploader {
             }
         }
 
-        if ($_FILES["avatar"]["size"] > 500000) {
+        if ($_FILES["avatar"]["size"] > 2000000) {
             $this->setUploadOk(2);
         }
 
@@ -135,7 +135,7 @@ class Uploader {
             }
         }
 
-        if ($_FILES["postImage"]["size"] > 500000) {
+        if ($_FILES["postImage"]["size"] > 2000000) {
             $this->setUploadOk(2);
         }
 
