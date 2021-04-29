@@ -126,8 +126,10 @@ class User
         }
 
         if (canLogin($email, $password)) {
+            $user = $this::fetchUser($email);
             // login
             session_start();
+            $_SESSION['user'] = $user->getUsername();
             $_SESSION["email"] = $email;
             header("Location: feed.php");
         } else {
