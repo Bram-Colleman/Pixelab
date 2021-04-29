@@ -12,7 +12,7 @@
         $uploader = new Uploader($_SESSION['user']);
         try {
             Post::uploadPost(User::fetchUserByUsername($_SESSION['user'])->getId(), $uploader->uploadPostImage(), $_POST['description']);
-//            $uploader->uploadPostImage();
+            header("Location: feed.php");
         } catch (Exception $e) {
             $error = $e->getMessage();
         }

@@ -145,24 +145,6 @@ class Uploader {
 
         move_uploaded_file($_FILES["postImage"]["tmp_name"], $this->getTargetFile());
 
-//        switch ($this->getUploadOk()) {
-//            case 0:
-//                if (move_uploaded_file($_FILES["postImage"]["tmp_name"], $this->getTargetFile())) {
-//                    $this->setUploadOk(0);
-//                } else {
-//                    $this->setUploadOk(1);
-//                }
-//                break;
-//            case 1:
-//                $this->setUploadOk(1);
-//                break;
-//            case 2:
-//                $this->setUploadOk(2);
-//                break;
-//            case 3:
-//                $this->setUploadOk(3);
-//                break;
-//        }
         return $fileName;
     }
 }
