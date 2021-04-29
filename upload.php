@@ -1,13 +1,14 @@
 <?php
 include_once("nav.php");
-include_once(__DIR__ . "/classes/Db.php");
 include_once (__DIR__ . "/classes/User.php");
 include_once(__DIR__ . "/classes/Uploader.php");
 
 if (!empty($_POST)) {
-    session_start();
-    $upload = new Uploader($_SESSION['user']);
-    $upload->uploadAvatar();
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+    $uploader = new Uploader($_SESSION['user']);
+    $uploader->uploadAvatar();
 }
 
 ?>
@@ -24,7 +25,7 @@ if (!empty($_POST)) {
 </head>
 <body>
 <div class="text-center">
-    <?php if ($upload->getUploadOk() == 0) : ?>
+    <?php if ($uploader->getUploadOk() == 0) : ?>
         <img class="icon" src="images/confirmation_icon.svg" alt="confirmation icon">
         <p>Your profile settings have been changed!</p>
         <p class="lead">
@@ -32,7 +33,7 @@ if (!empty($_POST)) {
         </p>
     <?php endif; ?>
 
-    <?php if ($upload->getUploadOk() == 1) : ?>
+    <?php if ($uploader->getUploadOk() == 1) : ?>
         <img class="icon" src="images/error_icon.svg" alt="confirmation icon">
         <p>File is not an image!</p>
         <p class="lead">
@@ -40,7 +41,7 @@ if (!empty($_POST)) {
         </p>
     <?php endif; ?>
 
-    <?php if ($upload->getUploadOk() == 2) : ?>
+    <?php if ($uploader->getUploadOk() == 2) : ?>
         <img class="icon" src="images/error_icon.svg" alt="confirmation icon">
         <p>File is too large like my cock!</p>
         <p class="lead">
@@ -48,7 +49,7 @@ if (!empty($_POST)) {
         </p>
     <?php endif; ?>
 
-    <?php if ($upload->getUploadOk() == 3) : ?>
+    <?php if ($uploader->getUploadOk() == 3) : ?>
         <img class="icon" src="images/error_icon.svg" alt="confirmation icon">
         <p>Only JPG, JPEG or PNG files are allowed!</p>
         <p class="lead">
