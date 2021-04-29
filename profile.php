@@ -31,7 +31,7 @@ if (!empty($_POST)) {
     <body>
     <?php
     if (!empty($_POST)):
-        if ($_POST['password'] != $user->getPassword()): ?>
+        if ($_POST['oldPassword'] != $user->getPassword()): ?>
             <div class="container-fluid w-25 pt-1 text-center">
                 <div class="alert alert-danger" id="invalidPassword" role="alert">
                     Incorrect password.
@@ -43,7 +43,7 @@ if (!empty($_POST)) {
     ?>
     <div class="flexbox">
         <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
-            <form method="post">
+            <form action="upload.php" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
                         <label for="file-input">
