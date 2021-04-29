@@ -59,7 +59,14 @@ try {
             <!--    post:-->
             <div class="row">
                 <div class="col-12 text-center">
-                    <img src="./images/blank_post.jpg" alt="" style="width: 100%">
+                    <?php if (!empty($post)) {
+                        if (!empty($post->getImage())) : ?>
+<!--                            <img src="./uploads/avatars/--><?php //echo $user->getAvatar();?><!--" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>-->
+                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="width: 100%">
+                        <?php else: ?>
+                            <img src="./images/blank_post.jpg" alt="" style="width: 100%">
+                        <?php endif;
+                    } ?>
                 </div>
             </div>
             <!--    action buttons:-->

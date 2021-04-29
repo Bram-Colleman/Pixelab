@@ -47,7 +47,7 @@
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="inputDescription" class="form-label">Description</label>
-                            <textarea class="form-control" style="height: 15rem;" id="inputDescription" name="description"></textarea>
+                            <textarea class="form-control" style="height: 15rem;" id="inputDescription" name="description" required></textarea>
                         </div>
                     </div>
 
