@@ -3,10 +3,13 @@ include_once("nav.php");
 include_once(__DIR__ . "/classes/User.php");
 
 try {
+
     if(!isset($_SESSION)) {
         session_start();
     }
-    $user = User::fetchUser($_SESSION['email']);
+
+    $user = User::fetchUserByEmail($_SESSION['email']);
+
 } catch (Exception $e) {
     $error = $e->getMessage();
 }
@@ -55,9 +58,9 @@ if (!empty($_POST)) {
                         <label for="file-input">
                             <?php if (!empty($user)) : ?>
                                 <?php if (!empty($user->getAvatar())) : ?>
-                                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="width: 20rem;" role='button' alt=""/>
+                                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
                                 <?php else: ?>
-                                    <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 20rem;" role='button' alt=""/>
+                                    <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </label>
