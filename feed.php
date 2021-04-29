@@ -70,20 +70,24 @@ $posts = Post::fetchRecentPosts();
             </div>
         </div>
         <!--    comments:-->
-        <div class="row" style="padding-top: .5rem">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <span><strong>Username</strong></span>
+        <?php if (!empty($post->getComments())): ?>
+            <?php foreach ($post->getComments() as $comment) : ?>
+            <div class="row" style="padding-top: .5rem">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <span><strong><?php echo $comment['username'];?></strong></span>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <span>Comment</span>
+                    <div class="row">
+                        <div class="col-12">
+                            <span><?php echo $comment['content'];?></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 <?php endforeach; ?>
 

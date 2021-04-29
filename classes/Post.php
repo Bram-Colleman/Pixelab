@@ -8,14 +8,16 @@ include_once(__DIR__ . "/Db.php");
      private $description;
      private $timestamp;
      private $likes = array();
+     private $comments = array();
 
-     public function __construct($user = null, $image = null, $description = null, $timestamp = null, $likes = null)
+     public function __construct($user = null, $image = null, $description = null, $timestamp = null, $likes = null, $comments = null)
      {
          $this->setUser($user);
          $this->setImage($image);
          $this->setDescription($description);
          $this->setTimestamp($timestamp);
          $this->setLikes($likes);
+         $this->setComments($comments);
      }
 
 
@@ -31,8 +33,9 @@ include_once(__DIR__ . "/Db.php");
          }
          $recentPosts = Array();
          $postLikes = Array();
-         $i=0;
+         $postComments = Array();
          foreach ($posts as $post) {
+             //likes
             $statement = $conn->prepare("SELECT username FROM post_likes pl JOIN users u ON u.id = pl.user_id WHERE post_id = :postId");
             $statement->bindValue(":postId", $post['id']);
             $statement->execute();
@@ -43,8 +46,21 @@ include_once(__DIR__ . "/Db.php");
                 }
             }
 
-            array_push($recentPosts, new Post($post['username'], $post['image'], $post['description'], $post['timestamp'], $postLikes));
+            //comments
+             $statement = $conn->prepare("SELECT u.username, c.content FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
+             $statement->bindValue(":postId", $post['id']);
+             $statement->execute();
+             $fetchedComments = $statement->fetchAll();
+             if (!empty($fetchedComments)){
+                 foreach ($fetchedComments as $fetchedComment){
+                     array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content']));
+                 }
+             }
+
+             //all posts
+            array_push($recentPosts, new Post($post['username'], $post['image'], $post['description'], $post['timestamp'], $postLikes, $postComments));
             $postLikes = Array();
+            $postComments = Array();
          }
          return $recentPosts;
 
@@ -71,6 +87,10 @@ include_once(__DIR__ . "/Db.php");
      {
          return $this->likes;
      }
+     public function getComments(): array
+     {
+         return $this->comments;
+     }
 
 
      private function setUser($user): void
@@ -92,6 +112,10 @@ include_once(__DIR__ . "/Db.php");
      public function setLikes(array $likes): void
      {
          $this->likes = $likes;
+     }
+     public function setComments(array $comments): void
+     {
+         $this->comments = $comments;
      }
 
 
