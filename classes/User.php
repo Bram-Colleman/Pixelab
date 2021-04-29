@@ -21,7 +21,7 @@ class User
         $this->setPassword($password);
     }
 
-    public static function fetchUser($email)
+    public static function fetchUserByEmail($email)
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
@@ -34,6 +34,20 @@ class User
         }
         return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
     }
+    public static function fetchUserByUsername($username)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+
+        $user = $statement->fetch();
+        if (!$user) {
+            throw new Exception('This user does not exist');
+        }
+        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+    }
+
     public function getId()
     {
         return $this->id;
@@ -142,7 +156,7 @@ class User
         }
 
         if (canLogin($email, $password)) {
-            $user = $this::fetchUser($email);
+            $user = $this::fetchUserByEmail($email);
             // login
             session_start();
             $_SESSION['user'] = $user->getUsername();
