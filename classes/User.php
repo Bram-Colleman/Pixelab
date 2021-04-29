@@ -4,14 +4,16 @@ include_once(__DIR__ . "/Db.php");
 
 class User
 {
+    private $id;
     private $username;
     private $email;
     private $bio;
     private $avatar;
     private $password;
 
-    public function __construct($username = null, $email = null, $bio = null, $avatar = null, $password = null)
+    public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null)
     {
+        $this->setId($id);
         $this->setUsername($username);
         $this->setEmail($email);
         $this->setBio($bio);
@@ -30,7 +32,11 @@ class User
         if (!$user) {
             throw new Exception('This user does not exist');
         }
-        return new User($user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+    }
+    public function getId()
+    {
+        return $this->id;
     }
     public function getUsername()
     {
@@ -58,16 +64,26 @@ class User
     {
         if ($password === $this->getPassword()){
             $conn = Db::getConnection();
-            $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail WHERE email = :email");
+            $statement = $conn->prepare("SELECT COUNT(*) FROM users WHERE id != :id AND (email = :email OR username = :username)");
+            $statement->bindValue(":id", $this->getId());
+            $statement->bindValue(":email", $email);
             $statement->bindValue(":username", $username);
-            $statement->bindValue(":bio", $bio);
-            $statement->bindValue(":newEmail", $email);
-            $statement->bindValue(":email", $this->getEmail());
             $statement->execute();
-
-            header('Location: feed.php');
-
+            $check = $statement->fetch()['COUNT(*)'];
+            if ($check == 0) {
+                $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail WHERE email = :email");
+                $statement->bindValue(":username", $username);
+                $statement->bindValue(":bio", $bio);
+                $statement->bindValue(":newEmail", $email);
+                $statement->bindValue(":email", $this->getEmail());
+                $statement->execute();
+                header('Location: feed.php');
+            }
         }
+    }
+    private function setId($id): void
+    {
+        $this->id = $id;
     }
     private function setUsername($username): void
     {

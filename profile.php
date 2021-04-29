@@ -29,18 +29,22 @@ if (!empty($_POST)) {
         <title>Profile</title>
     </head>
     <body>
-    <?php
-    if (!empty($_POST)):
-        if ($_POST['oldPassword'] != $user->getPassword()): ?>
+    <?php if (!empty($_POST)): ?>
+        <?php if ($_POST['oldPassword'] != $user->getPassword()): ?>
+
             <div class="container-fluid w-25 pt-1 text-center">
                 <div class="alert alert-danger" id="invalidPassword" role="alert">
                     Incorrect password.
                 </div>
             </div>
-    <?php
-    endif;
-        endif;
-    ?>
+        <?php  else: ?>
+            <div class="container-fluid w-25 pt-1 text-center">
+                <div class="alert alert-danger" id="invalidPassword" role="alert">
+                    The username or email you entered already exists.
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
     <div class="flexbox">
         <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
             <form action="upload.php" method="post" enctype="multipart/form-data">
