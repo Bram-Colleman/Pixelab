@@ -1,5 +1,17 @@
 <?php
     include_once("nav.php");
+    include_once("classes/User.php");
+    include_once("classes/Uploader.php");
+
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+
+    if(!empty($_POST)) {
+        $uploader = new Uploader();
+        $uploader->uploadPost();
+    }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,7 +46,7 @@
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="inputDescription" class="form-label">Description</label>
-                            <input type="text" class="form-control" style="height: 15rem;" id="inputDescription" name="description">
+                            <textarea class="form-control" style="height: 15rem;" id="inputDescription" name="description"></textarea>
                         </div>
                     </div>
 

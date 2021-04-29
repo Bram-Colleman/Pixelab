@@ -20,7 +20,6 @@ include_once(__DIR__ . "/Db.php");
          $this->setComments($comments);
      }
 
-
      public static function fetchRecentPosts()
      {
          $conn = Db::getConnection();
@@ -66,7 +65,6 @@ include_once(__DIR__ . "/Db.php");
 
      }
 
-
      public function getUser()
      {
          return $this->user;
@@ -91,7 +89,6 @@ include_once(__DIR__ . "/Db.php");
      {
          return $this->comments;
      }
-
 
      private function setUser($user): void
      {

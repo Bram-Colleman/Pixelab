@@ -3,8 +3,13 @@ include_once("nav.php");
 include_once(__DIR__ . "/classes/User.php");
 
 try {
-    session_start();
+
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+
     $user = User::fetchUserByEmail($_SESSION['email']);
+
 } catch (Exception $e) {
     $error = $e->getMessage();
 }

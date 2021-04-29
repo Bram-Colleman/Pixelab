@@ -26,6 +26,9 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a class="nav-link" href="uploadPost.php"><i class="fa fa-plus" aria-hidden="true" style="font-size: 1.5rem"></i></a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-bell-o" aria-hidden="true"
                                                     style="font-size: 1.5rem"></i></a>
                 </li>
