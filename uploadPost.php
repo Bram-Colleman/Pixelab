@@ -1,15 +1,21 @@
 <?php
     include_once("nav.php");
-    include_once("classes/User.php");
-    include_once("classes/Uploader.php");
+    include_once(__DIR__ . "/classes/User.php");
+    include_once(__DIR__ . "/classes/Post.php");
+    include_once(__DIR__ . "/classes/Uploader.php");
 
     if(!isset($_SESSION)) {
         session_start();
     }
 
     if(!empty($_POST)) {
-        $uploader = new Uploader();
-        $uploader->uploadPost();
+        $uploader = new Uploader($_SESSION['user']);
+        try {
+            Post::uploadPost(User::fetchUserByUsername($_SESSION['user'])->getId(), $uploader->uploadPostImage(), $_POST['description']);
+            header("Location: feed.php");
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
     }
 
 ?>
@@ -28,20 +34,15 @@
 <div class="background-overlay"></div>
 <div class="flexbox">
     <div class="login-card">
-        <!--        <form method="post" action class="login-form">-->
-        <!--            <input name="email" value="email@email.com" type="email" required autofocus class="login-field"/>-->
-        <!--            <input name="username" value="Username" type="text" required autofocus class="login-field"/>-->
-        <!--            <input name="bio" value="bio" type="text" required autofocus class="login-field"/>-->
-        <!--            <input name="oldPassword" placeholder="oldPassword" type="password" required class="login-field"/>-->
-        <!--            <input name="newPassword" placeholder="newPassword" type="password" required class="login-field"/>-->
-        <!--            <input name="login" type="submit" value="Log in" class="login-button"/>-->
-        <!--        </form>-->
         <div style="width: 75%;  margin-left: 12.5%; margin-top: 10%" class="row">
+            <form method="post" enctype="multipart/form-data">
             <div class="col">
-                <img class="avatar" src="./images/blank_avatar.png" alt="avatar">
+                <label for="file-input">
+                    <img src="./images/blank_post.jpg" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
+                </label>
+                <input type="file" id="file-input" name="postImage" style="display: none;">
             </div>
             <div class="col">
-            <form >
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
