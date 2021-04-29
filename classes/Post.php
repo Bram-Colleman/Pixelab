@@ -115,5 +115,14 @@ include_once(__DIR__ . "/Db.php");
          $this->comments = $comments;
      }
 
+     public static function uploadPost($userId, $image, $description) {
+         $conn = Db::getConnection();
+         $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
+         $statement->bindValue(":userId", $userId);
+         $statement->bindValue(":image", $image);
+         $statement->bindValue(":description", $description);
+         $statement->execute();
+     }
+
 
  }
