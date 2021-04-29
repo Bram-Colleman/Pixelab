@@ -1,6 +1,7 @@
 <?php
 
 include_once(__DIR__ . "/Db.php");
+include_once (__DIR__ . "/User.php");
 
 class Uploader {
 
@@ -10,6 +11,9 @@ class Uploader {
     private $target_dir;
     private $avatar;
     private $username = "";
+    private $postImage;
+    private $description;
+    private $userId;
 
     public function __construct($username = "") {
         $this->setUsername($username);
@@ -58,6 +62,30 @@ class Uploader {
     public function setImageFileType($imageFileType): void
     {
         $this->imageFileType = $imageFileType;
+    }
+    public function getPostImage()
+    {
+        return $this->postImage;
+    }
+    public function setPostImage($postImage): void
+    {
+        $this->postImage = $postImage;
+    }
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+    public function setUserId($userId): void
+    {
+        $this->userId = $userId;
     }
 
     public function uploadAvatar() {
@@ -113,5 +141,14 @@ class Uploader {
                 break;
         }
         return false;
+    }
+
+    public function uploadPost($userId, $image, $description) {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
+        $statement->bindValue(":userId", $userId);
+        $statement->bindValue(":image", $image);
+        $statement->bindValue(":description", $description);
+        $statement->execute();
     }
 }
