@@ -10,7 +10,6 @@ class Uploader {
     private $target_dir;
     private $avatar;
     private $username = "";
-    private $fileName;
 
     public function __construct($username = "") {
         $this->setUsername($username);
@@ -64,7 +63,7 @@ class Uploader {
     public function uploadAvatar() {
         $fileName = $this->getUsername() . "_" . date('YmdHis') . ".jpg";
         $this->setTargetDir( "uploads/avatars/");
-        if(str_contains($_FILES["avatar"]["name"], ".jpg") || str_contains($_FILES["avatar"]["name"], ".png") || str_contains($_FILES["avatar"]["name"], ".jpeg") ) {
+        if(strpos($_FILES["avatar"]["name"], ".jpg") || strpos($_FILES["avatar"]["name"], ".png") || strpos($_FILES["avatar"]["name"], ".jpeg") ) {
             $this->setTargetFile($this->getTargetDir() . basename($fileName));
         }
         $this->setImageFileType(strtolower(pathinfo($this->getTargetFile(), PATHINFO_EXTENSION)));
@@ -113,5 +112,6 @@ class Uploader {
                 $this->setUploadOk(3);
                 break;
         }
+        return false;
     }
 }

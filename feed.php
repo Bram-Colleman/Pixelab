@@ -2,7 +2,12 @@
 include_once("nav.php");
 include_once(__DIR__."/classes/Post.php");
 
-$posts = Post::fetchRecentPosts();
+try {
+    $posts = Post::fetchRecentPosts();
+} catch (Exception $e) {
+    $error = $e->getMessage();
+
+}
 ?>
 
 <!doctype html>

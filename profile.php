@@ -51,7 +51,13 @@ if (!empty($_POST)) {
                 <div class="row">
                     <div class="col-md-6">
                         <label for="file-input">
-                            <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 75%;" role='button'/>
+                            <?php if (!empty($user)) : ?>
+                                <?php if (!empty($user->getAvatar())) : ?>
+                                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="width: 20rem;" role='button' alt=""/>
+                                <?php else: ?>
+                                    <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 20rem;" role='button' alt=""/>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </label>
                         <input id="file-input" type="file" name="avatar" style="display: none"/>
                     </div>
