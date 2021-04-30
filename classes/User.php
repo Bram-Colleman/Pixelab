@@ -1,24 +1,56 @@
 <?php
 
-include_once(__DIR__."/Db.php");
+include_once(__DIR__ . "/Db.php");
 
-class User {
-    
+class User
+{
+    private $id;
     private $username;
     private $email;
     private $bio;
     private $avatar;
+    private $password;
 
-    public function __construct($username, $email, $bio = null , $avatar = null )
+    public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null)
     {
-        $this->username = $username;
-        $this->email = $email;
-        $this->bio = $bio;
-        $this->avatar = $avatar;
+        $this->setId($id);
+        $this->setUsername($username);
+        $this->setEmail($email);
+        $this->setBio($bio);
+        $this->setAvatar($avatar);
+        $this->setPassword($password);
     }
 
-    public function fetchUser() {
+    public static function fetchUserByEmail($email)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
 
+        $user = $statement->fetch();
+        if (!$user) {
+            throw new Exception('This user does not exist');
+        }
+        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+    }
+    public static function fetchUserByUsername($username)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+
+        $user = $statement->fetch();
+        if (!$user) {
+            throw new Exception('This user does not exist');
+        }
+        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
     public function getUsername()
     {
@@ -36,24 +68,58 @@ class User {
     {
         return $this->avatar;
     }
+    public function getPassword()
+    {
+        return $this->password;
+    }
 
-    public function setUsername($username): void
+
+    public function updateUser($username, $bio, $email, $password)
+    {
+        if ($password === $this->getPassword()){
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("SELECT COUNT(*) FROM users WHERE id != :id AND (email = :email OR username = :username)");
+            $statement->bindValue(":id", $this->getId());
+            $statement->bindValue(":email", $email);
+            $statement->bindValue(":username", $username);
+            $statement->execute();
+            $check = $statement->fetch()['COUNT(*)'];
+            if ($check == 0) {
+                $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail WHERE email = :email");
+                $statement->bindValue(":username", $username);
+                $statement->bindValue(":bio", $bio);
+                $statement->bindValue(":newEmail", $email);
+                $statement->bindValue(":email", $this->getEmail());
+                $statement->execute();
+                header('Location: feed.php');
+            }
+        }
+    }
+    private function setId($id): void
+    {
+        $this->id = $id;
+    }
+    private function setUsername($username): void
     {
         $this->username = $username;
     }
-    public function setEmail($email): void
+    private function setEmail($email): void
     {
         $this->email = $email;
     }
-    public function setBio($bio): void
+    private function setBio($bio): void
     {
         $this->bio = $bio;
     }
-    public function setAvatar($avatar): void
+    private function setAvatar($avatar): void
     {
         $this->avatar = $avatar;
     }
-    
+
+    private function setPassword($password): void
+    {
+        $this->password = $password;
+    }
 
     public static function login($email, $password){
 
@@ -69,7 +135,7 @@ class User {
         }
 
         //verify password
-        $hash =  $user["password"];
+        $hash = $user["password"];
         if(password_verify($password, $hash)){
             // login
             session_start();
