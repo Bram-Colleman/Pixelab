@@ -2,10 +2,10 @@
 
 const SETTINGS = [
     "db" => [
-        "dbname" => "db_project",
+        "dbname" => "pixelab",
         "user" => "root",
-        "password" => "root",
+        "password" => "",
         "host" => "localhost",
-        "port" => "3307"
+        "port" => "3306"
     ]
 ];

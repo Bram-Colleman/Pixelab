@@ -6,8 +6,7 @@ include_once(__DIR__."/classes/User.php");
 
 if(!empty($_POST)){
     try{
-        $user = new User();
-        $user->login($_POST['email'], $_POST['password']);
+        User::login($_POST['email'], $_POST['password']);
     }catch (Exception $e) {
         $error = $e->getMessage();
     }
