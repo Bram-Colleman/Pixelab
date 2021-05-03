@@ -163,6 +163,7 @@ class User
     {
         $this->avatar = $avatar;
     }
+
     private function setPassword($password): void
     {
         $this->password = $password;
@@ -184,51 +185,30 @@ class User
         $this->imageFileType = $imageFileType;
     }
 
-    public function login($email, $password)
-    {
-        function canLogin($email, $password)
-        {
-            $conn = Db::getConnection();
-            $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
-            $statement->bindValue(":email", $email);
-            $statement->execute();
-            // get user connected to email
-            $user = $statement->fetch();
-            if (!$user) {
-                throw new Exception('This user does not exist');
-            }
-            //verify password
+    public static function login($email, $password){
 
-            // WHEN SIGNUP IS ADD, USE THIS CODE
-            /*
-            $hash =  $user["password"];
-            if(password_verify($password, $hash)){
-                return true;
-            }else{
-                return false;
-            }
-            */
-            // --------------------------------------
-
-            // TO TEST DUMMY DATA, I ADDED THIS CODE
-            if ($password === $user["password"]) {
-                return true;
-            } else {
-                return false;
-            }
-            // --------------------------------------
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        
+        // get user connected to email
+        $user = $statement->fetch();
+        if(!$user){
+            throw new Exception('This user does not exist');
         }
 
-        if (canLogin($email, $password)) {
-            $user = $this::fetchUserByEmail($email);
+        //verify password
+        $hash = $user["password"];
+        if(password_verify($password, $hash)){
             // login
             session_start();
-            $_SESSION['user'] = $user->getUsername();
             $_SESSION["email"] = $email;
             header("Location: feed.php");
-        } else {
+        }else{
             throw new Exception('Incorrect password');
         }
+
     }
 
 //    public function uploadAvatar() {
