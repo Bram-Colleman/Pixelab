@@ -17,7 +17,13 @@ try {
 if (!empty($_POST)) {
     if (!empty($user)) {
 //        $user->uploadAvatar($_POST['oldPassword']);
-        $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+        if(isset($_POST['updateProfile'])) {
+            $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+        }
+
+        if(isset($_POST['deleteAvatar'])) {
+            $user->deleteAvatar();
+        }
     }
 }
 
@@ -57,6 +63,7 @@ if (!empty($_POST)) {
             <form method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
+                        <div class="position-relative w-100 h-100 d-flex justify-content-center">
                         <label for="file-input">
                             <?php if (!empty($user)) : ?>
                                 <?php if (!empty($user->getAvatar())) : ?>
@@ -66,7 +73,9 @@ if (!empty($_POST)) {
                                 <?php endif; ?>
                             <?php endif; ?>
                         </label>
-                        <input id="file-input" type="file" name="avatar" style="display: none"/>
+                            <input id="file-input" type="file" name="avatar" style="display: none"/>
+                            <input type="submit" class="position-absolute bottom-0 btn btn-danger" value="Delete picture" name="deleteAvatar">
+                        </div>
                     </div>
                     <div class="col col-md-6">
                         <div class="col-md-12">
@@ -104,7 +113,7 @@ if (!empty($_POST)) {
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-primary" value="Update profile">
+                        <input type="submit" class="btn btn-primary" value="Update profile" name="updateProfile">
                     </div>
                 </div>
             </form>

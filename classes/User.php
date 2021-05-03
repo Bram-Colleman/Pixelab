@@ -153,6 +153,19 @@ class User
             }
         }
     }
+
+    public function deleteAvatar() {
+        $conn = Db::getConnection();
+
+        unlink("uploads/avatars/" . $this->getAvatar());
+
+        $statement = $conn->prepare("UPDATE users SET avatar = null WHERE id = :id");
+        $statement->bindValue(":id", $this->getId());
+        $statement->execute();
+
+        header('Location: feed.php');
+    }
+
     private function setId($id): void
     {
         $this->id = $id;
