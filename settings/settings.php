@@ -2,7 +2,7 @@
 
 const SETTINGS = [
     "db" => [
-        "dbname" => "db_digital_dime",
+        "dbname" => "db_pixelab",
         "user" => "root",
         "password" => "root",
         "host" => "localhost",
