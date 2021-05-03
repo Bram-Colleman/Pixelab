@@ -109,7 +109,7 @@ class User
 
     public function updateUser($username, $bio, $email, $password)
     {
-        if ($password === $this->getPassword()){
+        if (password_verify($password, $this->getPassword())){
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT COUNT(*) FROM users WHERE id != :id AND (email = :email OR username = :username)");
             $statement->bindValue(":id", $this->getId());
@@ -166,6 +166,11 @@ class User
 
     private function setPassword($password): void
     {
+        $options = [
+            'cost' => 12,
+        ];
+        $password = password_hash($password, PASSWORD_DEFAULT, $options);
+
         $this->password = $password;
     }
     public function setTargetDir($target_dir): void
@@ -210,6 +215,25 @@ class User
             throw new Exception('Incorrect password');
         }
 
+    }
+
+    public function register() {
+        $conn = Db::getConnection();
+
+        $statement = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+
+        $username = $this->getUsername();
+        $email = $this->getEmail();
+        $password = $this->getPassword();
+
+        $statement->bindValue(":username", $username);
+        $statement->bindValue(":email", $email);
+        $statement->bindValue(":password", $password);
+
+        header("Location: login.php");
+
+        $result = $statement->execute();
+        return $result;
     }
 
 //    public function uploadAvatar() {

@@ -18,6 +18,7 @@ if (!empty($_POST)) {
     if (!empty($user)) {
 //        $user->uploadAvatar($_POST['oldPassword']);
         $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword']);
+        echo $user->getPassword();
     }
 }
 
@@ -37,7 +38,7 @@ if (!empty($_POST)) {
     </head>
     <body>
     <?php if (!empty($_POST)): ?>
-        <?php if ($_POST['oldPassword'] != $user->getPassword()): ?>
+        <?php if (password_verify($_POST['oldPassword'], $user->getPassword()) === false): ?>
 
             <div class="container-fluid w-25 pt-1 text-center">
                 <div class="alert alert-danger" id="invalidPassword" role="alert">

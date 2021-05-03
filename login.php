@@ -1,6 +1,8 @@
 <?php
 include_once(__DIR__ . "/classes/User.php");
 
+session_start();
+session_destroy();
 
 if(!empty($_POST)){
     try{
@@ -36,7 +38,7 @@ if(!empty($_POST)){
         </form>
     </div>
     <div class="login-card">
-        <p>Don't have an account? <a href="#" class="register-link">Register.</a></p>
+        <p>Don't have an account? <a href="register.php" class="register-link">Register.</a></p>
     </div>
 </div>
 
