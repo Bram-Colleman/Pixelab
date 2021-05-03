@@ -107,9 +107,9 @@ class User
     }
 
 
-    public function updateUser($username, $bio, $email, $password)
+    public function updateUser($username, $bio, $email, $currentPassword, $newPassword)
     {
-        if ($password === $this->getPassword()){
+        if (password_verify($currentPassword, $this->getPassword())){
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT COUNT(*) FROM users WHERE id != :id AND (email = :email OR username = :username)");
             $statement->bindValue(":id", $this->getId());
@@ -118,18 +118,28 @@ class User
             $statement->execute();
             $check = $statement->fetch()['COUNT(*)'];
 
-            if($_FILES["file"]["error"] == 4) {
-//means there is no file uploaded
-                throw new Exception("This is not an image");
+            if ($_FILES['avatar']['size'] != 0 && $_FILES['avatar']['error'] == 0)
+            {
+                $fileName = $this->getUsername() . "_" . date('YmdHis') . ".jpg";
+                $this->setTargetDir( "uploads/avatars/");
+                $this->setImageFileType(strtolower(pathinfo($this->getTargetFile(), PATHINFO_EXTENSION)));
+
+                $this->setTargetFile($this->getTargetDir() . basename($fileName));
+
+                move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile());
             }
 
-            $fileName = $this->getUsername() . "_" . date('YmdHis') . ".jpg";
-            $this->setTargetDir( "uploads/avatars/");
-            $this->setImageFileType(strtolower(pathinfo($this->getTargetFile(), PATHINFO_EXTENSION)));
+            if (!empty($newPassword)) {
+                $options = [
+                    'cost' => 12,
+                ];
+                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT, $options);
 
-            $this->setTargetFile($this->getTargetDir() . basename($fileName));
-
-            move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile());
+                $statement = $conn->prepare("UPDATE users SET password = :password WHERE email = :email");
+                $statement->bindValue(":email", $this->getEmail());
+                $statement->bindValue(":password", $hashedPassword);
+                $statement->execute();
+            }
 
             if ($check == 0) {
                 $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail, avatar = :avatar WHERE email = :email");
@@ -137,7 +147,7 @@ class User
                 $statement->bindValue(":bio", $bio);
                 $statement->bindValue(":newEmail", $email);
                 $statement->bindValue(":email", $this->getEmail());
-                $statement->bindValue(":avatar", $fileName);
+                $statement->bindValue(":avatar", (isset($fileName) ? $fileName : $this->getAvatar()));
                 $statement->execute();
                 header('Location: feed.php');
             }
@@ -210,6 +220,29 @@ class User
             throw new Exception('Incorrect password');
         }
 
+    }
+
+    public function register() {
+        $conn = Db::getConnection();
+
+        $statement = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+
+        $username = $this->getUsername();
+        $email = $this->getEmail();
+        $password = $this->getPassword();
+        $options = [
+            'cost' => 12,
+        ];
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT, $options);
+
+        $statement->bindValue(":username", $username);
+        $statement->bindValue(":email", $email);
+        $statement->bindValue(":password", $hashedPassword);
+
+        header("Location: login.php");
+
+        $result = $statement->execute();
+        return $result;
     }
 
 //    public function uploadAvatar() {

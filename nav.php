@@ -30,9 +30,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="uploadPost.php"><i class="fa fa-plus" aria-hidden="true" style="font-size: 1.5rem"></i></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-bell-o" aria-hidden="true"
-                                                    style="font-size: 1.5rem"></i></a>
+                <li class="nav-item dropdown">
+<!--                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuNotifications" href="#"><i class="fa fa-bell-o" aria-hidden="false"-->
+<!--                                                    style="font-size: 1.5rem"></i></a>-->
+                    <a class="nav-link" href="#" id="navbarDropdownMenuNotifications" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell-o" aria-hidden="false"
+                                                                          style="font-size: 1.5rem"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuNotifications">
+                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
+                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown" style="height: 5%">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"

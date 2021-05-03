@@ -62,7 +62,7 @@ try {
                     <?php if (!empty($post)) {
                         if (!empty($post->getImage())) : ?>
 <!--                            <img src="./uploads/avatars/--><?php //echo $user->getAvatar();?><!--" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>-->
-                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 648px; max-height: 648px;">
+                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 648px; max-height: 648px; min-width: 648px; min-height: 648px;">
                         <?php else: ?>
                             <img src="./images/blank_post.jpg" alt="" style="width: 648px; height: 648px;">
                         <?php endif;
