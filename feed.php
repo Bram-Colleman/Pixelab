@@ -47,7 +47,6 @@ try {
                             <img src="./images/blank_avatar.png" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>
                         <?php endif;
                     } ?>
-    <!--                <img src="./images/blank_avatar.png" alt="" class="rounded-circle" style="height: 75%">-->
                 </div>
                 <div class="col-11" style="align-self: center">
                     <a href="./profilePage.php?user=<?php try {
@@ -58,13 +57,12 @@ try {
             </div>
             <!--    post:-->
             <div class="row">
-                <div class="col-12 text-center">
+                <div class="col-12 text-center p-0">
                     <?php if (!empty($post)) {
                         if (!empty($post->getImage())) : ?>
-<!--                            <img src="./uploads/avatars/--><?php //echo $user->getAvatar();?><!--" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>-->
-                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 648px; max-height: 648px; min-width: 648px; min-height: 648px;">
+                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 100%; min-width: 100%">
                         <?php else: ?>
-                            <img src="./images/blank_post.jpg" alt="" style="width: 648px; height: 648px;">
+                            <img src="./images/blank_post.jpg" alt="" style="max-width: 100%; min-width: 100%">
                         <?php endif;
                     } ?>
                 </div>

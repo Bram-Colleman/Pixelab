@@ -32,38 +32,60 @@ include_once(__DIR__ . "/User.php");
              throw new Exception('There are no posts found');
          }
          $recentPosts = Array();
-         $postLikes = Array();
-         $postComments = Array();
+
          foreach ($posts as $post) {
-             //likes
-            $statement = $conn->prepare("SELECT username FROM post_likes pl JOIN users u ON u.id = pl.user_id WHERE post_id = :postId");
-            $statement->bindValue(":postId", $post['id']);
-            $statement->execute();
-            $fetchedLikes = $statement->fetchAll();
-            if (!empty($fetchedLikes)){
-                foreach ($fetchedLikes as $fetchedLike){
-                    array_push($postLikes, $fetchedLike['username']);
-                }
-            }
-
-            //comments
-             $statement = $conn->prepare("SELECT u.username, c.content FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
-             $statement->bindValue(":postId", $post['id']);
-             $statement->execute();
-             $fetchedComments = $statement->fetchAll();
-             if (!empty($fetchedComments)){
-                 foreach ($fetchedComments as $fetchedComment){
-                     array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content']));
-                 }
-             }
-
-             //all posts
-            array_push($recentPosts, new Post($post['username'], $post['image'], $post['description'], $post['timestamp'], $postLikes, $postComments));
-            $postLikes = Array();
-            $postComments = Array();
+            array_push($recentPosts, new Post($post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id'])))? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'] )));
          }
          return $recentPosts;
 
+     }
+     public static function fetchPostsByUserId($userId) {
+         $postUser = User::fetchUserByUserId($userId);
+         $conn = Db::getConnection();
+         $statement = $conn->prepare("SELECT * FROM posts WHERE user_id = :userId ORDER BY timestamp DESC");
+         $statement->bindValue(":userId", $userId);
+         $statement->execute();
+
+         $posts = $statement->fetchAll();
+         if (!posts) {
+             throw new Exception('Something went wrong!');
+         }
+         $fetchedPosts = array();
+
+         foreach ($posts as $post) {
+             array_push($fetchedPosts, new Post($post['id'], $post['image'], $post['description'], $post['timestamp'],
+                 (empty(Post::fetchLikes($post['id'])))? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'] )));
+         }
+         return $fetchedPosts;
+     }
+     public static function fetchLikes($postId){
+         $conn = Db::getConnection();
+         $statement = $conn->prepare("SELECT username FROM post_likes pl JOIN users u ON u.id = pl.user_id WHERE post_id = :postId");
+         $statement->bindValue(":postId", $postId);
+         $statement->execute();
+         $fetchedLikes = $statement->fetchAll();
+         $postLikes = array();
+         if (!empty($fetchedLikes)){
+             foreach ($fetchedLikes as $fetchedLike){
+                 array_push($postLikes, $fetchedLike['username']);
+             }
+         }
+         return $postLikes;
+     }
+     public static function fetchComments($postId){
+         $conn = Db::getConnection();
+         $statement = $conn->prepare("SELECT u.username, c.content FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
+         $statement->bindValue(":postId", $postId);
+         $statement->execute();
+         $fetchedComments = $statement->fetchAll();
+         $postComments = array();
+         if (!empty($fetchedComments)){
+             foreach ($fetchedComments as $fetchedComment){
+                 array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content']));
+             }
+         }
+         return $postComments;
      }
 
      public function getUser()

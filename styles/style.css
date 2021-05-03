@@ -89,3 +89,29 @@
 .logo {
     max-width: 100px;
 }
+
+.profilePagePost {
+    width: 256px;
+    height: 256px;
+    object-fit: cover;
+    padding: 1%;
+}
+.postPreview {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.profilePagePost:hover {
+    filter: blur(4px) brightness(.3);
+    transition: .25s;
+    overflow: hidden;
+}
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+}
+
