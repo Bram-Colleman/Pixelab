@@ -16,6 +16,7 @@ try {
 
 if (!empty($_POST)) {
     if (!empty($user)) {
+//        $user->uploadAvatar($_POST['oldPassword']);
         $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword']);
     }
 }
@@ -31,6 +32,7 @@ if (!empty($_POST)) {
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="styles/bootstrap.min.css">
+        <link rel="stylesheet" href="styles/style.css">
         <title>Profile</title>
     </head>
     <body>
@@ -52,7 +54,7 @@ if (!empty($_POST)) {
     <?php endif; ?>
     <div class="flexbox">
         <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
-            <form action="upload.php" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
                         <label for="file-input">

@@ -1,6 +1,7 @@
 <?php
 
 include_once(__DIR__ . "/Db.php");
+include_once(__DIR__ . "/User.php");
 
  Class Post {
      private $user;
@@ -115,14 +116,25 @@ include_once(__DIR__ . "/Db.php");
          $this->comments = $comments;
      }
 
-     public static function uploadPost($userId, $image, $description) {
+     public static function uploadPost($userId, $description) {
+         $fileName = User::fetchUserByUserId($userId)->getUsername() . "_" . date('YmdHis') . ".jpg";
+         $targetDir = "uploads/posts/";
+         $targetFile = $targetDir . basename($fileName);
+//         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+// Check if image file is a actual image or fake image
+         if($_FILES["file"]["error"] == 4) {
+//means there is no file uploaded
+             throw new Exception("This is not an image");
+         }
+
+         move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
+
          $conn = Db::getConnection();
          $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
          $statement->bindValue(":userId", $userId);
-         $statement->bindValue(":image", $image);
+         $statement->bindValue(":image", $fileName);
          $statement->bindValue(":description", $description);
          $statement->execute();
      }
-
-
  }

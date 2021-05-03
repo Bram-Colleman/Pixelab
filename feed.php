@@ -18,8 +18,8 @@ try {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--    <link rel="stylesheet" href="./styles/style.css">-->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/style.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -62,9 +62,9 @@ try {
                     <?php if (!empty($post)) {
                         if (!empty($post->getImage())) : ?>
 <!--                            <img src="./uploads/avatars/--><?php //echo $user->getAvatar();?><!--" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>-->
-                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="width: 100%">
+                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 648px; max-height: 648px;">
                         <?php else: ?>
-                            <img src="./images/blank_post.jpg" alt="" style="width: 100%">
+                            <img src="./images/blank_post.jpg" alt="" style="width: 648px; height: 648px;">
                         <?php endif;
                     } ?>
                 </div>
