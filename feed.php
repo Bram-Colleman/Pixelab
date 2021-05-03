@@ -18,8 +18,8 @@ try {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--    <link rel="stylesheet" href="./styles/style.css">-->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/style.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -47,7 +47,6 @@ try {
                             <img src="./images/blank_avatar.png" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>
                         <?php endif;
                     } ?>
-    <!--                <img src="./images/blank_avatar.png" alt="" class="rounded-circle" style="height: 75%">-->
                 </div>
                 <div class="col-11" style="align-self: center">
                     <a href="./profilePage.php?user=<?php try {
@@ -58,8 +57,14 @@ try {
             </div>
             <!--    post:-->
             <div class="row">
-                <div class="col-12 text-center">
-                    <img src="./images/blank_post.jpg" alt="" style="width: 100%">
+                <div class="col-12 text-center p-0">
+                    <?php if (!empty($post)) {
+                        if (!empty($post->getImage())) : ?>
+                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 100%; min-width: 100%">
+                        <?php else: ?>
+                            <img src="./images/blank_post.jpg" alt="" style="max-width: 100%; min-width: 100%">
+                        <?php endif;
+                    } ?>
                 </div>
             </div>
             <!--    action buttons:-->

@@ -1,87 +1,117 @@
-body {
-    padding: 0;
-    margin: 0;
+/*body {*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*}*/
+/*.login-body {*/
+/*    background: url("../images/background.jpg") no-repeat fixed ;*/
+/*    background-size: cover;*/
+/*}*/
+/*.background-overlay {*/
+/*    position: fixed;*/
+/*    width: 100vw;*/
+/*    height: 100vh;*/
+/*    background-color: white;*/
+/*    opacity: 50%;*/
+/*}*/
+/*.flexbox {*/
+/*    display: flex;*/
+/*    width: 100vw;*/
+/*    height: 100vh;*/
+/*    justify-content: center;*/
+/*    flex-direction: column;*/
+/*}*/
+/*.login-card {*/
+/*    margin: 8px;*/
+/*    align-self: center;*/
+/*    background-color: white;*/
+/*    border-radius: 5px;*/
+/*    padding: 16px 48px;*/
+/*    filter: drop-shadow(0px 0px 20px rgb(64, 64, 64));*/
+/*    text-align: center;*/
+/*}*/
+/*.login-logo {*/
+/*    width: 250px;*/
+/*    margin-top: 16px;*/
+/*    margin-bottom: 32px;*/
+/*}*/
+/*.login-form input{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    margin: 5px 0;*/
+/*    justify-content: center;*/
+
+/*}*/
+/*.login-field {*/
+/*    height: 20px;*/
+/*    padding: 9px 0 7px 8px;*/
+/*    width: 250px;*/
+/*    border-radius: 3px;*/
+/*    border: lightgray solid .5px;*/
+
+/*}*/
+/*.login-field:focus, .login-button:focus {*/
+/*    outline: none;*/
+/*}*/
+
+/*.login-button {*/
+/*    height: 36px!important;*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*    width: 100%;*/
+/*    line-height: 20px;*/
+/*    box-sizing: border-box;*/
+/*    background-color: #BDBDBD;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    color: white;*/
+/*    font-weight: bold;*/
+/*    margin-top: 10px!important;*/
+/*}*/
+/*.login-button:hover {*/
+/*    background-color: #343434;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*p {*/
+/*    font-family: Montserrat, sans-serif;*/
+/*}*/
+/*.register-link {*/
+/*    text-decoration: none;*/
+/*    color: black;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.icon {*/
+/*    width: 40px;*/
+/*    margin-bottom: 1rem;*/
+/*}*/
+
+.logo {
+    max-width: 100px;
 }
-.login-body {
-    background: url("../images/background.jpg") no-repeat fixed ;
-    background-size: cover;
+
+.profilePagePost {
+    width: 256px;
+    height: 256px;
+    object-fit: cover;
+    padding: 1%;
 }
-.background-overlay {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background-color: white;
-    opacity: 50%;
-}
-.flexbox {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    justify-content: center;
-    flex-direction: column;
-}
-.login-card {
-    margin: 8px;
-    align-self: center;
-    background-color: white;
-    border-radius: 5px;
-    padding: 16px 48px;
-    filter: drop-shadow(0px 0px 20px rgb(64, 64, 64));
+.postPreview {
+    position: relative;
     text-align: center;
-}
-.login-logo {
-    width: 250px;
-    margin-top: 16px;
-    margin-bottom: 32px;
-}
-.login-form input{
-    display: flex;
-    flex-direction: column;
-    margin: 5px 0;
-    justify-content: center;
-
-}
-.login-field {
-    height: 20px;
-    padding: 9px 0 7px 8px;
-    width: 250px;
-    border-radius: 3px;
-    border: lightgray solid .5px;
-
-}
-.login-field:focus, .login-button:focus {
-    outline: none;
-}
-
-.login-button {
-    height: 36px!important;
-    display: inline-flex;
-    align-items: center;
-    width: 100%;
-    line-height: 20px;
-    box-sizing: border-box;
-    background-color: #BDBDBD;
-    border: none;
-    border-radius: 5px;
     color: white;
-    font-weight: bold;
-    margin-top: 10px!important;
-}
-.login-button:hover {
-    background-color: #343434;
-    cursor: pointer;
 }
 
-p {
-    font-family: Montserrat, sans-serif;
+.profilePagePost:hover {
+    filter: blur(4px) brightness(.3);
+    transition: .25s;
+    overflow: hidden;
 }
-.register-link {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
 }
 
-.icon {
-    width: 40px;
-    margin-bottom: 1rem;
-}

@@ -3,15 +3,27 @@ include_once("nav.php");
 include_once(__DIR__ . "/classes/User.php");
 
 try {
-    session_start();
+
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+
     $user = User::fetchUserByEmail($_SESSION['email']);
+
 } catch (Exception $e) {
     $error = $e->getMessage();
 }
 
 if (!empty($_POST)) {
     if (!empty($user)) {
-        $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword']);
+//        $user->uploadAvatar($_POST['oldPassword']);
+        if(isset($_POST['updateProfile'])) {
+            $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+        }
+
+        if(isset($_POST['deleteAvatar'])) {
+            $user->deleteAvatar();
+        }
     }
 }
 
@@ -26,11 +38,12 @@ if (!empty($_POST)) {
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="styles/bootstrap.min.css">
+        <link rel="stylesheet" href="styles/style.css">
         <title>Profile</title>
     </head>
     <body>
     <?php if (!empty($_POST)): ?>
-        <?php if ($_POST['oldPassword'] != $user->getPassword()): ?>
+        <?php if (password_verify($_POST['oldPassword'], $user->getPassword()) === false): ?>
 
             <div class="container-fluid w-25 pt-1 text-center">
                 <div class="alert alert-danger" id="invalidPassword" role="alert">
@@ -47,9 +60,10 @@ if (!empty($_POST)) {
     <?php endif; ?>
     <div class="flexbox">
         <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
-            <form action="upload.php" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
+                        <div class="position-relative w-100 h-100 d-flex justify-content-center">
                         <label for="file-input">
                             <?php if (!empty($user)) : ?>
                                 <?php if (!empty($user->getAvatar())) : ?>
@@ -59,7 +73,9 @@ if (!empty($_POST)) {
                                 <?php endif; ?>
                             <?php endif; ?>
                         </label>
-                        <input id="file-input" type="file" name="avatar" style="display: none"/>
+                            <input id="file-input" type="file" name="avatar" style="display: none"/>
+                            <input type="submit" class="position-absolute bottom-0 btn btn-danger" value="Delete picture" name="deleteAvatar">
+                        </div>
                     </div>
                     <div class="col col-md-6">
                         <div class="col-md-12">
@@ -90,14 +106,14 @@ if (!empty($_POST)) {
                                     <input type="password" class="form-control" id="inputOldPassword" name="oldPassword" required>
                                 </div>
                             </div>
-<!--                            <div class="col-md-6">-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="inputNewPassword" class="form-label fw-bold">New Password</label>-->
-<!--                                    <input type="password" class="form-control" id="inputNewPassword" name="newPassword">-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="inputNewPassword" class="form-label fw-bold">New Password</label>
+                                    <input type="password" class="form-control" id="inputNewPassword" name="newPassword">
+                                </div>
+                            </div>
                         </div>
-                        <input type="submit" class="btn btn-primary" value="Update profile">
+                        <input type="submit" class="btn btn-primary" value="Update profile" name="updateProfile">
                     </div>
                 </div>
             </form>

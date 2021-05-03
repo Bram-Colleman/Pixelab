@@ -9,7 +9,9 @@
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid" style="height: 5%">
-        <a class="navbar-brand" href="./feed.php">Pixelab</a>
+        <a class="navbar-brand" href="./feed.php">
+            <img class="logo" src="images/pixelab_logo.png" alt="pixelab_logo">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,8 +28,19 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-bell-o" aria-hidden="true"
-                                                    style="font-size: 1.5rem"></i></a>
+                    <a class="nav-link" href="uploadPost.php"><i class="fa fa-plus" aria-hidden="true" style="font-size: 1.5rem"></i></a>
+                </li>
+                <li class="nav-item dropdown">
+<!--                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuNotifications" href="#"><i class="fa fa-bell-o" aria-hidden="false"-->
+<!--                                                    style="font-size: 1.5rem"></i></a>-->
+                    <a class="nav-link" href="#" id="navbarDropdownMenuNotifications" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell-o" aria-hidden="false"
+                                                                          style="font-size: 1.5rem"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuNotifications">
+                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
+                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown" style="height: 5%">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"

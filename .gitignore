@@ -1,3 +1,5 @@
 .idea
-.settings
 .DS_Store
+settings/
+settings/settings.php
+uploads/
