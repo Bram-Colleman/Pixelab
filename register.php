@@ -1,18 +1,18 @@
 <?php
 
-include_once (__DIR__ . '/classes/User.php');
+include_once(__DIR__ . '/classes/User.php');
 
 session_start();
 session_destroy();
 
-    if (!empty($_POST)) {
-        try {
-            $user = new User(null, $_POST['username'], $_POST['email'], null, null, $_POST['password']);
-            $user->register();
-        } catch (Exception $e){
-            $error = $e->getMessage();
-        }
+if (!empty($_POST)) {
+    try {
+        $user = new User(null, $_POST['username'], $_POST['email'], null, null, $_POST['password']);
+        $user->register();
+    } catch (Exception $e) {
+        $error = $e->getMessage();
     }
+}
 
 ?><!doctype html>
 <html lang="en">
@@ -25,20 +25,14 @@ session_destroy();
     <title>Sign Up</title>
 </head>
 <body class="login-body">
-<div class="background-overlay"></div>
-<div class="flexbox">
-    <div class="login-card">
-        <img src="./images/pixelab_logo.png" alt="" class="login-logo">
-        <form method="post" class="login-form">
-            <input name="email" placeholder="Email" type="email" required autofocus class="login-field"/>
-            <input name="username" placeholder="Username" type="text" required class="login-field"/>
-            <input name="password" placeholder="Password" type="password" required class="login-field"/>
-            <input name="register" type="submit" value="Register" class="login-button"/>
-        </form>
-    </div>
-    <div class="login-card">
-        <p>Already have an account? <a href="login.php" class="login-link">Login.</a></p>
-    </div>
+<img src="./images/pixelab_logo.png" alt="" class="login-logo">
+<form method="post" class="login-form">
+    <input name="email" placeholder="Email" type="email" required autofocus class="login-field"/>
+    <input name="username" placeholder="Username" type="text" required class="login-field"/>
+    <input name="password" placeholder="Password" type="password" required class="login-field"/>
+    <input name="register" type="submit" value="Register" class="login-button"/>
+</form>
+<p>Already have an account? <a href="login.php" class="login-link">Login.</a></p>
 </div>
 
 </body>
