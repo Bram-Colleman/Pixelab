@@ -2,16 +2,14 @@
     include_once("nav.php");
     include_once(__DIR__ . "/classes/User.php");
     include_once(__DIR__ . "/classes/Post.php");
-    include_once(__DIR__ . "/classes/Uploader.php");
 
     if(!isset($_SESSION)) {
         session_start();
     }
 
     if(!empty($_POST)) {
-        $uploader = new Uploader($_SESSION['user']);
         try {
-            Post::uploadPost(User::fetchUserByUsername($_SESSION['user'])->getId(), $uploader->uploadPostImage(), $_POST['description']);
+            Post::uploadPost(User::fetchUserByUsername($_SESSION['user'])->getId(), $_POST['description']);
             header("Location: feed.php");
         } catch (Exception $e) {
             $error = $e->getMessage();
@@ -26,8 +24,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--    <link rel="stylesheet" href="./styles/style.css">-->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/style.css">
     <title>Upload Post</title>
 </head>
 <body class="login-body">

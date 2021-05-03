@@ -1,8 +1,5 @@
 <?php
-//include_once (__DIR__ . '/classes/Db.php');
 include_once(__DIR__ . "/classes/User.php");
-
-//$conn = Db::getConnection();
 
 if (!empty($_POST)) {
     try {
