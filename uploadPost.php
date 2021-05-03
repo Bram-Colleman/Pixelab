@@ -9,9 +9,10 @@
 
     if(!empty($_POST)) {
         try {
-            Post::uploadPost(User::fetchUserByUsername($_SESSION['user'])->getId(), $_POST['description']);
+            Post::uploadPost(User::fetchUserByEmail($_SESSION['email'])->getId(), $_POST['description']);
             header("Location: feed.php");
         } catch (Exception $e) {
+            var_dump($_SESSION);
             $error = $e->getMessage();
         }
     }
@@ -38,7 +39,7 @@
                 <label for="file-input">
                     <img src="./images/blank_post.jpg" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
                 </label>
-                <input type="file" id="file-input" name="postImage" style="display: none;">
+                <input type="file" id="file-input" name="postImage" style="display: none;" required>
             </div>
             <div class="col">
                 <div class="row">

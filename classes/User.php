@@ -203,6 +203,7 @@ class User
         if(password_verify($password, $hash)){
             // login
             session_start();
+            $_SESSION["user"] = $user['username'];
             $_SESSION["email"] = $email;
             header("Location: feed.php");
         }else{

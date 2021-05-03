@@ -117,7 +117,11 @@ include_once(__DIR__ . "/User.php");
      }
 
      public static function uploadPost($userId, $description) {
-         $fileName = User::fetchUserByUserId($userId)->getUsername() . "_" . date('YmdHis') . ".jpg";
+         try {
+             $fileName = User::fetchUserByUserId($userId)->getUsername() . "_" . date('YmdHis') . ".jpg";
+         } catch (Exception $e) {
+             echo "dhg";
+         }
          $targetDir = "uploads/posts/";
          $targetFile = $targetDir . basename($fileName);
 //         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
