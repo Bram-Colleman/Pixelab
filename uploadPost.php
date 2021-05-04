@@ -35,7 +35,7 @@ if (!empty($_POST)) {
         <div style="width: 75%;  margin-left: 12.5%; margin-top: 10%" class="row">
             <div class="col-md-6">
                 <label for="file-input">
-                    <img src="./images/blank_post.jpg" class="rounded-circle" style="width: 20vw;" role='button'
+                    <img id="uploadedImage" src="./images/blank_post.jpg" class="rounded-circle" style="width: 20vw; height: 20vw; object-fit: cover" role='button'
                          alt=""/>
                 </label>
                 <input type="file" id="file-input" name="postImage" style="display: none;" required>
@@ -49,6 +49,11 @@ if (!empty($_POST)) {
         </div>
     </form>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="js/app.js"></script>
 
 </body>
 </html>
