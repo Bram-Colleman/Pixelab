@@ -39,9 +39,9 @@ try {
             <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image" >
             <div class="centered">
                 <span class="overlay d-none">
-                    <i class="fa fa-heart btn-icon fs-1" aria-hidden="true"></i>
+                    <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
                     <?php echo " ". sizeof($post->getLikes());?>
-                    <i class="fa fa-comment btn-icon fs-1" aria-hidden="true"></i>
+                    <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
                     <?php echo "  ". sizeof($post->getComments());?>
                 </span>
             </div>
@@ -51,9 +51,9 @@ try {
             <img class="profilePagePost w-256-px h-256-px" src="./images/blank_post.jpg" alt="blank post">
             <div class="centered">
                 <span class="overlay d-none">
-                    <i class="fa fa-heart btn-icon fs-1" aria-hidden="true"></i>
+                    <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
                     <?php echo " ". sizeof($post->getLikes());?>
-                    <i class="fa fa-comment btn-icon fs-1" aria-hidden="true"></i>
+                    <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
                     <?php echo "  ". sizeof($post->getComments());?>
                 </span>
             </div>
@@ -64,13 +64,14 @@ try {
 
 
 <script>
-    $(".postPreview").on( "hover",
+    $(".postPreview").hover(
         function () {
         $(".postPreview:hover span").removeClass("d-none");
         },
         function () {
         $(".overlay").addClass("d-none");
         }
+    )
 </script>
 
 </body>
