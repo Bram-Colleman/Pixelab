@@ -20,7 +20,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item align-self-md-end">
                     <form class="d-flex m-0">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchBar">
                     </form>
                 </li>
             </ul>
@@ -65,3 +65,4 @@
 
 <script src="https://use.fontawesome.com/2dd2522a24.js"></script>
 <script src="scripts/bootstrap.js"></script>
+<script src="scripts/search.js"></script>

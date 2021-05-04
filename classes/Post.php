@@ -180,4 +180,10 @@ class Post
     {
         $this->comments = $comments;
     }
+
+    public static function search($searchFor, $searchText)
+    {
+        
+    }
 }
+
