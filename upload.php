@@ -7,9 +7,6 @@ if (!empty($_POST)) {
         session_start();
     }
     $user = new User($_SESSION['user']);
-//    $user->uploadAvatar();
-//    $uploader = new Uploader($_SESSION['user']);
-//    $uploader->uploadAvatar();
 }
 
 ?>

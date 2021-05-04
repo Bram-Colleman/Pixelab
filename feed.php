@@ -34,21 +34,20 @@ try {
         } catch (Exception $e) {
         }
     ?>
-        <div class="container-fluid shadow-sm"
-             style="width: 35%; padding-top: 1rem; padding-bottom: 1rem; margin-top: 1.5rem;">
+        <div class="container-fluid shadow-sm w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
-            <div class="row" style="height: 5%;">
+            <div class="row h-5 mb-2">
 
-                <div class="col-1" style="align-self: center">
+                <div class="col-1 align-self-center">
                     <?php if (!empty($user)) {
                         if (!empty($user->getAvatar())) : ?>
-                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>
+                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-1-half-vw" role='button' alt="avatar image"/>
                         <?php else: ?>
-                            <img src="./images/blank_avatar.png" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>
+                            <img src="./images/blank_avatar.png" class="rounded-circle max-w-1-half-vw" role='button' alt="blank avatar"/>
                         <?php endif;
                     } ?>
                 </div>
-                <div class="col-11" style="align-self: center">
+                <div class="col-11 align-self-center">
                     <a href="./profilePage.php?user=<?php try {
                         echo $post->getUser();
                     } catch (Exception $e) {
@@ -60,36 +59,34 @@ try {
                 <div class="col-12 text-center p-0">
                     <?php if (!empty($post)) {
                         if (!empty($post->getImage())) : ?>
-                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 100%; min-width: 100%">
+                            <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
                         <?php else: ?>
-                            <img src="./images/blank_post.jpg" alt="" style="max-width: 100%; min-width: 100%">
+                            <img class="max-w-100 min-w-100" src="./images/blank_post.jpg" alt="blank post image">
                         <?php endif;
                     } ?>
                 </div>
             </div>
             <!--    action buttons:-->
-            <div class="row d-flex" style="padding-top: 1rem">
-                <div class="col-1" style=" max-width: 7%">
-                    <button style="border: none; outline: none; background: none;"><i class="fa fa-heart-o"
-                                                                                      aria-hidden="true"
-                                                                                      style="font-size: 1.5rem; padding-top: .2rem; font-weight: bold"></i>
+            <div class="row d-flex pt-1">
+                <div class="col-1 max-w-7">
+                    <button class="border-0 outline-none bg-none">
+                        <i class="fa fa-heart-o btn-icon" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div class="col-1" style="padding-left: 0">
-                    <button style="border: none; outline: none; background: none;"><i class="fa fa-comment-o"
-                                                                                      aria-hidden="true"
-                                                                                      style="font-size: 1.7rem; position: relative; left: 0; font-weight: bold"></i>
+                <div class="col-1 px-0">
+                    <button class="border-0 outline-none bg-none">
+                        <i class="fa fa-comment-o btn-icon font-size-1-6" aria-hidden="true"></i>
                     </button>
                 </div>
                 <!--    likes:-->
             </div>
-            <div class="row" style="padding-top: .5rem">
+            <div class="row pt-half">
                 <div class="col-12">
                     <span><?php echo sizeof($post->getLikes()); ?> likes</span>
                 </div>
             </div>
             <!--    Description:-->
-            <div class="row" style="padding-top: .5rem">
+            <div class="row pt-half">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12">
@@ -101,7 +98,7 @@ try {
             <!--    comments:-->
             <?php if (!empty($post->getComments())): ?>
                 <?php foreach ($post->getComments() as $comment) : ?>
-                <div class="row" style="padding-top: .5rem">
+                <div class="row pt-half">
                     <div class="col-12">
                         <div class="row">
                             <div class="col-12">

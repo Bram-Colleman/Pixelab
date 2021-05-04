@@ -32,17 +32,17 @@ if (!empty($_POST)) {
 <body>
 <div class="container">
     <form class="form-inline" method="post" enctype="multipart/form-data">
-        <div style="width: 75%;  margin-left: 12.5%; margin-top: 10%" class="row">
+        <div class="row w-75 ml-12-half mt-10">
             <div class="col-md-6">
                 <label for="file-input">
-                    <img id="uploadedImage" src="./images/blank_post.jpg" class="rounded-circle" style="width: 20vw; height: 20vw; object-fit: cover" role='button'
+                    <img id="uploadedImage" src="./images/blank_post.jpg" class="rounded-circle w-20-vw h-20-vw object-fit-cover" role='button'
                          alt=""/>
                 </label>
-                <input type="file" id="file-input" name="postImage" style="display: none;" required>
+                <input class="d-none" type="file" id="file-input" name="postImage" required>
             </div>
             <div class="col-md-6">
                 <label for="inputDescription" class="form-label">Description</label>
-                <textarea class="form-control" style="height: 15rem; resize: none" id="inputDescription"
+                <textarea class="form-control h-15-rem resize-none" id="inputDescription"
                           name="description" required></textarea>
                 <button type="submit" class="btn btn-primary mt-2">Submit</button>
             </div>

@@ -8,7 +8,7 @@
     }
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid" style="height: 5%">
+    <div class="container-fluid h-5">
         <a class="navbar-brand" href="./feed.php">
             <img class="logo" src="images/pixelab_logo.png" alt="pixelab_logo">
         </a>
@@ -28,28 +28,28 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="uploadPost.php"><i class="fa fa-plus" aria-hidden="true" style="font-size: 1.5rem"></i></a>
+                    <a class="nav-link" href="uploadPost.php">
+                        <i class="fa fa-plus font-size-1-half" aria-hidden="true"></i>
+                    </a>
                 </li>
                 <li class="nav-item dropdown">
-<!--                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuNotifications" href="#"><i class="fa fa-bell-o" aria-hidden="false"-->
-<!--                                                    style="font-size: 1.5rem"></i></a>-->
                     <a class="nav-link" href="#" id="navbarDropdownMenuNotifications" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell-o" aria-hidden="false"
-                                                                          style="font-size: 1.5rem"></i>
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-bell-o font-size-1-half" aria-hidden="false"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuNotifications">
                         <li><a class="dropdown-item" href="#">Notification 1</a></li>
                         <li><a class="dropdown-item" href="#">Notification 2</a></li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown" style="height: 5%">
+                <li class="nav-item dropdown h-5">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         <?php if (!empty($currentUser)) : ?>
                             <?php if (!empty($currentUser->getAvatar())) : ?>
-                                <img src="./uploads/avatars/<?php echo $currentUser->getAvatar();?>" alt="" class="rounded-circle" style="max-width: 1.5rem">
+                                <img src="./uploads/avatars/<?php echo $currentUser->getAvatar();?>" alt="" class="rounded-circle max-w-1-half-rem">
                             <?php else: ?>
-                        <img src="./images/blank_avatar.png" alt="" class="rounded-circle" style="max-width: 1.5rem">
+                        <img src="./images/blank_avatar.png" alt="" class="rounded-circle max-w-1-half-rem">
                             <?php endif; ?>
                         <?php endif; ?>
                     </a>

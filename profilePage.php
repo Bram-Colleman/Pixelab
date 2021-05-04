@@ -26,34 +26,34 @@ try {
 <script src="https://use.fontawesome.com/2dd2522a24.js"></script>
     <div class="container">
         <?php if (!empty($user->getAvatar())) : ?>
-            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="max-width: 10vw;" alt=""/>
+            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-10-vw" alt="uploaded avatar"/>
         <?php else: ?>
-            <img src="./images/blank_avatar.png" class="rounded-circle" style="max-width: 10vw;" alt=""/>
+            <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw" alt="blank avatar"/>
         <?php endif; ?>
         <h1 class="d-inline"><?php echo $user->getUsername();?></h1>
     </div>
-    <div class="container d-flex" style="flex-flow:wrap;margin: auto;" >
+    <div class="container d-flex flex-wrap m-auto">
     <?php foreach (Post::fetchPostsByUserId($user->getId()) as $post) : ?>
         <?php if (!empty($post->getImage())) : ?>
         <div class="postPreview">
-            <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage();?>" alt="" >
+            <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image" >
             <div class="centered">
                 <span class="overlay d-none">
-                    <i class="fa fa-heart" aria-hidden="true" style="font-size: 1rem; padding-top: .2rem; font-weight: bold"></i>
+                    <i class="fa fa-heart btn-icon fs-1" aria-hidden="true"></i>
                     <?php echo " ". sizeof($post->getLikes());?>
-                    <i class="fa fa-comment" aria-hidden="true" style="font-size: 1rem; padding-top: .2rem; font-weight: bold"></i>
+                    <i class="fa fa-comment btn-icon fs-1" aria-hidden="true"></i>
                     <?php echo "  ". sizeof($post->getComments());?>
                 </span>
             </div>
         </div>
         <?php else: ?>
         <div class="postPreview">
-            <img class="profilePagePost" src="./images/blank_post.jpg" alt="" style="width: 256px; height: 256px; padding: 1%">
+            <img class="profilePagePost w-256-px h-256-px" src="./images/blank_post.jpg" alt="blank post">
             <div class="centered">
                 <span class="overlay d-none">
-                    <i class="fa fa-heart" aria-hidden="true" style="font-size: 1rem; padding-top: .2rem; font-weight: bold"></i>
+                    <i class="fa fa-heart btn-icon fs-1" aria-hidden="true"></i>
                     <?php echo " ". sizeof($post->getLikes());?>
-                    <i class="fa fa-comment" aria-hidden="true" style="font-size: 1rem; padding-top: .2rem; font-weight: bold"></i>
+                    <i class="fa fa-comment btn-icon fs-1" aria-hidden="true"></i>
                     <?php echo "  ". sizeof($post->getComments());?>
                 </span>
             </div>
@@ -64,14 +64,13 @@ try {
 
 
 <script>
-    $(".postPreview").hover(
+    $(".postPreview").on( "hover",
         function () {
         $(".postPreview:hover span").removeClass("d-none");
         },
         function () {
         $(".overlay").addClass("d-none");
         }
-    )
 </script>
 
 </body>
