@@ -2,7 +2,7 @@
     session_start();
     include_once(__DIR__."/classes/User.php");
     try {
-        $currentUser = User::fetchUserByEmail($_SESSION['email']);
+        $currentUser = User::fetchUserByUsername($_SESSION["user"]);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }

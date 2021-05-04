@@ -11,10 +11,11 @@ class User
     private $avatar;
     private $password;
     private $target_file;
+    private $target_dir;
     private $imageFileType;
     private $uploadOk;
-    private $target_dir;
 
+    //Constructor
     public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null)
     {
         $this->setId($id);
@@ -25,46 +26,7 @@ class User
         $this->setPassword($password);
     }
 
-    public static function fetchUserByEmail($email)
-    {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
-        $statement->bindValue(":email", $email);
-        $statement->execute();
-
-        $user = $statement->fetch();
-        if (!$user) {
-            throw new Exception('This user does not exist');
-        }
-        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
-    }
-    public static function fetchUserByUsername($username)
-    {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
-        $statement->bindValue(":username", $username);
-        $statement->execute();
-
-        $user = $statement->fetch();
-        if (!$user) {
-            throw new Exception('This user does not exist');
-        }
-        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
-    }
-    public static function fetchUserByUserId($userId)
-    {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT * FROM users WHERE id = :id");
-        $statement->bindValue(":id", $userId);
-        $statement->execute();
-
-        $user = $statement->fetch();
-        if (!$user) {
-            throw new Exception('This user does not exist');
-        }
-        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
-    }
-
+    //Getters
     public function getId()
     {
         return $this->id;
@@ -89,24 +51,79 @@ class User
     {
         return $this->password;
     }
-    public function getTargetDir()
-    {
-        return $this->target_dir;
-    }
-    public function getUploadOk()
-    {
-        return $this->uploadOk;
-    }
     public function getTargetFile()
     {
         return $this->target_file;
+    }
+    public function getTargetDir()
+    {
+        return $this->target_dir;
     }
     public function getImageFileType()
     {
         return $this->imageFileType;
     }
+    public function getUploadOk()
+    {
+        return $this->uploadOk;
+    }
 
+    //Setters
+    private function setId($id): void
+    {
+        $this->id = $id;
+    }
+    private function setUsername($username): void
+    {
+        $this->username = $username;
+    }
+    private function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+    private function setBio($bio): void
+    {
+        $this->bio = $bio;
+    }
+    private function setAvatar($avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+    private function setPassword($password): void
+    {
+        $this->password = $password;
+    }
+    private function setTargetFile($target_file): void
+    {
+        $this->target_file = $target_file;
+    }
+    private function setTargetDir($target_dir): void
+    {
+        $this->target_dir = $target_dir;
+    }
+    private function setImageFileType($imageFileType): void
+    {
+        $this->imageFileType = $imageFileType;
+    }
+    private function setUploadOk($uploadOk): void
+    {
+        $this->uploadOk = $uploadOk;
+    }
 
+    //Methods
+    public static function fetchUserByUsername($username)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE username = :username");
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+
+        $user = $statement->fetch();
+        if (!$user) {
+            throw new Exception('This user does not exist');
+        }
+        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+    }
     public function updateUser($username, $bio, $email, $currentPassword, $newPassword)
     {
         if (password_verify($currentPassword, $this->getPassword())){
@@ -127,6 +144,7 @@ class User
                 $this->setTargetFile($this->getTargetDir() . basename($fileName));
 
                 move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile());
+                unlink("uploads/avatars/" . $this->getAvatar());
             }
 
             if (!empty($newPassword)) {
@@ -153,7 +171,6 @@ class User
             }
         }
     }
-
     public function deleteAvatar() {
         $conn = Db::getConnection();
 
@@ -165,49 +182,6 @@ class User
 
         header('Location: feed.php');
     }
-
-    private function setId($id): void
-    {
-        $this->id = $id;
-    }
-    private function setUsername($username): void
-    {
-        $this->username = $username;
-    }
-    private function setEmail($email): void
-    {
-        $this->email = $email;
-    }
-    private function setBio($bio): void
-    {
-        $this->bio = $bio;
-    }
-    private function setAvatar($avatar): void
-    {
-        $this->avatar = $avatar;
-    }
-
-    private function setPassword($password): void
-    {
-        $this->password = $password;
-    }
-    public function setTargetDir($target_dir): void
-    {
-        $this->target_dir = $target_dir;
-    }
-    public function setUploadOk($uploadOk): void
-    {
-        $this->uploadOk = $uploadOk;
-    }
-    public function setTargetFile($target_file): void
-    {
-        $this->target_file = $target_file;
-    }
-    public function setImageFileType($imageFileType): void
-    {
-        $this->imageFileType = $imageFileType;
-    }
-
     public static function login($email, $password){
 
         $conn = Db::getConnection();
@@ -234,7 +208,6 @@ class User
         }
 
     }
-
     public function register() {
         $conn = Db::getConnection();
 
@@ -266,7 +239,6 @@ class User
 //        if(strpos($_FILES["avatar"]["name"], ".jpg") || strpos($_FILES["avatar"]["name"], ".png") || strpos($_FILES["avatar"]["name"], ".jpeg") ) {
 //            $this->setTargetFile($this->getTargetDir() . basename($fileName));
 //        }
-
 //        if(isset($_POST["submit"])) {
 //            $check = getimagesize($_FILES["avatar"]["tmp_name"]);
 //            if($check !== false) {
@@ -275,7 +247,6 @@ class User
 //                $this->setUploadOk(1);
 //            }
 //        }
-
 //        if ($_FILES["avatar"]["size"] > 2000000) {
 //            $this->setUploadOk(2);
 //        }

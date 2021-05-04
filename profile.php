@@ -8,7 +8,7 @@ try {
         session_start();
     }
 
-    $user = User::fetchUserByEmail($_SESSION['email']);
+    $user = User::fetchUserByUSername($_SESSION["user"]);
 
 } catch (Exception $e) {
     $error = $e->getMessage();

@@ -12,6 +12,7 @@ class Post
     private $likes = array();
     private $comments = array();
 
+    //constructor
     public function __construct($user = null, $image = null, $description = null, $timestamp = null, $likes = null, $comments = null)
     {
         $this->setUser($user);
@@ -22,26 +23,59 @@ class Post
         $this->setComments($comments);
     }
 
+    //Getters
+    public function getUser()
+    {
+        return $this->user;
+    }
+    public function getImage()
+    {
+        return $this->image;
+    }
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+    public function getLikes(): array
+    {
+        return $this->likes;
+    }
+    public function getComments(): array
+    {
+        return $this->comments;
+    }
+
+    //Setters
     private function setUser($user): void
     {
         $this->user = $user;
     }
-
     private function setImage($image): void
     {
         $this->image = $image;
     }
-
     private function setDescription($description): void
     {
         $this->description = $description;
     }
-
     private function setTimestamp($timestamp): void
     {
         $this->timestamp = $timestamp;
     }
+    public function setLikes(array $likes): void
+    {
+        $this->likes = $likes;
+    }
+    public function setComments(array $comments): void
+    {
+        $this->comments = $comments;
+    }
 
+    //Methods
     public static function fetchRecentPosts()
     {
         $conn = Db::getConnection();
@@ -61,7 +95,6 @@ class Post
         return $recentPosts;
 
     }
-
     public static function fetchLikes($postId)
     {
         $conn = Db::getConnection();
@@ -77,7 +110,6 @@ class Post
         }
         return $postLikes;
     }
-
     public static function fetchComments($postId)
     {
         $conn = Db::getConnection();
@@ -93,7 +125,6 @@ class Post
         }
         return $postComments;
     }
-
     public static function fetchPostsByUserId($userId)
     {
         $conn = Db::getConnection();
@@ -113,14 +144,10 @@ class Post
         }
         return $fetchedPosts;
     }
-
-    public static function uploadPost($userId, $description)
+    public static function uploadPost($email, $description)
     {
-        try {
-            $fileName = User::fetchUserByUserId($userId)->getUsername() . "_" . date('YmdHis') . ".jpg";
-        } catch (Exception $e) {
-            echo "dhg";
-        }
+
+        $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";
         $targetDir = "uploads/posts/";
         $targetFile = $targetDir . basename($fileName);
 //         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -135,49 +162,10 @@ class Post
 
         $conn = Db::getConnection();
         $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
-        $statement->bindValue(":userId", $userId);
+        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
         $statement->bindValue(":image", $fileName);
         $statement->bindValue(":description", $description);
         $statement->execute();
     }
 
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    public function getTimestamp()
-    {
-        return $this->timestamp;
-    }
-
-    public function getLikes(): array
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(array $likes): void
-    {
-        $this->likes = $likes;
-    }
-
-    public function getComments(): array
-    {
-        return $this->comments;
-    }
-
-    public function setComments(array $comments): void
-    {
-        $this->comments = $comments;
-    }
 }
