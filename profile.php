@@ -67,9 +67,9 @@ if (!empty($_POST)) {
                         <label for="file-input">
                             <?php if (!empty($user)) : ?>
                                 <?php if (!empty($user->getAvatar())) : ?>
-                                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
+                                    <img id="uploadedImage" src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="width: 20vw; height: 20vw; object-fit: cover" role='button' alt=""/>
                                 <?php else: ?>
-                                    <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
+                                    <img id="uploadedImage" src="./images/blank_avatar.png" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </label>
@@ -131,6 +131,7 @@ if (!empty($_POST)) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
     </body>
     </html>
 <?php endif; ?>
