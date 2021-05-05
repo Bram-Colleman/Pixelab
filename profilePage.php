@@ -66,11 +66,11 @@ try {
 <script>
     $(".postPreview").hover(
         function () {
-            $(".overlay").removeClass("d-none");
+            $(".postPreview:hover .overlay").removeClass("d-none");
             $(".profilePagePost:hover").addClass("profilePagePostHover");
         },
         function () {
-            $(".overlay").addClass("d-none");
+            $(" .overlay").addClass("d-none");
             $(".profilePagePost").removeClass("profilePagePostHover");
         }
     )
