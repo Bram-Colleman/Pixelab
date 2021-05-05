@@ -52,9 +52,9 @@ try {
             <div class="centered">
                 <span class="overlay d-none">
                     <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
-                    <?php echo " ". sizeof($post->getLikes());?>
+                    <?php echo sizeof($post->getLikes());?>
                     <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
-                    <?php echo "  ". sizeof($post->getComments());?>
+                    <?php echo sizeof($post->getComments());?>
                 </span>
             </div>
         </div>
@@ -66,13 +66,14 @@ try {
 <script>
     $(".postPreview").hover(
         function () {
-        $(".postPreview:hover span").removeClass("d-none");
+            $(".overlay").removeClass("d-none");
+            $(".profilePagePost:hover").addClass("profilePagePostHover");
         },
         function () {
-        $(".overlay").addClass("d-none");
+            $(".overlay").addClass("d-none");
+            $(".profilePagePost").removeClass("profilePagePostHover");
         }
     )
 </script>
-
 </body>
 </html>

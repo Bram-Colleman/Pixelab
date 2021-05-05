@@ -150,11 +150,11 @@ class Post
         $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";
         $targetDir = "uploads/posts/";
         $targetFile = $targetDir . basename($fileName);
-//         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+        //$imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-// Check if image file is a actual image or fake image
+        // Check if image file is a actual image or fake image
         if ($_FILES["file"]["error"] == 4) {
-//means there is no file uploaded
+            //means there is no file uploaded
             throw new Exception("This is not an image");
         }
 
