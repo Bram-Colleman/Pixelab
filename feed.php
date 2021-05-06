@@ -23,7 +23,6 @@ try {
     <title>Pixelab</title>
 </head>
 <body>
-<script src="https://use.fontawesome.com/2dd2522a24.js"></script>
 
 <?php if (!empty($posts)) {
     foreach ($posts as $post): ?>
@@ -34,11 +33,11 @@ try {
         } catch (Exception $e) {
         }
     ?>
-        <div class="container-fluid shadow-sm w-35 pt-1 pb-1 mt-5">
+        <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
             <div class="row h-5 mb-2">
 
-                <div class="col-1 align-self-center">
+                <div class="col-1 align-self-center max-w-6">
                     <?php if (!empty($user)) {
                         if (!empty($user->getAvatar())) : ?>
                             <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-1-half-vw" role='button' alt="avatar image"/>
@@ -48,7 +47,7 @@ try {
                     } ?>
                 </div>
                 <div class="col-11 align-self-center">
-                    <a href="./profilePage.php?user=<?php try {
+                    <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
                         echo $post->getUser();
                     } catch (Exception $e) {
                     } ?>"><?php echo $post->getUser(); ?></a>
@@ -69,14 +68,15 @@ try {
             <!--    action buttons:-->
             <div class="row d-flex pt-1">
                 <div class="col-1 max-w-7">
-                    <button class="border-0 outline-none bg-none">
+                    <a href="#" class="border-0 outline-none bg-none text-black btn-like" data-postid="<?php echo $post->getId();?>" >
                         <i class="fa fa-heart-o btn-icon" aria-hidden="true"></i>
-                    </button>
+                        <i class="fa fa-heart btn-icon" aria-hidden="true"></i>
+                    </a>
                 </div>
                 <div class="col-1 px-0">
-                    <button class="border-0 outline-none bg-none">
+                    <a href="#" class="border-0 outline-none bg-none text-black">
                         <i class="fa fa-comment-o btn-icon font-size-1-6" aria-hidden="true"></i>
-                    </button>
+                    </a>
                 </div>
                 <!--    likes:-->
             </div>
@@ -89,7 +89,7 @@ try {
             <div class="row pt-half">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 pb-2">
                             <span><strong><?php echo $post->getUser(); ?> </strong></span><span><?php echo $post->getDescription();?></span>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ try {
             <?php if (!empty($post->getComments())): ?>
                 <?php foreach ($post->getComments() as $comment) : ?>
                 <div class="row pt-half">
-                    <div class="col-12">
+                    <div class="col-12 pb-2">
                         <div class="row">
                             <div class="col-12">
                                 <span><strong><?php echo $comment['username'];?></strong></span>
@@ -118,5 +118,13 @@ try {
     <?php endforeach;
 } ?>
 
+<script src="https://use.fontawesome.com/2dd2522a24.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="js/feed.js"></script>
 </body>
 </html>

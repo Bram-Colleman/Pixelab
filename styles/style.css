@@ -33,6 +33,9 @@
     padding-top: .2rem;
     font-weight: bold;
 }
+.btn-like:hover {
+    color: red!important;
+}
 
 /* utility classes */
 
@@ -73,6 +76,9 @@
 }
 .max-w-100 {
     max-width: 100%;
+}
+.max-w-6 {
+    max-width: 6%;
 }
 
 .max-w-7 {
@@ -121,6 +127,9 @@
 .mt-10 {
     margin-top: 10%;
 }
+.mt-5-rem {
+    margin-top: 5rem;
+}
 
 .object-fit-cover {
     object-fit: cover;
@@ -128,4 +137,21 @@
 
 .resize-none {
     resize: none;
+}
+.text-black {
+    color: black;
+}
+.h-centered {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+.v-centered {
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+}
+.translate-50-50 {
+    transform: translate(-50%, -50%)!important;
+
 }
