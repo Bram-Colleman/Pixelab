@@ -20,10 +20,8 @@ try {
         <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <title>Pixelab</title>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
-<script src="https://use.fontawesome.com/2dd2522a24.js"></script>
     <div class="container">
         <?php if (!empty($user->getAvatar())) : ?>
             <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-10-vw" alt="uploaded avatar"/>
@@ -33,36 +31,41 @@ try {
         <h1 class="d-inline"><?php echo $user->getUsername();?></h1>
     </div>
     <div class="container d-flex flex-wrap m-auto">
-    <?php foreach (Post::fetchPostsByUserId($user->getId()) as $post) : ?>
-        <?php if (!empty($post->getImage())) : ?>
-        <div class="postPreview">
-            <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image" >
-            <div class="centered">
-                <span class="overlay d-none">
-                    <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
-                    <?php echo " ". sizeof($post->getLikes());?>
-                    <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
-                    <?php echo "  ". sizeof($post->getComments());?>
-                </span>
-            </div>
-        </div>
-        <?php else: ?>
-        <div class="postPreview">
-            <img class="profilePagePost w-256-px h-256-px" src="./images/blank_post.jpg" alt="blank post">
-            <div class="centered">
-                <span class="overlay d-none">
-                    <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
-                    <?php echo sizeof($post->getLikes());?>
-                    <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
-                    <?php echo sizeof($post->getComments());?>
-                </span>
-            </div>
-        </div>
-        <?php endif; ?>
-    <?php endforeach; ?>
+    <?php try {
+        foreach (Post::fetchPostsByUserId($user->getId()) as $post) : ?>
+            <?php if (!empty($post->getImage())) : ?>
+                <div class="postPreview">
+                    <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage(); ?>"
+                         alt="post image">
+                    <div class="centered">
+                    <span class="overlay d-none">
+                        <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
+                        <?php echo " " . sizeof($post->getLikes()); ?>
+                        <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
+                        <?php echo "  " . sizeof($post->getComments()); ?>
+                    </span>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="postPreview">
+                    <img class="profilePagePost w-256-px h-256-px" src="./images/blank_post.jpg" alt="blank post">
+                    <div class="centered">
+                    <span class="overlay d-none">
+                        <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>
+                        <?php echo sizeof($post->getLikes()); ?>
+                        <i class="fa fa-comment btn-icon font-size-1-rem" aria-hidden="true"></i>
+                        <?php echo sizeof($post->getComments()); ?>
+                    </span>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php endforeach;
+    } catch (Exception $e) {
+    } ?>
     </div>
 
-
+<script src="https://use.fontawesome.com/2dd2522a24.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
     $(".postPreview").hover(
         function () {

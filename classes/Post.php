@@ -5,6 +5,7 @@ include_once(__DIR__ . "/User.php");
 
 class Post
 {
+    private $id;
     private $user;
     private $image;
     private $description;
@@ -13,8 +14,9 @@ class Post
     private $comments = array();
 
     //constructor
-    public function __construct($user = null, $image = null, $description = null, $timestamp = null, $likes = null, $comments = null)
+    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = null, $comments = null)
     {
+        $this->setId($id);
         $this->setUser($user);
         $this->setImage($image);
         $this->setDescription($description);
@@ -24,6 +26,10 @@ class Post
     }
 
     //Getters
+    public function getId()
+    {
+        return $this->id;
+    }
     public function getUser()
     {
         return $this->user;
@@ -50,6 +56,10 @@ class Post
     }
 
     //Setters
+    private function setId($id): void
+    {
+        $this->id = $id;
+    }
     private function setUser($user): void
     {
         $this->user = $user;
@@ -76,7 +86,7 @@ class Post
     }
 
     //Methods
-    public static function fetchRecentPosts()
+    public static function fetchRecentPosts(): array
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC  LIMIT 20");
@@ -87,15 +97,14 @@ class Post
             throw new Exception('There are no posts found');
         }
         $recentPosts = array();
-
         foreach ($posts as $post) {
-            array_push($recentPosts, new Post($post['username'], $post['image'], $post['description'], $post['timestamp'],
+            array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
         }
         return $recentPosts;
 
     }
-    public static function fetchLikes($postId)
+    public static function fetchLikes($postId): array
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT username FROM post_likes pl JOIN users u ON u.id = pl.user_id WHERE post_id = :postId");
@@ -110,7 +119,7 @@ class Post
         }
         return $postLikes;
     }
-    public static function fetchComments($postId)
+    public static function fetchComments($postId): array
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT u.username, c.content FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
@@ -125,10 +134,10 @@ class Post
         }
         return $postComments;
     }
-    public static function fetchPostsByUserId($userId)
+    public static function fetchPostsByUserId($userId): array
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT * FROM posts WHERE user_id = :userId ORDER BY timestamp DESC");
+        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE user_id = :userId ORDER BY timestamp DESC");
         $statement->bindValue(":userId", $userId);
         $statement->execute();
 
@@ -139,12 +148,12 @@ class Post
         $fetchedPosts = array();
 
         foreach ($posts as $post) {
-            array_push($fetchedPosts, new Post($post['id'], $post['image'], $post['description'], $post['timestamp'],
+            array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
         }
         return $fetchedPosts;
     }
-    public static function uploadPost($email, $description)
+    public static function uploadPost($description)
     {
 
         $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";

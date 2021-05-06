@@ -9,7 +9,7 @@ if (!isset($_SESSION)) {
 
 if (!empty($_POST)) {
     try {
-        Post::uploadPost(User::fetchUserByUSername($_SESSION["user"]), $_POST['description']);
+        Post::uploadPost($_POST['description']);
         header("Location: feed.php");
     } catch (Exception $e) {
         var_dump($_SESSION);
