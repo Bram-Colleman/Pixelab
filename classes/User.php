@@ -159,7 +159,7 @@ class User
                 $statement->execute();
             }
 
-            if ($check == 0) {
+            if ($this->checkIfUserExists($email, $username)) {
                 $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail, avatar = :avatar WHERE email = :email");
                 $statement->bindValue(":username", $username);
                 $statement->bindValue(":bio", $bio);
@@ -210,25 +210,37 @@ class User
     }
     public function register() {
         $conn = Db::getConnection();
-
-        $statement = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
-
         $username = $this->getUsername();
         $email = $this->getEmail();
         $password = $this->getPassword();
-        $options = [
-            'cost' => 12,
-        ];
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT, $options);
 
-        $statement->bindValue(":username", $username);
+        if($this->checkIfUserExists($email, $username)) {
+            $statement = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+            $options = [
+                'cost' => 12,
+            ];
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT, $options);
+
+            $statement->bindValue(":username", $username);
+            $statement->bindValue(":email", $email);
+            $statement->bindValue(":password", $hashedPassword);
+
+            header("Location: login.php");
+
+            $result = $statement->execute();
+            return $result;
+        }
+    }
+
+    public function checkIfUserExists($email, $username): bool
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT COUNT(*) FROM users WHERE (email = :email OR username = :username)");
         $statement->bindValue(":email", $email);
-        $statement->bindValue(":password", $hashedPassword);
-
-        header("Location: login.php");
-
-        $result = $statement->execute();
-        return $result;
+        $statement->bindValue(":username", $username);
+        $statement->execute();
+        $check = $statement->fetch()['COUNT(*)'];
+        return $check == 0;
     }
 
 //    public function uploadAvatar() {
