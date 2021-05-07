@@ -1,7 +1,8 @@
 <?php
-include_once("nav.php");
+include_once(__DIR__."/includes/nav.php");
 include_once(__DIR__."/classes/Post.php");
 include_once(__DIR__."/classes/User.php");
+include_once(__DIR__."/includes/checkSession.php");
 
 if(empty($_POST)){
     try {
@@ -32,7 +33,6 @@ if(empty($_POST)){
     <title>Pixelab</title>
 </head>
 <body>
-<script src="https://use.fontawesome.com/2dd2522a24.js"></script>
 
 <?php if (!empty($posts)) {
     foreach ($posts as $post): ?>
@@ -43,22 +43,21 @@ if(empty($_POST)){
         } catch (Exception $e) {
         }
     ?>
-        <div class="container-fluid shadow-sm"
-             style="width: 35%; padding-top: 1rem; padding-bottom: 1rem; margin-top: 1.5rem;">
+        <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
-            <div class="row" style="height: 5%;">
+            <div class="row h-5 mb-2">
 
-                <div class="col-1" style="align-self: center">
+                <div class="col-1 align-self-center max-w-6">
                     <?php if (!empty($user)) {
                         if (!empty($user->getAvatar())) : ?>
-                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>
+                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-1-half-vw" role='button' alt="avatar image"/>
                         <?php else: ?>
-                            <img src="./images/blank_avatar.png" class="rounded-circle" style="max-width: 1.5vw;" role='button' alt=""/>
+                            <img src="./images/blank_avatar.png" class="rounded-circle max-w-1-half-vw" role='button' alt="blank avatar"/>
                         <?php endif;
                     } ?>
                 </div>
-                <div class="col-11" style="align-self: center">
-                    <a href="./profilePage.php?user=<?php try {
+                <div class="col-11 align-self-center">
+                    <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
                         echo $post->getUser();
                     } catch (Exception $e) {
                     } ?>"><?php echo $post->getUser(); ?></a>
@@ -69,39 +68,33 @@ if(empty($_POST)){
                 <div class="col-12 text-center p-0">
                     <?php if (!empty($post)) {
                         if (!empty($post->getImage())) : ?>
-                            <img src="./uploads/posts/<?php echo $post->getImage();?>" alt="" style="max-width: 100%; min-width: 100%">
+                            <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
                         <?php else: ?>
-                            <img src="./images/blank_post.jpg" alt="" style="max-width: 100%; min-width: 100%">
+                            <img class="max-w-100 min-w-100" src="./images/blank_post.jpg" alt="blank post image">
                         <?php endif;
                     } ?>
                 </div>
             </div>
             <!--    action buttons:-->
-            <div class="row d-flex" style="padding-top: 1rem">
-                <div class="col-1" style=" max-width: 7%">
-                    <button style="border: none; outline: none; background: none;"><i class="fa fa-heart-o"
-                                                                                      aria-hidden="true"
-                                                                                      style="font-size: 1.5rem; padding-top: .2rem; font-weight: bold"></i>
-                    </button>
-                </div>
-                <div class="col-1" style="padding-left: 0">
-                    <button style="border: none; outline: none; background: none;"><i class="fa fa-comment-o"
-                                                                                      aria-hidden="true"
-                                                                                      style="font-size: 1.7rem; position: relative; left: 0; font-weight: bold"></i>
-                    </button>
+            <div class="row d-flex pt-1">
+                <div class="col-1 max-w-7">
+                    <a href="#" class="border-0 outline-none bg-none text-black btn-like" data-postid="<?php echo $post->getId();?>" >
+                        <i class="fa fa-heart-o btn-icon" aria-hidden="true"></i>
+                        <i class="fa fa-heart btn-icon" aria-hidden="true"></i>
+                    </a>
                 </div>
                 <!--    likes:-->
             </div>
-            <div class="row" style="padding-top: .5rem">
+            <div class="row pt-half">
                 <div class="col-12">
                     <span><?php echo sizeof($post->getLikes()); ?> likes</span>
                 </div>
             </div>
             <!--    Description:-->
-            <div class="row" style="padding-top: .5rem">
+            <div class="row pt-half">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 pb-2">
                             <span><strong><?php echo $post->getUser(); ?> </strong></span><span><?php echo $post->getDescription();?></span>
                         </div>
                     </div>
@@ -110,8 +103,8 @@ if(empty($_POST)){
             <!--    comments:-->
             <?php if (!empty($post->getComments())): ?>
                 <?php foreach ($post->getComments() as $comment) : ?>
-                <div class="row" style="padding-top: .5rem">
-                    <div class="col-12">
+                <div class="row pt-half">
+                    <div class="col-12 pb-2">
                         <div class="row">
                             <div class="col-12">
                                 <span><strong><?php echo $comment['username'];?></strong></span>
@@ -126,9 +119,24 @@ if(empty($_POST)){
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            <!-- comment input field :-->
+            <div class="d-flex">
+                <form class="w-100" method="post">
+                    <input type="text" name="commentInputField">
+                    <input type="submit" name="addComment" value="post">
+                </form>
+            </div>
         </div>
     <?php endforeach;
 } ?>
 
+<script src="https://use.fontawesome.com/2dd2522a24.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="js/feed.js"></script>
 </body>
 </html>

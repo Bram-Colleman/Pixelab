@@ -1,15 +1,13 @@
 <?php
-include_once("nav.php");
-include_once (__DIR__ . "/classes/User.php");
+include_once(__DIR__ . "/includes/nav.php");
+include_once(__DIR__ . "/classes/User.php");
+include_once(__DIR__ . "/includes/checkSession.php");
 
 if (!empty($_POST)) {
     if(!isset($_SESSION)) {
         session_start();
     }
     $user = new User($_SESSION['user']);
-//    $user->uploadAvatar();
-//    $uploader = new Uploader($_SESSION['user']);
-//    $uploader->uploadAvatar();
 }
 
 ?>

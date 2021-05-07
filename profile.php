@@ -1,6 +1,8 @@
 <?php
-include_once("nav.php");
+include_once(__DIR__ . "/includes/nav.php");
 include_once(__DIR__ . "/classes/User.php");
+include_once(__DIR__ . "/includes/checkSession.php");
+
 
 try {
 
@@ -8,7 +10,7 @@ try {
         session_start();
     }
 
-    $user = User::fetchUserByEmail($_SESSION['email']);
+    $user = User::fetchUserByUSername($_SESSION["user"]);
 
 } catch (Exception $e) {
     $error = $e->getMessage();
@@ -59,7 +61,7 @@ if (!empty($_POST)) {
         <?php endif; ?>
     <?php endif; ?>
     <div class="flexbox">
-        <div class="justify-content-center" style="width: 50%; margin: 5% auto auto;">
+        <div class="justify-content-center w-50 m-5-auto-auto">
             <form method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
@@ -67,13 +69,13 @@ if (!empty($_POST)) {
                         <label for="file-input">
                             <?php if (!empty($user)) : ?>
                                 <?php if (!empty($user->getAvatar())) : ?>
-                                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
+                                    <img id="uploadedImage" src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle w-20-vw h-20-vw object-fit-cover" role='button' alt="avatar"/>
                                 <?php else: ?>
-                                    <img src="./images/blank_avatar.png" class="rounded-circle" style="width: 20vw;" role='button' alt=""/>
+                                    <img id="uploadedImage" src="./images/blank_avatar.png" class="rounded-circle w-20-vw" role='button' alt="blank avatar"/>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </label>
-                            <input id="file-input" type="file" name="avatar" style="display: none"/>
+                            <input class="d-none" id="file-input" type="file" name="avatar"/>
                             <input type="submit" class="position-absolute bottom-0 btn btn-danger" value="Delete picture" name="deleteAvatar">
                         </div>
                     </div>
@@ -102,7 +104,7 @@ if (!empty($_POST)) {
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="inputOldPassword" class="form-label fw-bold">Current Password <span style="color: red;">*</span></label>
+                                    <label for="inputOldPassword" class="form-label fw-bold">Current Password <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control" id="inputOldPassword" name="oldPassword" required>
                                 </div>
                             </div>
@@ -131,6 +133,7 @@ if (!empty($_POST)) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
     </body>
     </html>
 <?php endif; ?>
