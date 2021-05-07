@@ -1,7 +1,7 @@
 <?php
     session_start();
-    include_once(__DIR__."/classes/User.php");
-    include_once(__DIR__."/classes/Post.php");
+    include_once("./classes/User.php");
+    include_once("./classes/Post.php");
     try {
         $currentUser = User::fetchUserByEmail($_SESSION['email']);
     } catch (Exception $e) {
