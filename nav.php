@@ -1,6 +1,7 @@
 <?php
     session_start();
     include_once(__DIR__."/classes/User.php");
+    include_once(__DIR__."/classes/Post.php");
     try {
         $currentUser = User::fetchUserByEmail($_SESSION['email']);
     } catch (Exception $e) {
@@ -19,8 +20,8 @@
         <div class="collapse navbar-collapse justify-content-center w-100" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item align-self-md-end">
-                    <form class="d-flex m-0">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchBar">
+                    <form class="d-flex m-0" method="post">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
                     </form>
                 </li>
             </ul>
@@ -65,4 +66,4 @@
 
 <script src="https://use.fontawesome.com/2dd2522a24.js"></script>
 <script src="scripts/bootstrap.js"></script>
-<script src="scripts/search.js"></script>
+<!-- <script src="scripts/search.js"></script> -->

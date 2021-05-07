@@ -1,4 +1,4 @@
-var searchBar = document.querySelector("#searchBar");
+var searchBar = document.querySelector("#search");
 var searchQry;
 
 searchBar.addEventListener("keydown", function(e){
@@ -7,7 +7,6 @@ searchBar.addEventListener("keydown", function(e){
 
 searchBar.addEventListener("keypress", function(e){
     if (e.key === 'Enter') {
-        alert(searchQry);
-        e.preventDefault();
+        
       }
 })

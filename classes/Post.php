@@ -183,6 +183,24 @@ class Post
 
     public static function search($searchFor, $searchText)
     {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
+        $statement->bindValue(":searchText", $searchText);
+        $statement->execute();
+
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }else{
+            $recentPosts = array();
+
+            foreach ($posts as $post) {
+                array_push($recentPosts, new Post($post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+
+            return $recentPosts;
+        }
         
     }
 }
