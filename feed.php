@@ -4,11 +4,20 @@ include_once(__DIR__."/classes/Post.php");
 include_once(__DIR__."/classes/User.php");
 include_once(__DIR__."/includes/checkSession.php");
 
-try {
-    $posts = Post::fetchRecentPosts();
-} catch (Exception $e) {
-    $error = $e->getMessage();
+if(empty($_POST)){
+    try {
 
+            $posts = Post::fetchRecentPosts();
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+
+    }
+}else{
+    try {
+        $posts = Post::search('description', $_POST['search']);
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
 }
 ?>
 

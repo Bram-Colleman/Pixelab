@@ -14,7 +14,7 @@ class Post
     private $comments = array();
 
     //constructor
-    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = null, $comments = null)
+    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
     {
         $this->setId($id);
         $this->setUser($user);
@@ -177,4 +177,26 @@ class Post
         $statement->execute();
     }
 
+    public static function search($searchFor, $searchText)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
+        $statement->bindValue(":searchText", $searchText);
+        $statement->execute();
+
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }else{
+            $recentPosts = array();
+
+            foreach ($posts as $post) {
+                array_push($recentPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+
+            return $recentPosts;
+        }
+
+    }
 }
