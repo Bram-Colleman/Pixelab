@@ -111,6 +111,20 @@ class User
     }
 
     //Methods
+    public static function fetchUserByEmail($email)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+
+        $user = $statement->fetch();
+        if (!$user) {
+            throw new Exception('This user does not exist');
+        }
+        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+    }
+
     public static function fetchUserByUsername($username)
     {
         $conn = Db::getConnection();
