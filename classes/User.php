@@ -144,7 +144,9 @@ class User
                 $this->setTargetFile($this->getTargetDir() . basename($fileName));
 
                 move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile());
-                unlink("uploads/avatars/" . $this->getAvatar());
+                if (!empty($this->getAvatar())){
+                    unlink("uploads/avatars/" . $this->getAvatar());
+                }
             }
 
             if (!empty($newPassword)) {
@@ -159,7 +161,7 @@ class User
                 $statement->execute();
             }
 
-            if ($this->checkIfUserExists($email, $username)) {
+            if ($this->checkIfUserExists($email, $username) <= 1) {
                 $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail, avatar = :avatar WHERE email = :email");
                 $statement->bindValue(":username", $username);
                 $statement->bindValue(":bio", $bio);
@@ -214,7 +216,7 @@ class User
         $email = $this->getEmail();
         $password = $this->getPassword();
 
-        if($this->checkIfUserExists($email, $username)) {
+        if($this->checkIfUserExists($email, $username) == 0) {
             $statement = $conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
             $options = [
                 'cost' => 12,
@@ -232,7 +234,7 @@ class User
         }
     }
 
-    public function checkIfUserExists($email, $username): bool
+    public function checkIfUserExists($email, $username)
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT COUNT(*) FROM users WHERE (email = :email OR username = :username)");
@@ -240,7 +242,7 @@ class User
         $statement->bindValue(":username", $username);
         $statement->execute();
         $check = $statement->fetch()['COUNT(*)'];
-        return $check == 0;
+        return $check;
     }
 
 //    public function uploadAvatar() {

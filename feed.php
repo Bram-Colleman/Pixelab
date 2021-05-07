@@ -1,7 +1,8 @@
 <?php
-include_once("nav.php");
+include_once(__DIR__."/includes/nav.php");
 include_once(__DIR__."/classes/Post.php");
 include_once(__DIR__."/classes/User.php");
+include_once(__DIR__."/includes/checkSession.php");
 
 try {
     $posts = Post::fetchRecentPosts();
@@ -73,11 +74,6 @@ try {
                         <i class="fa fa-heart btn-icon" aria-hidden="true"></i>
                     </a>
                 </div>
-                <div class="col-1 px-0">
-                    <a href="#" class="border-0 outline-none bg-none text-black">
-                        <i class="fa fa-comment-o btn-icon font-size-1-6" aria-hidden="true"></i>
-                    </a>
-                </div>
                 <!--    likes:-->
             </div>
             <div class="row pt-half">
@@ -114,6 +110,13 @@ try {
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            <!-- comment input field :-->
+            <div class="d-flex">
+                <form class="w-100" method="post">
+                    <input type="text" name="commentInputField">
+                    <input type="submit" name="addComment" value="post">
+                </form>
+            </div>
         </div>
     <?php endforeach;
 } ?>

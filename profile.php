@@ -1,6 +1,8 @@
 <?php
-include_once("nav.php");
+include_once(__DIR__ . "/includes/nav.php");
 include_once(__DIR__ . "/classes/User.php");
+include_once(__DIR__ . "/includes/checkSession.php");
+
 
 try {
 
