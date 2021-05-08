@@ -183,11 +183,12 @@ class User
                 $statement->bindValue(":email", $this->getEmail());
                 $statement->bindValue(":avatar", (isset($fileName) ? $fileName : $this->getAvatar()));
                 $statement->execute();
-                
+
                 session_destroy();
                 session_start();
                 $_SESSION["user"] = $username;
                 $_SESSION["email"] = $email;
+                $_SESSION["userId"] = $this->getId();
                 header('Location: feed.php');
             }
         }
