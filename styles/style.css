@@ -33,7 +33,10 @@
     padding-top: .2rem;
     font-weight: bold;
 }
-.btn-like:hover {
+.fa-heart-o:hover {
+    color: red!important;
+}
+.fa-heart {
     color: red!important;
 }
 
