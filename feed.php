@@ -1,8 +1,9 @@
 <?php
-include_once(__DIR__."/includes/nav.php");
-include_once(__DIR__."/classes/Post.php");
-include_once(__DIR__."/classes/User.php");
-include_once(__DIR__."/includes/checkSession.php");
+include_once(__DIR__ . "/includes/nav.php");
+include_once(__DIR__ . "/classes/Post.php");
+include_once(__DIR__ . "/classes/User.php");
+include_once(__DIR__ . "/classes/Comment.php");
+include_once(__DIR__ . "/includes/checkSession.php");
 
 if(empty($_POST)){
     try {
@@ -99,7 +100,7 @@ if(empty($_POST)){
                 </div>
             </div>
             <!--    Description:-->
-            <div class="row pt-half">
+            <div class="row pt-half description">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
@@ -111,7 +112,7 @@ if(empty($_POST)){
             <!--    comments:-->
             <?php if (!empty($post->getComments())): ?>
                 <?php foreach ($post->getComments() as $comment) : ?>
-                <div class="row pt-half">
+                <div class="row pt-half comment">
                     <div class="col-12 pb-2">
                         <div class="row">
                             <div class="col-12">
@@ -128,11 +129,10 @@ if(empty($_POST)){
                 <?php endforeach; ?>
             <?php endif; ?>
             <!-- comment input field :-->
-            <div class="d-flex">
-                <form class="w-100" method="post">
-                    <input type="text" name="commentInputField">
-                    <input type="submit" name="addComment" value="post">
-                </form>
+            <div class="d-flex border-top-gray">
+                    <input class="w-100 border-0 addComment py-half-rem" type="text" name="comment" placeholder="Add a comment as <?php echo $_SESSION['user']; ?>..."
+                           data-postid="<?php echo $post->getId(); ?>"
+                           data-username="<?php echo $_SESSION['user']; ?>">
             </div>
         </div>
     <?php endforeach;
@@ -145,6 +145,7 @@ if(empty($_POST)){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
+<script src="js/liveCommentPost.js"></script>
 <script src="js/feed.js"></script>
 </body>
 </html>

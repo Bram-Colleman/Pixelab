@@ -218,6 +218,7 @@ class User
             session_start();
             $_SESSION["user"] = $user['username'];
             $_SESSION["email"] = $email;
+            $_SESSION["userId"] = $user['id'];
             header("Location: feed.php");
         }else{
             throw new Exception('Incorrect password');
