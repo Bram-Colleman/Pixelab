@@ -199,7 +199,7 @@ class Post
     public static function search($searchFor, $searchText): array
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT * FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
+        $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
         $statement->bindValue(":searchText", $searchText);
         $statement->execute();
 
@@ -210,8 +210,9 @@ class Post
             $recentPosts = array();
 
             foreach ($posts as $post) {
-                array_push($recentPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
-                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+//                array_push($recentPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
+//                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                array_push($recentPosts, Post::fetchPostById($post['id']));
             }
 
             return $recentPosts;
