@@ -43,14 +43,14 @@
                         <li><a class="dropdown-item" href="#">Notification 2</a></li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown" style="height: 5%">
+                <li class="nav-item dropdown h-5">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         <?php if (!empty($currentUser)) : ?>
                             <?php if (!empty($currentUser->getAvatar())) : ?>
-                                <img src="./uploads/avatars/<?php echo $currentUser->getAvatar();?>" alt="" class="rounded-circle" style="max-width: 1.5rem">
+                                <img src="./uploads/avatars/<?php echo $currentUser->getAvatar();?>" alt="" class="rounded-circle avatarIcon">
                             <?php else: ?>
-                        <img src="./images/blank_avatar.png" alt="" class="rounded-circle" style="max-width: 1.5rem">
+                        <img src="./images/blank_avatar.png" alt="" class="rounded-circle avatarIcon">
                             <?php endif; ?>
                         <?php endif; ?>
                     </a>

@@ -50,7 +50,7 @@ if(empty($_POST)){
                 <div class="col-1 align-self-center max-w-6">
                     <?php if (!empty($user)) {
                         if (!empty($user->getAvatar())) : ?>
-                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-1-half-vw" role='button' alt="avatar image"/>
+                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle avatarIcon" role='button' alt="avatar image"/>
                         <?php else: ?>
                             <img src="./images/blank_avatar.png" class="rounded-circle max-w-1-half-vw" role='button' alt="blank avatar"/>
                         <?php endif;
