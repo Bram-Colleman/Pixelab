@@ -78,16 +78,24 @@ if(empty($_POST)){
             <!--    action buttons:-->
             <div class="row d-flex pt-1">
                 <div class="col-1 max-w-7">
-                    <a href="#" class="border-0 outline-none bg-none text-black btn-like" data-postid="<?php echo $post->getId();?>" >
-                        <i class="fa fa-heart-o btn-icon" aria-hidden="true"></i>
-                        <i class="fa fa-heart btn-icon" aria-hidden="true"></i>
-                    </a>
+                        <a href="#" class="border-0 outline-none bg-none text-black btn-like"
+                               data-postid="<?php echo $post->getId();?>"
+                               data-liked="<?php echo in_array($_SESSION['user'],$post->getLikes())? "1": "0";?>"
+                               data-userid="<?php echo User::fetchUserByUsername($_SESSION['user'])->getId();?>">
+                            <i class="fa <?php echo in_array($_SESSION['user'],$post->getLikes())? "fa-heart": "fa-heart-o";?> btn-icon" aria-hidden="true" ></i>
+                        </a>
+<!--                    --><?php //var_dump(Post::fetchPostById(44)); ?>
                 </div>
                 <!--    likes:-->
             </div>
             <div class="row pt-half">
                 <div class="col-12">
-                    <span><?php echo sizeof($post->getLikes()); ?> likes</span>
+                    <span>
+                        <span class="like-count" id="<?php echo $post->getId();?>">
+                            <?php echo sizeof($post->getLikes()); ?>
+                        </span>
+                        likes
+                    </span>
                 </div>
             </div>
             <!--    Description:-->
