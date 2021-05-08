@@ -34,7 +34,6 @@ if(empty($_POST)){
     <title>Pixelab</title>
 </head>
 <body>
-
 <?php if (!empty($posts)) {
     foreach ($posts as $post): ?>
     <?php
@@ -146,6 +145,6 @@ if(empty($_POST)){
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
 <script src="js/liveCommentPost.js"></script>
-<script src="js/feed.js"></script>
+<script src="js/liveLikePost.js"></script>
 </body>
 </html>
