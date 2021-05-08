@@ -134,6 +134,26 @@ class Post
         }
         return $postComments;
     }
+    public static function fetchPostById($id): Post
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
+        $statement->bindValue(":postId", $id);
+        $statement->execute();
+
+        $post = $statement->fetch();
+        if (!$post) {
+            throw new Exception('Something went wrong!');
+        }
+
+        return new Post($post['id'],
+                        $post['username'],
+                        $post['image'],
+                        $post['description'],
+                        $post['timestamp'],
+                  (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
+              (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+    }
     public static function fetchPostsByUserId($userId): array
     {
         $conn = Db::getConnection();
@@ -153,7 +173,7 @@ class Post
         }
         return $fetchedPosts;
     }
-    public static function uploadPost($description)
+    public static function uploadPost($description): void
     {
 
         $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";
@@ -176,8 +196,7 @@ class Post
         $statement->bindValue(":description", $description);
         $statement->execute();
     }
-
-    public static function search($searchFor, $searchText)
+    public static function search($searchFor, $searchText): array
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT * FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
@@ -198,5 +217,21 @@ class Post
             return $recentPosts;
         }
 
+    }
+    public function like(): bool{
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO post_likes (user_id, post_id) VALUES (:userId, :postId)");
+        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
+        $statement->bindValue(":postId", $this->getId());
+        $result = $statement->execute();
+        return $result;
+    }
+    public function unlike(): bool{
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM post_likes WHERE user_id = :userId AND post_id = :postId ");
+        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
+        $statement->bindValue(":postId", $this->getId());
+        $result = $statement->execute();
+        return $result;
     }
 }
