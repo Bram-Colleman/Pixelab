@@ -10,13 +10,14 @@ class User
     private $bio;
     private $avatar;
     private $password;
+    private $followers = array();
     private $target_file;
     private $target_dir;
     private $imageFileType;
     private $uploadOk;
 
     //Constructor
-    public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null)
+    public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null, $followers = array())
     {
         $this->setId($id);
         $this->setUsername($username);
@@ -24,6 +25,7 @@ class User
         $this->setBio($bio);
         $this->setAvatar($avatar);
         $this->setPassword($password);
+        $this->setFollowers($followers);
     }
 
     //Getters
@@ -50,6 +52,10 @@ class User
     public function getPassword()
     {
         return $this->password;
+    }
+    public function getFollowers()
+    {
+        return $this->followers;
     }
     public function getTargetFile()
     {
@@ -93,6 +99,10 @@ class User
     {
         $this->password = $password;
     }
+    private function setFollowers(array $followers): void
+    {
+        $this->followers = $followers;
+    }
     private function setTargetFile($target_file): void
     {
         $this->target_file = $target_file;
@@ -122,9 +132,10 @@ class User
         if (!$user) {
             throw new Exception('This user does not exist');
         }
-        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+        $newUser = new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+        $newUser->setFollowers($newUser->fetchFollowers());
+        return $newUser;
     }
-
     public static function fetchUserByUsername($username)
     {
         $conn = Db::getConnection();
@@ -136,7 +147,23 @@ class User
         if (!$user) {
             throw new Exception('This user does not exist');
         }
-        return new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+        $newUser = new User($user['id'], $user['username'], $user['email'], $user['bio'], $user['avatar'], $user['password']);
+        $newUser->setFollowers($newUser->fetchFollowers());
+        return $newUser;
+    }
+    public function fetchFollowers() {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT username FROM followers f JOIN users u ON u.id = follower_id WHERE following_id = :followingId");
+        $statement->bindValue(":followingId", $this->getId());
+        $statement->execute();
+        $fetchedLikes = $statement->fetchAll();
+        $postLikes = array();
+        if (!empty($fetchedLikes)) {
+            foreach ($fetchedLikes as $fetchedLike) {
+                array_push($postLikes, $fetchedLike['username']);
+            }
+        }
+        return $postLikes;
     }
     public function updateUser($username, $bio, $email, $currentPassword, $newPassword)
     {
@@ -254,7 +281,6 @@ class User
             return $result;
         }
     }
-
     public function checkIfUserExists($email, $username)
     {
         $conn = Db::getConnection();
@@ -264,6 +290,22 @@ class User
         $statement->execute();
         $check = $statement->fetch()['COUNT(*)'];
         return $check;
+    }
+    public function follow() {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO followers (follower_id, following_id) VALUES (:followerId, :followingId)");
+        $statement->bindValue(":followerId", User::fetchUserByUsername($_SESSION["user"])->getId());
+        $statement->bindValue(":followingId", $this->getId());
+        $result = $statement->execute();
+        return $result;
+    }
+    public function unfollow() {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM followers WHERE following_id = :followingId AND follower_id = :followerId");
+        $statement->bindValue(":followingId", $this->getId());
+        $statement->bindValue(":followerId", User::fetchUserByUsername($_SESSION['user'])->getId());
+        $result = $statement->execute();
+        return $result;
     }
 
 //    public function uploadAvatar() {
