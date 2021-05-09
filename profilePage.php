@@ -24,12 +24,29 @@ try {
 </head>
 <body>
     <div class="container">
-        <?php if (!empty($user->getAvatar())) : ?>
-            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-10-vw" alt="uploaded avatar"/>
-        <?php else: ?>
-            <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw" alt="blank avatar"/>
-        <?php endif; ?>
-        <h1 class="d-inline"><?php echo $user->getUsername();?></h1>
+        <div class="row pb-5 pt-5">
+            <div class="col-3 text-center">
+                <?php if (!empty($user->getAvatar())) : ?>
+                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-10-vw" alt="uploaded avatar"/>
+                <?php else: ?>
+                    <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw" alt="blank avatar"/>
+                <?php endif; ?>
+            </div>
+            <div class="col-6 align-self-center">
+                <h1 class="d-inline"><?php echo $user->getUsername();?></h1>
+                <p id="followerCount"><?php echo sizeof($user->fetchFollowers()); ?> Followers</p>
+            </div>
+            <?php if ($_GET['user'] != $_SESSION['user']): ?>
+            <div class="col-3 align-self-center text-center">
+                <button class="btn btn-primary" id="followButton"
+                        data-isfollowing="<?php echo(in_array($_SESSION['user'],User::fetchUserByUsername($_GET['user'])->getFollowers()))?"1":"0"; ?>"
+                        data-follower="<?php echo $_SESSION['user']?>"
+                        data-following="<?php echo $_GET['user']?>">
+                    <?php echo(in_array($_SESSION['user'],User::fetchUserByUsername($_GET['user'])->getFollowers())? "Unfollow":"Follow"); ?>
+                </button>
+            </div>
+            <?php endif; ?>
+        </div>
     </div>
     <div class="container d-flex flex-wrap m-auto">
     <?php try {
@@ -79,5 +96,6 @@ try {
         }
     )
 </script>
+    <script src="./js/liveFollowUser.js"></script>
 </body>
 </html>
