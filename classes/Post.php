@@ -235,4 +235,13 @@ class Post
         $result = $statement->execute();
         return $result;
     }
+
+    public function reportPost(){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO post_strikes (user_id, post_id) VALUES (:userId, :postId)");
+        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
+        $statement->bindValue(":postId", $this->getId());
+        $result = $statement->execute();
+        return $result;
+    }
 }

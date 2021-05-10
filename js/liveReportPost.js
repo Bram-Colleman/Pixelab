@@ -3,8 +3,23 @@ for (let i = 0; i < reportButtons.length; i++) {
     reportButtons[i].addEventListener('click', function(e) {
         // Getting post id
         let postId = this.dataset.postid;
-        let userId = this.dataset.userid;
-        console.log(postId+"   "+userId);
+        
+        // Post to database
+        let formData = new FormData();
+        formData.append('postId', postId);
+
+        fetch('ajax/reportPost.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
 
         e.preventDefault();
     });
