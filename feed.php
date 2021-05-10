@@ -111,7 +111,10 @@ if(empty($_POST)){
                                data-userid="<?php echo User::fetchUserByUsername($_SESSION['user'])->getId();?>">
                             <i class="fa <?php echo in_array($_SESSION['user'],$post->getLikes())? "fa-heart": "fa-heart-o";?> btn-icon" aria-hidden="true" ></i>
                         </a>
-                        <a href="#" class="border-0 outline-none bg-none text-blac btn-report">Report</a>
+                        <a href="#" class="border-0 outline-none bg-none text-blac btn-report" 
+                        data-postid="<?php echo $post->getId();?>" 
+                        data-userid="<?php echo User::fetchUserByUsername($_SESSION['user'])->getId();?>"
+                        >Report</a>
 <!--                    --><?php //var_dump(Post::fetchPostById(44)); ?>
                 </div>
                 <!--    likes:-->
