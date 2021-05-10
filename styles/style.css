@@ -51,6 +51,12 @@
     object-fit: cover;
 }
 
+.timestamp-comment {
+    display: block;
+    font-size: 0.7rem;
+    color: #757575;
+}
+
 /* utility classes */
 
 .w-35 {

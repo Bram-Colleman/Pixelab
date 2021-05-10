@@ -122,14 +122,14 @@ class Post
     public static function fetchComments($postId): array
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT u.username, c.content FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
+        $statement = $conn->prepare("SELECT u.username, c.content, c.id FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
         $statement->bindValue(":postId", $postId);
         $statement->execute();
         $fetchedComments = $statement->fetchAll();
         $postComments = array();
         if (!empty($fetchedComments)) {
             foreach ($fetchedComments as $fetchedComment) {
-                array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content']));
+                array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content'], "id" => $fetchedComment['id']));
             }
         }
         return $postComments;
