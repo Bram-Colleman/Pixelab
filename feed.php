@@ -7,8 +7,7 @@ include_once(__DIR__ . "/includes/checkSession.php");
 
 if(empty($_POST)){
     try {
-
-            $posts = Post::fetchRecentPosts();
+            $posts = Post::fetchRecentPosts(20,0);
     } catch (Exception $e) {
         $error = $e->getMessage();
 
@@ -37,6 +36,7 @@ $newComment = new Comment();
     <title>Pixelab</title>
 </head>
 <body>
+<div id="PostContainer">
 <?php if (!empty($posts)) {
     foreach ($posts as $post): ?>
     <?php
@@ -96,10 +96,10 @@ $newComment = new Comment();
             </div>
             <div class="row pt-half">
                 <div class="col-12">
+                    <span class="like-count" id="<?php echo $post->getId();?>">
+                        <?php echo sizeof($post->getLikes()); ?>
+                    </span>
                     <span>
-                        <span class="like-count" id="<?php echo $post->getId();?>">
-                            <?php echo sizeof($post->getLikes()); ?>
-                        </span>
                         likes
                     </span>
                 </div>
@@ -109,7 +109,8 @@ $newComment = new Comment();
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
-                            <span><strong><?php echo htmlspecialchars($post->getUser()); ?> </strong></span><span><?php echo htmlspecialchars($post->getDescription());?></span>
+
+                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span><?php echo htmlspecialchars($post->getDescription());?></span>
                         </div>
                     </div>
                 </div>
@@ -121,7 +122,7 @@ $newComment = new Comment();
                     <div class="col-12 pb-2">
                         <div class="row">
                             <div class="col-12">
-                                <span><strong><?php echo htmlspecialchars($comment['username']);?></strong></span>
+                                <span class="fw-bold"><?php echo htmlspecialchars($comment['username']);?></span>
                             </div>
                         </div>
                         <div class="row">
@@ -141,8 +142,14 @@ $newComment = new Comment();
                            data-username="<?php echo htmlspecialchars($_SESSION['user']); ?>">
             </div>
         </div>
+
     <?php endforeach;
 } ?>
+
+</div>
+<div class="d-flex justify-content-center pt-5 pb-5">
+    <button class="btn btn-primary m-4" data-currentpostamount="20" id="btn-loadmore">Load more</button>
+</div>
 
 <script src="https://use.fontawesome.com/2dd2522a24.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -153,6 +160,7 @@ $newComment = new Comment();
         crossorigin="anonymous"></script>
 <script src="js/liveCommentPost.js"></script>
 <script src="js/liveLikePost.js"></script>
+<script src="js/liveMorePosts.js"></script>
 <script src="js/liveReportPost.js"></script>
 </body>
 </html>

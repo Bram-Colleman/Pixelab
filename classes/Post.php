@@ -13,9 +13,10 @@ class Post
     private $likes = array();
     private $comments = array();
 
+
     // Constructor
 
-    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
+  public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
     {
         $this->setId($id);
         $this->setUser($user);
@@ -56,13 +57,65 @@ class Post
     {
         return $this->comments;
     }
-    public static function fetchRecentPosts(): array
+
+    //Setters
+    private function setId($id): void
+    {
+        $this->id = $id;
+    }
+    private function setUser($user): void
+    {
+        $this->user = $user;
+    }
+    private function setImage($image): void
+    {
+        $this->image = $image;
+    }
+    private function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+    private function setTimestamp($timestamp): void
+    {
+        $this->timestamp = $timestamp;
+    }
+    public function setLikes(array $likes): void
+    {
+        $this->likes = $likes;
+    }
+    public function setComments(array $comments): void
+    {
+        $this->comments = $comments;
+    }
+
+    //Methods
+    public static function fetchRecentPosts($limit, $offset)
+
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC  LIMIT 20");
+        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
         $statement->execute();
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }
+        $recentPosts = array();
 
-        return Post::loadPosts($statement);
+        if ($offset === 0 ){
+            foreach ($posts as $post) {
+                array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                    (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+            return $recentPosts;
+        } else {
+            foreach ($posts as $post) {
+                $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                    (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+                array_push($recentPosts, $newPost->toArray());
+            }
+            return $recentPosts;
+        }
+
     }
     public static function fetchLikes($postId): array
     {
@@ -134,37 +187,6 @@ class Post
             (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
     }
 
-    // Setters
-
-    private function setId($id): void
-    {
-        $this->id = $id;
-    }
-    private function setUser($user): void
-    {
-        $this->user = $user;
-    }
-    private function setImage($image): void
-    {
-        $this->image = $image;
-    }
-    private function setDescription($description): void
-    {
-        $this->description = $description;
-    }
-    private function setTimestamp($timestamp): void
-    {
-        $this->timestamp = $timestamp;
-    }
-    public function setLikes(array $likes): void
-    {
-        $this->likes = $likes;
-    }
-    public function setComments(array $comments): void
-    {
-        $this->comments = $comments;
-    }
-
     // Methods
 
     public static function uploadPost($description): void
@@ -220,6 +242,7 @@ class Post
         return Post::loadPosts($statement);
 
     }
+
 
     public function postedTimeAgo($postId) {
         date_default_timezone_set('Europe/Brussels');
@@ -305,5 +328,22 @@ class Post
             
         }
         return $selectedPosts;
+    }
+    public function toArray()
+    {
+        $poster = User::fetchUserByUsername($this->getUser());
+        $array = array(
+            "id" => $this->getId(),
+            "description" => $this->getDescription(),
+            "image" => $this->getImage(),
+            "timestamp" => $this->getTimestamp(),
+            "user" => $this->getUser(),
+            "likes" => $this->getLikes(),
+            "comments" => $this->getComments(),
+            "posterImage" => $poster->getAvatar(),
+            "sessionUser" => $_SESSION['user'],
+            "sessionUserId" => User::fetchUserByUsername($_SESSION['user'])->getId(),
+        );
+        return $array;
     }
 }
