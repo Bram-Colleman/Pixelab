@@ -63,6 +63,10 @@
 
 /* utility classes */
 
+.w-10-rem {
+    width: 10rem;
+}
+
 .w-35 {
     width: 35%;
 }
@@ -77,6 +81,10 @@
 
 .h-256-px {
     height: 256px;
+}
+
+.h-10-rem {
+    height: 10rem;
 }
 
 .h-20-vw {
