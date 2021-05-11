@@ -11,6 +11,35 @@ class Comment
 
     // Getters
 
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+    public function getPostId()
+    {
+        return $this->post_id;
+    }
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    // Setters
+
+    public function setUserId($user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+    public function setPostId($post_id): void
+    {
+        $this->post_id = $post_id;
+    }
+    public function setContent($content): void
+    {
+        $this->content = $content;
+    }
+
+    // Methods
     public function save() {
         $conn = Db::getConnection();
         $userId = $this->getUserId();
@@ -23,40 +52,6 @@ class Comment
         $statement->bindValue(":content", $content);
         return $statement->execute();
     }
-
-    // Setters
-
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId($user_id): void
-    {
-        $this->user_id = $user_id;
-    }
-
-    public function getPostId()
-    {
-        return $this->post_id;
-    }
-
-    public function setPostId($post_id): void
-    {
-        $this->post_id = $post_id;
-    }
-
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    public function setContent($content): void
-    {
-        $this->content = $content;
-    }
-
-    // Methods
 
     public function timeAgo($commentId) {
         date_default_timezone_set ('Europe/Brussels');
