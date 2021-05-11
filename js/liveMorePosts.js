@@ -12,6 +12,7 @@ document.querySelector("#btn-loadmore").addEventListener('click', function(event
                 if (result.body !== "Something went wrong."){
                     this.dataset.currentpostamount = parseInt(this.dataset.currentpostamount) + 20;
                     for (let i = 0; i<result.body[1]; i++) {
+                        // console.log(result.body[2][i]);
                         document.querySelector("#PostContainer")
                             .appendChild(createPost(result.body[0][i]['posterImage'],
                                 result.body[0][i]['user'],
@@ -21,10 +22,12 @@ document.querySelector("#btn-loadmore").addEventListener('click', function(event
                                 result.body[0][i]['id'],
                                 result.body[0][i]['sessionUserId'],
                                 result.body[0][i]['description'],
-                                result.body[0][i]['comments']
+                                result.body[0][i]['comments'],
+                                result.body[0][i]['timeAgo'],
+                                result.body[0][i]['commentsAgo']
                             ));
                     }
-                    loadScripts()
+                    loadScripts();
 
                 } else {
                     $("#btn-loadmore").toggle();
@@ -35,12 +38,12 @@ document.querySelector("#btn-loadmore").addEventListener('click', function(event
 
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error:', error.message);
             });
     event.preventDefault();
 });
 
-function createPost(avatar, posterName, postImg, sessionUsername, likes, postId, userId, description, comments) {
+function createPost(avatar, posterName, postImg, sessionUsername, likes, postId, userId, description, comments, timeAgo, commentsAgo) {
     let div1 = document.createElement("div");
     div1.className = "container-fluid shadow w-35 pt-1 pb-1 mt-5";
 
@@ -63,18 +66,22 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
     }
     imgHeader.setAttribute("role", "button");
     let divHeader3 = document.createElement("div");
-    divHeader3.className = "col-9 align-self-center";
+    divHeader3.className = "col-8 align-self-center";
     let aHeader = document.createElement("a");
     aHeader.innerText = " " + posterName;
     aHeader.className = "text-decoration-none text-black fw-bold";
     aHeader.setAttribute("href", "./profilePage.php?user="+posterName);
+    let divHeader4 = document.createElement("div");
+    divHeader4.className = "col-3 align-self-center justify-content-end timestamp-post";
+    divHeader4.innerText = "Posted "+ timeAgo +" ago";
+
 
     div1.appendChild(divHeader1);
     divHeader1.appendChild(divHeader2);
     divHeader2.appendChild(imgHeader);
     divHeader1.appendChild(divHeader3);
     divHeader3.appendChild(aHeader);
-    // Timestamp
+    divHeader1.appendChild(divHeader4);
 
 
     // Post
@@ -102,27 +109,37 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
     divAction1.className = "row d-flex pt-1";
     let divAction2 = document.createElement("div");
     divAction2.className = "col-1 max-w-7";
-    let aAction = document.createElement("a");
-    aAction.className = "border-0 outline-none bg-none text-black btn-like";
-    aAction.setAttribute("href", "#");
-    aAction.setAttribute("data-postid", postId);
-    aAction.setAttribute("data-userid", userId);
+    let aAction1 = document.createElement("a");
+    aAction1.className = "border-0 outline-none bg-none text-black btn-like";
+    aAction1.setAttribute("href", "#");
+    aAction1.setAttribute("data-postid", postId);
+    aAction1.setAttribute("data-userid", userId);
     let iAction = document.createElement("i");
     iAction.setAttribute("aria-hidden", "true");
     if (likes.includes(sessionUsername)) {
         iAction.className = "btn-icon fa fa-heart";
-        aAction.setAttribute("data-liked", "1");
+        aAction1.setAttribute("data-liked", "1");
 
     } else {
         iAction.className = "btn-icon fa fa-heart-o";
-        aAction.setAttribute("data-liked", "0");
+        aAction1.setAttribute("data-liked", "0");
 
     }
+    let divAction3 = document.createElement("div");
+    divAction3.className = "col-11 d-flex justify-content-end";
+    let aAction2 = document.createElement("a");
+    aAction2.className = "border-0 outline-none bg-none text-blac btn-report text-end";
+    aAction2.setAttribute("href", "#");
+    aAction2.setAttribute("data-postid", postId);
+    aAction2.innerText = "Report";
+
 
     div1.appendChild(divAction1);
     divAction1.appendChild(divAction2);
-    divAction2.appendChild(aAction);
-    aAction.appendChild(iAction);
+    divAction2.appendChild(aAction1);
+    aAction1.appendChild(iAction);
+    divAction1.appendChild(divAction3);
+    divAction3.appendChild(aAction2);
 
 
     // Likes
@@ -184,9 +201,11 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
             divComments5.className = "row";
             let divComments6 = document.createElement("div");
             divComments6.className = "col-12";
-
             let spanCommentText = document.createElement("div");
             spanCommentText.innerText = comments[i]['content'];
+            let spanCommentTimeAgo = document.createElement("div");
+            spanCommentTimeAgo.className = "timestamp-comment";
+            spanCommentTimeAgo.innerText = commentsAgo[i];
 
             div1.appendChild(divComments1);
             divComments1.appendChild(divComments2);
@@ -196,6 +215,7 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
             divComments2.appendChild(divComments5);
             divComments5.appendChild(divComments6);
             divComments6.appendChild(spanCommentText);
+            divComments6.appendChild(spanCommentTimeAgo);
         }
     }
     // CommentInput
@@ -223,4 +243,8 @@ function loadScripts() {
     let commentScript = document.createElement("script");
     commentScript.setAttribute("src", "js/liveCommentPost.js");
     document.querySelector("body").appendChild(commentScript);
+
+    let reportScript = document.createElement("script");
+    reportScript.setAttribute("src", "js/liveReportPost.js");
+    document.querySelector("body").appendChild(reportScript);
 }

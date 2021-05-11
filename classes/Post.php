@@ -2,6 +2,7 @@
 
 include_once(__DIR__ . "/Db.php");
 include_once(__DIR__ . "/User.php");
+include_once (__DIR__ . "/Comment.php");
 
 class Post
 {
@@ -15,8 +16,7 @@ class Post
 
 
     // Constructor
-
-  public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
+    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
     {
         $this->setId($id);
         $this->setUser($user);
@@ -28,7 +28,6 @@ class Post
     }
 
     // Getters
-
     public function getUser()
     {
         return $this->user;
@@ -58,7 +57,7 @@ class Post
         return $this->comments;
     }
 
-    //Setters
+    // Setters
     private function setId($id): void
     {
         $this->id = $id;
@@ -88,7 +87,7 @@ class Post
         $this->comments = $comments;
     }
 
-    //Methods
+    // Methods
     public static function fetchRecentPosts($limit, $offset)
 
     {
@@ -186,9 +185,6 @@ class Post
             (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
             (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
     }
-
-    // Methods
-
     public static function uploadPost($description): void
     {
 
@@ -212,7 +208,6 @@ class Post
         $statement->bindValue(":description", $description);
         $statement->execute();
     }
-
     public function like(): bool
     {
         $conn = Db::getConnection();
@@ -222,7 +217,6 @@ class Post
         $result = $statement->execute();
         return $result;
     }
-
     public function unlike(): bool
     {
         $conn = Db::getConnection();
@@ -232,7 +226,6 @@ class Post
         $result = $statement->execute();
         return $result;
     }
-
     public static function search($searchFor, $searchText): array
     {
         $conn = Db::getConnection();
@@ -242,14 +235,12 @@ class Post
         return Post::loadPosts($statement);
 
     }
-
-
-    public function postedTimeAgo($postId) {
+    public function postedTimeAgo() {
         date_default_timezone_set('Europe/Brussels');
 
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT timestamp FROM posts WHERE id = :id");
-        $statement->bindValue(":id", $postId);
+        $statement->bindValue(":id", $this->getId());
         $statement->execute();
         $data = $statement->fetch();
 
@@ -273,7 +264,6 @@ class Post
             return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
         }
     }
-
     public function reportPost(){
         $userId = User::fetchUserByUsername($_SESSION["user"])->getId();
         $postId = $this->getId();
@@ -287,7 +277,6 @@ class Post
         return $result;
         
     }
-
     public static function alreadyReported($postId, $userId){
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT * FROM `post_strikes` WHERE post_id = :postId AND user_id = :userId");
@@ -302,7 +291,6 @@ class Post
             return true;
         }
     }
-
     private static function postReportCount($postId){
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT COUNT(*) AS amount FROM `post_strikes` WHERE post_id = :postId");
@@ -312,7 +300,6 @@ class Post
 
         return (int)$report["amount"];
     }
-
     private static function loadPosts($statement){
         $posts = $statement->fetchAll();
         if (!$posts) {
@@ -332,7 +319,11 @@ class Post
     public function toArray()
     {
         $poster = User::fetchUserByUsername($this->getUser());
-        $array = array(
+        $timesAgo = array();
+        foreach ($this->getComments() as $comment) {
+            array_push($timesAgo, Comment::timeAgo($comment['id']));
+        }
+        return array(
             "id" => $this->getId(),
             "description" => $this->getDescription(),
             "image" => $this->getImage(),
@@ -343,7 +334,8 @@ class Post
             "posterImage" => $poster->getAvatar(),
             "sessionUser" => $_SESSION['user'],
             "sessionUserId" => User::fetchUserByUsername($_SESSION['user'])->getId(),
+            "timeAgo" => $this->postedTimeAgo(),
+            "commentsAgo" => $timesAgo,
         );
-        return $array;
     }
 }

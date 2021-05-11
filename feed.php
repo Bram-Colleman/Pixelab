@@ -87,10 +87,12 @@ $newComment = new Comment();
                                data-userid="<?php echo User::fetchUserByUsername($_SESSION['user'])->getId();?>">
                             <i class="fa <?php echo in_array($_SESSION['user'],$post->getLikes())? "fa-heart": "fa-heart-o";?> btn-icon" aria-hidden="true" ></i>
                         </a>
-                        <a href="#" class="border-0 outline-none bg-none text-blac btn-report" 
-                        data-postid="<?php echo $post->getId();?>" 
-                        >Report</a>
 <!--                    --><?php //var_dump(Post::fetchPostById(44)); ?>
+                </div>
+                <div class="col-11 d-flex justify-content-end">
+                    <a href="#" class="border-0 outline-none bg-none text-blac btn-report text-end"
+                       data-postid="<?php echo $post->getId();?>"
+                    >Report</a>
                 </div>
                 <!--    likes:-->
             </div>
@@ -109,8 +111,7 @@ $newComment = new Comment();
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
-
-                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span><?php echo htmlspecialchars($post->getDescription());?></span>
+                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span> <?php echo htmlspecialchars($post->getDescription());?></span>
                         </div>
                     </div>
                 </div>
@@ -128,7 +129,7 @@ $newComment = new Comment();
                         <div class="row">
                             <div class="col-12">
                                 <span><?php echo htmlspecialchars($comment['content']);?></span>
-                                <span class="timestamp-comment"><?php echo $newComment->timeAgo($comment['id']) . " ago"; ?></span>
+                                <span class="timestamp-comment"><?php echo Comment::timeAgo($comment['id']) . " ago"; ?></span>
                             </div>
                         </div>
                     </div>
@@ -142,7 +143,6 @@ $newComment = new Comment();
                            data-username="<?php echo htmlspecialchars($_SESSION['user']); ?>">
             </div>
         </div>
-
     <?php endforeach;
 } ?>
 

@@ -10,7 +10,6 @@ class Comment
     private $content;
 
     // Getters
-
     public function getUserId()
     {
         return $this->user_id;
@@ -25,7 +24,6 @@ class Comment
     }
 
     // Setters
-
     public function setUserId($user_id): void
     {
         $this->user_id = $user_id;
@@ -52,8 +50,7 @@ class Comment
         $statement->bindValue(":content", $content);
         return $statement->execute();
     }
-
-    public function timeAgo($commentId) {
+    public static function timeAgo($commentId) {
         date_default_timezone_set ('Europe/Brussels');
 
         $conn = Db::getConnection();
