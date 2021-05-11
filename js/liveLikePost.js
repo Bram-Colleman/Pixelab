@@ -1,12 +1,9 @@
 //onload
-// $(function () {
-//     $(".fa-heart").toggle();
-// });
+document.addEventListener('load', function () {
+    let likeButtons = [];
+})
 
-
-
-//clickevent likebutton
-let likeButtons = document.querySelectorAll(".btn-like");
+likeButtons = document.querySelectorAll(".btn-like");
 for (let i = 0; i < likeButtons.length; i++) {
     likeButtons[i].addEventListener('click', function(event) {
         $(this).children('i').toggleClass("fa-heart-o").toggleClass("fa-heart");

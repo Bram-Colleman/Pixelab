@@ -65,6 +65,14 @@
     width: 20vw;
 }
 
+.w-10-vw {
+    width: 10vw;
+}
+
+.h-10-vw {
+    height: 10vw;
+}
+
 .w-256-px {
     width: 256px;
 }

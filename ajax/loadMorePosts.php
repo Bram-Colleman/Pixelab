@@ -5,16 +5,13 @@ if (!empty($_POST)) {
     session_start();
 
     try {
-        $post = Post::fetchPostById($_POST['postId']);
-        $post->unlike();
-        $b = [  'amount' => sizeof(Post::fetchLikes($post->getId())),
-                'postid' => $post->getId()
-        ];
+        $posts = Post::fetchRecentPosts(20, $_POST['currentAmount']);
+        $postamount = sizeof($posts);
 
         $response = [
             'status' => 'success',
-            'body' => $b,
-            'message' => 'Post unliked'
+            'body' => [$posts, $postamount],
+            'message' => 'Posts loaded'
         ];
 
         header('Content-type: application/json');
@@ -23,12 +20,10 @@ if (!empty($_POST)) {
         $response = [
             'status' => 'Failed',
             'body' => 'Something went wrong.',
-            'message' => 'Something went wrong.'
+            'message' => $e->getMessage()
         ];
         echo json_encode($response);
     }
-
-
 }
 
 

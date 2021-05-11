@@ -27,7 +27,7 @@ try {
         <div class="row pb-5 pt-5">
             <div class="col-3 text-center">
                 <?php if (!empty($user->getAvatar())) : ?>
-                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-10-vw" alt="uploaded avatar"/>
+                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle w-10-vw h-10-vw object-fit-cover alt="uploaded avatar"/>
                 <?php else: ?>
                     <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw" alt="blank avatar"/>
                 <?php endif; ?>
