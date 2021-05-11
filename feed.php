@@ -20,6 +20,9 @@ if(empty($_POST)){
         $error = $e->getMessage();
     }
 }
+
+$newComment = new Comment();
+
 ?>
 
 <!doctype html>
@@ -148,6 +151,7 @@ if(empty($_POST)){
                         <div class="row">
                             <div class="col-12">
                                 <span><?php echo $comment['content'];?></span>
+                                <span class="timestamp-comment"><?php echo $newComment->timeAgo($comment['id']) . " ago"; ?></span>
                             </div>
                         </div>
                     </div>

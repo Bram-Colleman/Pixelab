@@ -24,7 +24,9 @@ for (let i = 0; i < inputFields.length; i++) {
                     console.log("Success:", result);
                     let commentList = inputFields[i].parentNode.parentNode.querySelectorAll(".comment");
                     let newComment = document.createElement('div');
-                    newComment.innerHTML = "<span><strong>" + username + "</strong></span>" + "<br>" + result.body;
+                    newComment.innerHTML = "<span><strong>" + username + "</strong></span>" +
+                        "<br>" + result.body +
+                        "<br>" + "<span class='timestamp-comment'>Just now</span>";
                     if(commentList.length === 0) {
                         commentList = inputFields[i].parentNode.parentNode.querySelectorAll(".description");
                         commentList[(commentList.length) - 1].appendChild(newComment);
