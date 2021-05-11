@@ -48,8 +48,7 @@ $newComment = new Comment();
     ?>
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
-            <div class="row h-5 mb-2">
-
+            <div class="row h-5 mb-1">
                 <div class="col-1 align-self-center max-w-6">
                     <?php if (!empty($user)) {
                         if (!empty($user->getAvatar())) : ?>
@@ -59,39 +58,13 @@ $newComment = new Comment();
                         <?php endif;
                     } ?>
                 </div>
-                <div class="col-9 align-self-center">
+                <div class="col-8 align-self-center">
                     <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
                         echo $post->getUser();
                     } catch (Exception $e) {
                     } ?>"><?php echo $post->getUser(); ?></a>
                 </div>
-                <div class="col-2 align-self-center justify-content-end timestamp-post">
-                    <?php
-                    $a = new DateTime($post->getTimestamp());
-                    $b = new DateTime(date('Y-m-d H:i:s'));
-
-
-                    $intervalminutes = $a->diff($b)->i;
-                    $intervalhourstomin =  ($a->diff($b)->H) *60;
-                    $intervaldaystomin =  ($a->diff($b)->d) *24*60;
-                    $interval = $intervalminutes+$intervalhourstomin+$intervaldaystomin-60;
-
-
-                    $intervalhours =  ($a->diff($b)->h);
-                    $intervaldays =  ($a->diff($b)->d);
-
-                    if ($interval<0) {
-                        echo "Today";
-                    }
-                    elseif ($intervaldays> 0 && $intervaldays<7) {
-                        echo $intervaldays . "d ago";
-                    }
-                    elseif ($intervaldays>7) {
-                        echo floor($intervaldays/7) . "w ago"; // => 1
-
-                    }
-                    ?>
-                </div>
+                <div class="col-3 align-self-center justify-content-end timestamp-post"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></div>
             </div>
             <!--    post:-->
             <div class="row">

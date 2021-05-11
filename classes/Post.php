@@ -13,7 +13,8 @@ class Post
     private $likes = array();
     private $comments = array();
 
-    //constructor
+    // Constructor
+
     public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
     {
         $this->setId($id);
@@ -25,11 +26,8 @@ class Post
         $this->setComments($comments);
     }
 
-    //Getters
-    public function getId()
-    {
-        return $this->id;
-    }
+    // Getters
+
     public function getUser()
     {
         return $this->user;
@@ -37,6 +35,10 @@ class Post
     public function getImage()
     {
         return $this->image;
+    }
+    public function getId()
+    {
+        return $this->id;
     }
     public function getDescription()
     {
@@ -54,38 +56,6 @@ class Post
     {
         return $this->comments;
     }
-
-    //Setters
-    private function setId($id): void
-    {
-        $this->id = $id;
-    }
-    private function setUser($user): void
-    {
-        $this->user = $user;
-    }
-    private function setImage($image): void
-    {
-        $this->image = $image;
-    }
-    private function setDescription($description): void
-    {
-        $this->description = $description;
-    }
-    private function setTimestamp($timestamp): void
-    {
-        $this->timestamp = $timestamp;
-    }
-    public function setLikes(array $likes): void
-    {
-        $this->likes = $likes;
-    }
-    public function setComments(array $comments): void
-    {
-        $this->comments = $comments;
-    }
-
-    //Methods
     public static function fetchRecentPosts(): array
     {
         $conn = Db::getConnection();
@@ -98,7 +68,7 @@ class Post
         }
         $recentPosts = array();
         foreach ($posts as $post) {
-            array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+            array_push($recentPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
         }
         return $recentPosts;
@@ -134,26 +104,6 @@ class Post
         }
         return $postComments;
     }
-    public static function fetchPostById($id): Post
-    {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
-        $statement->bindValue(":postId", $id);
-        $statement->execute();
-
-        $post = $statement->fetch();
-        if (!$post) {
-            throw new Exception('Something went wrong!');
-        }
-
-        return new Post($post['id'],
-                        $post['username'],
-                        $post['image'],
-                        $post['description'],
-                        $post['timestamp'],
-                  (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
-              (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
-    }
     public static function fetchPostsByUserId($userId): array
     {
         $conn = Db::getConnection();
@@ -173,6 +123,60 @@ class Post
         }
         return $fetchedPosts;
     }
+    public static function fetchPostById($id): Post
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
+        $statement->bindValue(":postId", $id);
+        $statement->execute();
+
+        $post = $statement->fetch();
+        if (!$post) {
+            throw new Exception('Something went wrong!');
+        }
+
+        return new Post($post['id'],
+            $post['username'],
+            $post['image'],
+            $post['description'],
+            $post['timestamp'],
+            (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
+            (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+    }
+
+    // Setters
+
+    private function setId($id): void
+    {
+        $this->id = $id;
+    }
+    private function setUser($user): void
+    {
+        $this->user = $user;
+    }
+    private function setImage($image): void
+    {
+        $this->image = $image;
+    }
+    private function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+    private function setTimestamp($timestamp): void
+    {
+        $this->timestamp = $timestamp;
+    }
+    public function setLikes(array $likes): void
+    {
+        $this->likes = $likes;
+    }
+    public function setComments(array $comments): void
+    {
+        $this->comments = $comments;
+    }
+
+    // Methods
+
     public static function uploadPost($description): void
     {
 
@@ -196,6 +200,27 @@ class Post
         $statement->bindValue(":description", $description);
         $statement->execute();
     }
+
+    public function like(): bool
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO post_likes (user_id, post_id) VALUES (:userId, :postId)");
+        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
+        $statement->bindValue(":postId", $this->getId());
+        $result = $statement->execute();
+        return $result;
+    }
+
+    public function unlike(): bool
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM post_likes WHERE user_id = :userId AND post_id = :postId ");
+        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
+        $statement->bindValue(":postId", $this->getId());
+        $result = $statement->execute();
+        return $result;
+    }
+
     public static function search($searchFor, $searchText): array
     {
         $conn = Db::getConnection();
@@ -206,7 +231,7 @@ class Post
         $posts = $statement->fetchAll();
         if (!$posts) {
             throw new Exception('There are no posts found');
-        }else{
+        } else {
             $recentPosts = array();
 
             foreach ($posts as $post) {
@@ -219,20 +244,34 @@ class Post
         }
 
     }
-    public function like(): bool{
+
+    public function postedTimeAgo($postId) {
+        date_default_timezone_set('Europe/Brussels');
+
         $conn = Db::getConnection();
-        $statement = $conn->prepare("INSERT INTO post_likes (user_id, post_id) VALUES (:userId, :postId)");
-        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
-        $statement->bindValue(":postId", $this->getId());
-        $result = $statement->execute();
-        return $result;
-    }
-    public function unlike(): bool{
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("DELETE FROM post_likes WHERE user_id = :userId AND post_id = :postId ");
-        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
-        $statement->bindValue(":postId", $this->getId());
-        $result = $statement->execute();
-        return $result;
+        $statement = $conn->prepare("SELECT timestamp FROM posts WHERE id = :id");
+        $statement->bindValue(":id", $postId);
+        $statement->execute();
+        $data = $statement->fetch();
+
+        $time = strtotime($data[0]);
+
+        $time = time() - $time;
+        $time = ($time < 1) ? 1 : $time;
+        $tokens = array(
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
+
+        foreach ($tokens as $unit => $text) {
+            if ($time < $unit) continue;
+            $numberOfUnits = floor($time / $unit);
+            return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
+        }
     }
 }
