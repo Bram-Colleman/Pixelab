@@ -15,6 +15,7 @@ for (let i = 0; i < reportButtons.length; i++) {
         .then(response => response.json())
         .then(result => {
             console.log('Success:', result);
+            this.innerHTML = "Reported";
         })
         .catch(error => {
             console.error('Error:', error);

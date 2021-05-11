@@ -237,11 +237,31 @@ class Post
     }
 
     public function reportPost(){
+        $userId = User::fetchUserByUsername($_SESSION["user"])->getId();
+        $postId = $this->getId();
+
+        
         $conn = Db::getConnection();
         $statement = $conn->prepare("INSERT INTO post_strikes (user_id, post_id) VALUES (:userId, :postId)");
-        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
-        $statement->bindValue(":postId", $this->getId());
+        $statement->bindValue(":userId", $userId);
+        $statement->bindValue(":postId", $postId);
         $result = $statement->execute();
         return $result;
+        
+    }
+
+    public static function alreadyReported($postId, $userId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM `post_strikes` WHERE post_id = :postId AND user_id = :userId");
+        $statement->bindValue(":postId", $postId, PDO::PARAM_INT);
+        $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $statement->execute();
+        //return $result;
+        $reports = $statement->fetchAll();
+        if (!$reports) {
+            return false;
+        }else{
+            return true;
+        }
     }
 }
