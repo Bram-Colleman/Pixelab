@@ -84,21 +84,21 @@ if (!empty($_POST)) {
                             <div class="mb-3">
                                 <label for="inputUsername" class="form-label fw-bold">Username</label>
                                 <input type="text" class="form-control" id="inputUsername"
-                                       value="<?php echo $user->getUsername(); ?>" name="username">
+                                       value="<?php echo htmlspecialchars($user->getUsername()); ?>" name="username">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="inputBio" class="form-label fw-bold">Bio</label>
                                 <input type="text" class="form-control" id="inputBio"
-                                       value="<?php echo $user->getBio(); ?>" name="bio">
+                                       value="<?php echo htmlspecialchars($user->getBio()); ?>" name="bio">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="inputEmail" class="form-label fw-bold">Email</label>
                                 <input type="email" class="form-control" id="inputEmail"
-                                       value="<?php echo $user->getEmail(); ?>" name="email">
+                                       value="<?php echo htmlspecialchars($user->getEmail()); ?>" name="email">
                             </div>
                         </div>
                         <div class="row">

@@ -60,9 +60,9 @@ $newComment = new Comment();
                 </div>
                 <div class="col-8 align-self-center">
                     <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
-                        echo $post->getUser();
+                        echo htmlspecialchars($post->getUser());
                     } catch (Exception $e) {
-                    } ?>"><?php echo $post->getUser(); ?></a>
+                    } ?>"><?php echo htmlspecialchars($post->getUser()); ?></a>
                 </div>
                 <div class="col-3 align-self-center justify-content-end timestamp-post"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></div>
             </div>
@@ -101,12 +101,12 @@ $newComment = new Comment();
                     </span>
                 </div>
             </div>
-            <!--    Description:-->
+            <!--    description:-->
             <div class="row pt-half description">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
-                            <span><strong><?php echo $post->getUser(); ?> </strong></span><span><?php echo $post->getDescription();?></span>
+                            <span><strong><?php echo htmlspecialchars($post->getUser()); ?> </strong></span><span><?php echo htmlspecialchars($post->getDescription());?></span>
                         </div>
                     </div>
                 </div>
@@ -118,12 +118,12 @@ $newComment = new Comment();
                     <div class="col-12 pb-2">
                         <div class="row">
                             <div class="col-12">
-                                <span><strong><?php echo $comment['username'];?></strong></span>
+                                <span><strong><?php echo htmlspecialchars($comment['username']);?></strong></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <span><?php echo $comment['content'];?></span>
+                                <span><?php echo htmlspecialchars($comment['content']);?></span>
                                 <span class="timestamp-comment"><?php echo $newComment->timeAgo($comment['id']) . " ago"; ?></span>
                             </div>
                         </div>
@@ -133,9 +133,9 @@ $newComment = new Comment();
             <?php endif; ?>
             <!-- comment input field :-->
             <div class="d-flex border-top-gray">
-                    <input class="w-100 border-0 addComment py-half-rem" type="text" name="comment" placeholder="Add a comment as <?php echo $_SESSION['user']; ?>..."
+                    <input class="w-100 border-0 addComment py-half-rem" type="text" name="comment" placeholder="Add a comment as <?php echo htmlspecialchars($_SESSION['user']); ?>..."
                            data-postid="<?php echo $post->getId(); ?>"
-                           data-username="<?php echo $_SESSION['user']; ?>">
+                           data-username="<?php echo htmlspecialchars($_SESSION['user']); ?>">
             </div>
         </div>
     <?php endforeach;
