@@ -62,17 +62,7 @@ class Post
         $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC  LIMIT 20");
         $statement->execute();
 
-        $posts = $statement->fetchAll();
-        if (!$posts) {
-            throw new Exception('There are no posts found');
-        }
-        $recentPosts = array();
-        foreach ($posts as $post) {
-            array_push($recentPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
-                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
-        }
-        return $recentPosts;
-
+        return Post::loadPosts($statement);
     }
     public static function fetchLikes($postId): array
     {
@@ -227,21 +217,7 @@ class Post
         $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
         $statement->bindValue(":searchText", $searchText);
         $statement->execute();
-
-        $posts = $statement->fetchAll();
-        if (!$posts) {
-            throw new Exception('There are no posts found');
-        } else {
-            $recentPosts = array();
-
-            foreach ($posts as $post) {
-//                array_push($recentPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
-//                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
-                array_push($recentPosts, Post::fetchPostById($post['id']));
-            }
-
-            return $recentPosts;
-        }
+        return Post::loadPosts($statement);
 
     }
 
@@ -273,5 +249,61 @@ class Post
             $numberOfUnits = floor($time / $unit);
             return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
         }
+    }
+
+    public function reportPost(){
+        $userId = User::fetchUserByUsername($_SESSION["user"])->getId();
+        $postId = $this->getId();
+
+        
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO post_strikes (user_id, post_id) VALUES (:userId, :postId)");
+        $statement->bindValue(":userId", $userId);
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+        
+    }
+
+    public static function alreadyReported($postId, $userId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM `post_strikes` WHERE post_id = :postId AND user_id = :userId");
+        $statement->bindValue(":postId", $postId, PDO::PARAM_INT);
+        $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $statement->execute();
+        //return $result;
+        $reports = $statement->fetchAll();
+        if (!$reports) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private static function postReportCount($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT COUNT(*) AS amount FROM `post_strikes` WHERE post_id = :postId");
+        $statement->bindValue(":postId", $postId, PDO::PARAM_INT);
+        $statement->execute();
+        $report = $statement->fetch();
+
+        return (int)$report["amount"];
+    }
+
+    private static function loadPosts($statement){
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }
+        $selectedPosts = array();
+        foreach ($posts as $post) {
+            $postReportCount = Post::postReportCount($post['id']);
+            if($postReportCount<3){
+                array_push($selectedPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+            
+        }
+        return $selectedPosts;
     }
 }
