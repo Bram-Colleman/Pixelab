@@ -6,7 +6,8 @@ if (!empty($_POST)) {
 
     try {
         $post = Post::fetchPostById($_POST['postId']);
-        $post->like();
+        ($_POST['isLiked'] == "1")? $post->unlike() : $post->like();
+
         $b = [  'amount' => sizeof(Post::fetchLikes($post->getId())),
                 'postid' => $post->getId()
         ];
@@ -14,7 +15,7 @@ if (!empty($_POST)) {
         $response = [
             'status' => 'success',
             'body' => $b,
-            'message' => 'Post liked'
+            'message' => ($_POST['isLiked'] == "1") ? 'Post liked' : 'Post unliked'
         ];
 
         header('Content-type: application/json');

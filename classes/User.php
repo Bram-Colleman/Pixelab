@@ -16,7 +16,7 @@ class User
     private $imageFileType;
     private $uploadOk;
 
-    //Constructor
+    // Constructor
     public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null, $followers = array())
     {
         $this->setId($id);
@@ -28,7 +28,7 @@ class User
         $this->setFollowers($followers);
     }
 
-    //Getters
+    // Getters
     public function getId()
     {
         return $this->id;
@@ -74,7 +74,7 @@ class User
         return $this->uploadOk;
     }
 
-    //Setters
+    // Setters
     private function setId($id): void
     {
         $this->id = $id;
@@ -120,7 +120,7 @@ class User
         $this->uploadOk = $uploadOk;
     }
 
-    //Methods
+    // Methods
     public static function fetchUserByEmail($email)
     {
         $conn = Db::getConnection();

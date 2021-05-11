@@ -6,11 +6,11 @@ if (!empty($_POST)) {
 
     try {
         $posts = Post::fetchRecentPosts(20, $_POST['currentAmount']);
-        $postamount = sizeof($posts);
+        $postAmount = sizeof($posts);
 
         $response = [
             'status' => 'success',
-            'body' => [$posts, $postamount],
+            'body' => [$posts, $postAmount],
             'message' => 'Posts loaded'
         ];
 

@@ -1,6 +1,10 @@
-let reportButtons = document.querySelectorAll(".btn-report");
+document.addEventListener('load', function () {
+    let reportButtons = document.querySelectorAll(".btn-report");
+})
+
+reportButtons = document.querySelectorAll(".btn-report");
 for (let i = 0; i < reportButtons.length; i++) {
-    reportButtons[i].addEventListener('click', function(e) {
+    reportButtons[i].addEventListener('click', function report(e) {
         // Getting post id
         let postId = this.dataset.postid;
         
