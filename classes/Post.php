@@ -13,8 +13,10 @@ class Post
     private $likes = array();
     private $comments = array();
 
-    //Constructor
-    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
+
+    // Constructor
+
+  public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
     {
         $this->setId($id);
         $this->setUser($user);
@@ -25,11 +27,8 @@ class Post
         $this->setComments($comments);
     }
 
-    //Getters
-    public function getId()
-    {
-        return $this->id;
-    }
+    // Getters
+
     public function getUser()
     {
         return $this->user;
@@ -37,6 +36,10 @@ class Post
     public function getImage()
     {
         return $this->image;
+    }
+    public function getId()
+    {
+        return $this->id;
     }
     public function getDescription()
     {
@@ -87,11 +90,11 @@ class Post
 
     //Methods
     public static function fetchRecentPosts($limit, $offset)
+
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
         $statement->execute();
-
         $posts = $statement->fetchAll();
         if (!$posts) {
             throw new Exception('There are no posts found');
@@ -112,6 +115,7 @@ class Post
             }
             return $recentPosts;
         }
+
     }
     public static function fetchLikes($postId): array
     {
@@ -131,37 +135,17 @@ class Post
     public static function fetchComments($postId): array
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT u.username, c.content FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
+        $statement = $conn->prepare("SELECT u.username, c.content, c.id FROM comments c JOIN users u ON u.id = c.user_id WHERE c.post_id = :postId");
         $statement->bindValue(":postId", $postId);
         $statement->execute();
         $fetchedComments = $statement->fetchAll();
         $postComments = array();
         if (!empty($fetchedComments)) {
             foreach ($fetchedComments as $fetchedComment) {
-                array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content']));
+                array_push($postComments, array("username" => $fetchedComment['username'], "content" => $fetchedComment['content'], "id" => $fetchedComment['id']));
             }
         }
         return $postComments;
-    }
-    public static function fetchPostById($id): Post
-    {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
-        $statement->bindValue(":postId", $id);
-        $statement->execute();
-
-        $post = $statement->fetch();
-        if (!$post) {
-            throw new Exception('Something went wrong!');
-        }
-
-        return new Post($post['id'],
-                        $post['username'],
-                        $post['image'],
-                        $post['description'],
-                        $post['timestamp'],
-                  (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
-              (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
     }
     public static function fetchPostsByUserId($userId): array
     {
@@ -182,6 +166,29 @@ class Post
         }
         return $fetchedPosts;
     }
+    public static function fetchPostById($id): Post
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
+        $statement->bindValue(":postId", $id);
+        $statement->execute();
+
+        $post = $statement->fetch();
+        if (!$post) {
+            throw new Exception('Something went wrong!');
+        }
+
+        return new Post($post['id'],
+            $post['username'],
+            $post['image'],
+            $post['description'],
+            $post['timestamp'],
+            (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
+            (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+    }
+
+    // Methods
+
     public static function uploadPost($description): void
     {
 
@@ -205,28 +212,9 @@ class Post
         $statement->bindValue(":description", $description);
         $statement->execute();
     }
-    public static function search($searchFor, $searchText): array
+
+    public function like(): bool
     {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
-        $statement->bindValue(":searchText", $searchText);
-        $statement->execute();
-
-        $posts = $statement->fetchAll();
-        if (!$posts) {
-            throw new Exception('There are no posts found');
-        }else{
-            $recentPosts = array();
-
-            foreach ($posts as $post) {
-                array_push($recentPosts, Post::fetchPostById($post['id']));
-            }
-
-            return $recentPosts;
-        }
-
-    }
-    public function like(): bool{
         $conn = Db::getConnection();
         $statement = $conn->prepare("INSERT INTO post_likes (user_id, post_id) VALUES (:userId, :postId)");
         $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
@@ -234,13 +222,112 @@ class Post
         $result = $statement->execute();
         return $result;
     }
-    public function unlike(): bool{
+
+    public function unlike(): bool
+    {
         $conn = Db::getConnection();
         $statement = $conn->prepare("DELETE FROM post_likes WHERE user_id = :userId AND post_id = :postId ");
         $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
         $statement->bindValue(":postId", $this->getId());
         $result = $statement->execute();
         return $result;
+    }
+
+    public static function search($searchFor, $searchText): array
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
+        $statement->bindValue(":searchText", $searchText);
+        $statement->execute();
+        return Post::loadPosts($statement);
+
+    }
+
+
+    public function postedTimeAgo($postId) {
+        date_default_timezone_set('Europe/Brussels');
+
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT timestamp FROM posts WHERE id = :id");
+        $statement->bindValue(":id", $postId);
+        $statement->execute();
+        $data = $statement->fetch();
+
+        $time = strtotime($data[0]);
+
+        $time = time() - $time;
+        $time = ($time < 1) ? 1 : $time;
+        $tokens = array(
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
+
+        foreach ($tokens as $unit => $text) {
+            if ($time < $unit) continue;
+            $numberOfUnits = floor($time / $unit);
+            return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
+        }
+    }
+
+    public function reportPost(){
+        $userId = User::fetchUserByUsername($_SESSION["user"])->getId();
+        $postId = $this->getId();
+
+        
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("INSERT INTO post_strikes (user_id, post_id) VALUES (:userId, :postId)");
+        $statement->bindValue(":userId", $userId);
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+        
+    }
+
+    public static function alreadyReported($postId, $userId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM `post_strikes` WHERE post_id = :postId AND user_id = :userId");
+        $statement->bindValue(":postId", $postId, PDO::PARAM_INT);
+        $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $statement->execute();
+        //return $result;
+        $reports = $statement->fetchAll();
+        if (!$reports) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private static function postReportCount($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT COUNT(*) AS amount FROM `post_strikes` WHERE post_id = :postId");
+        $statement->bindValue(":postId", $postId, PDO::PARAM_INT);
+        $statement->execute();
+        $report = $statement->fetch();
+
+        return (int)$report["amount"];
+    }
+
+    private static function loadPosts($statement){
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }
+        $selectedPosts = array();
+        foreach ($posts as $post) {
+            $postReportCount = Post::postReportCount($post['id']);
+            if($postReportCount<3){
+                array_push($selectedPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+            
+        }
+        return $selectedPosts;
     }
     public function toArray()
     {

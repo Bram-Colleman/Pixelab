@@ -21,10 +21,30 @@ document.addEventListener('load', function () {
                 formData.append("postId", postId);
                 formData.append("comment", content);
 
-                fetch('ajax/saveComment.php', {
-                    method: "POST",
-                    body: formData
-                })
+            fetch('ajax/saveComment.php', {
+                method: "POST",
+                body: formData
+            })
+//                 .then(response => response.json())
+//                 .then(result => {
+//                     console.log("Success:", result);
+//                     let commentList = inputFields[i].parentNode.parentNode.querySelectorAll(".comment");
+//                     let newComment = document.createElement('div');
+//                     newComment.innerHTML = "<span><strong>" + username + "</strong></span>" +
+//                         "<br>" + result.body +
+//                         "<span class='timestamp-comment'>Just now</span>";
+//                     if(commentList.length === 0) {
+//                         commentList = inputFields[i].parentNode.parentNode.querySelectorAll(".description");
+//                         commentList[(commentList.length) - 1].appendChild(newComment);
+//                     } else {
+//                         commentList[(commentList.length) - 1].appendChild(newComment);
+//                     }
+//                     inputFields[i].value = '';
+//                 })
+//                 .catch(error => {
+//                     console.log("Error", error);
+//                 })
+              
                     .then(response => response.json())
                     .then(result => {
                         console.log("Success:", result);

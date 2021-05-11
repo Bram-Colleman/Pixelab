@@ -33,7 +33,7 @@ try {
                 <?php endif; ?>
             </div>
             <div class="col-6 align-self-center">
-                <h1 class="d-inline"><?php echo $user->getUsername();?></h1>
+                <h1 class="d-inline"><?php echo htmlspecialchars($user->getUsername());?></h1>
                 <p id="followerCount"><?php echo sizeof($user->fetchFollowers()); ?> Followers</p>
             </div>
             <?php if ($_GET['user'] != $_SESSION['user']): ?>
