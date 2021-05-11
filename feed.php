@@ -20,6 +20,9 @@ if(empty($_POST)){
         $error = $e->getMessage();
     }
 }
+
+$newComment = new Comment();
+
 ?>
 
 <!doctype html>
@@ -45,8 +48,7 @@ if(empty($_POST)){
     ?>
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
-            <div class="row h-5 mb-2">
-
+            <div class="row h-5 mb-1">
                 <div class="col-1 align-self-center max-w-6">
                     <?php if (!empty($user)) {
                         if (!empty($user->getAvatar())) : ?>
@@ -56,39 +58,13 @@ if(empty($_POST)){
                         <?php endif;
                     } ?>
                 </div>
-                <div class="col-9 align-self-center">
+                <div class="col-8 align-self-center">
                     <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
-                        echo $post->getUser();
+                        echo htmlspecialchars($post->getUser());
                     } catch (Exception $e) {
-                    } ?>"><?php echo $post->getUser(); ?></a>
+                    } ?>"><?php echo htmlspecialchars($post->getUser()); ?></a>
                 </div>
-                <div class="col-2 align-self-center justify-content-end timestamp-post">
-                    <?php
-                    $a = new DateTime($post->getTimestamp());
-                    $b = new DateTime(date('Y-m-d H:i:s'));
-
-
-                    $intervalminutes = $a->diff($b)->i;
-                    $intervalhourstomin =  ($a->diff($b)->H) *60;
-                    $intervaldaystomin =  ($a->diff($b)->d) *24*60;
-                    $interval = $intervalminutes+$intervalhourstomin+$intervaldaystomin-60;
-
-
-                    $intervalhours =  ($a->diff($b)->h);
-                    $intervaldays =  ($a->diff($b)->d);
-
-                    if ($interval<0) {
-                        echo "Today";
-                    }
-                    elseif ($intervaldays> 0 && $intervaldays<7) {
-                        echo $intervaldays . "d ago";
-                    }
-                    elseif ($intervaldays>7) {
-                        echo floor($intervaldays/7) . "w ago"; // => 1
-
-                    }
-                    ?>
-                </div>
+                <div class="col-3 align-self-center justify-content-end timestamp-post"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></div>
             </div>
             <!--    post:-->
             <div class="row">
@@ -128,12 +104,12 @@ if(empty($_POST)){
                     </span>
                 </div>
             </div>
-            <!--    Description:-->
+            <!--    description:-->
             <div class="row pt-half description">
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
-                            <span><strong><?php echo $post->getUser(); ?> </strong></span><span><?php echo $post->getDescription();?></span>
+                            <span><strong><?php echo htmlspecialchars($post->getUser()); ?> </strong></span><span><?php echo htmlspecialchars($post->getDescription());?></span>
                         </div>
                     </div>
                 </div>
@@ -145,12 +121,13 @@ if(empty($_POST)){
                     <div class="col-12 pb-2">
                         <div class="row">
                             <div class="col-12">
-                                <span><strong><?php echo $comment['username'];?></strong></span>
+                                <span><strong><?php echo htmlspecialchars($comment['username']);?></strong></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <span><?php echo $comment['content'];?></span>
+                                <span><?php echo htmlspecialchars($comment['content']);?></span>
+                                <span class="timestamp-comment"><?php echo $newComment->timeAgo($comment['id']) . " ago"; ?></span>
                             </div>
                         </div>
                     </div>
@@ -159,9 +136,9 @@ if(empty($_POST)){
             <?php endif; ?>
             <!-- comment input field :-->
             <div class="d-flex border-top-gray">
-                    <input class="w-100 border-0 addComment py-half-rem" type="text" name="comment" placeholder="Add a comment as <?php echo $_SESSION['user']; ?>..."
+                    <input class="w-100 border-0 addComment py-half-rem" type="text" name="comment" placeholder="Add a comment as <?php echo htmlspecialchars($_SESSION['user']); ?>..."
                            data-postid="<?php echo $post->getId(); ?>"
-                           data-username="<?php echo $_SESSION['user']; ?>">
+                           data-username="<?php echo htmlspecialchars($_SESSION['user']); ?>">
             </div>
         </div>
     <?php endforeach;

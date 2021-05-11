@@ -51,11 +51,21 @@
     object-fit: cover;
 }
 .timestamp-post {
+    font-size: 0.8rem;
+    color: #757575;
+}
+
+.timestamp-comment {
+    display: block;
     font-size: 0.7rem;
     color: #757575;
 }
 
 /* utility classes */
+
+.w-10-rem {
+    width: 10rem;
+}
 
 .w-35 {
     width: 35%;
@@ -71,6 +81,10 @@
 
 .h-256-px {
     height: 256px;
+}
+
+.h-10-rem {
+    height: 10rem;
 }
 
 .h-20-vw {

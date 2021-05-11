@@ -27,13 +27,13 @@ try {
         <div class="row pb-5 pt-5">
             <div class="col-3 text-center">
                 <?php if (!empty($user->getAvatar())) : ?>
-                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle max-w-10-vw" alt="uploaded avatar"/>
+                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="w-10-rem h-10-rem object-fit-cover rounded-circle" alt="uploaded avatar"/>
                 <?php else: ?>
                     <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw" alt="blank avatar"/>
                 <?php endif; ?>
             </div>
             <div class="col-6 align-self-center">
-                <h1 class="d-inline"><?php echo $user->getUsername();?></h1>
+                <h1 class="d-inline"><?php echo htmlspecialchars($user->getUsername());?></h1>
                 <p id="followerCount"><?php echo sizeof($user->fetchFollowers()); ?> Followers</p>
             </div>
             <?php if ($_GET['user'] != $_SESSION['user']): ?>
