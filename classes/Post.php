@@ -337,6 +337,7 @@ class Post
     public static function deletePost($postId){
         Post::deleteStrikes($postId);
         Post::deletePostImage($postId);
+        Post::deleteCommentLikes($postId);
         Post::deletePostComments($postId);
         Post::deletePostLikes($postId);
         $conn = Db::getConnection();
@@ -348,6 +349,17 @@ class Post
     private static function deletePostComments($postId){
         $conn = Db::getConnection();
         $statement = $conn->prepare("DELETE FROM `comments` WHERE post_id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
+    private static function deleteCommentLikes($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE cl
+        from comment_likes cl
+        inner JOIN comments c
+        on cl.comment_id=c.id
+        WHERE c.post_id = :postId");
         $statement->bindValue(":postId", $postId);
         $result = $statement->execute();
         return $result;

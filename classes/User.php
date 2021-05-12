@@ -241,7 +241,6 @@ class User
         WHERE u.email = :email");
         $statement->bindValue(":email", $email);
         $statement->execute();
-        var_dump($email);
         // get user connected to email
         $user = $statement->fetch();
         if(!$user){
