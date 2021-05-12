@@ -101,16 +101,20 @@ class Post
         $recentPosts = array();
 
         if ($offset === 0 ){
-            foreach ($posts as $post) {
-                array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                    (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            foreach ($posts as $post) {   
+                if(Post::postReportCount($post['id'])<3){
+                    array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                }
             }
             return $recentPosts;
         } else {
             foreach ($posts as $post) {
-                $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                    (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
-                array_push($recentPosts, $newPost->toArray());
+                if(Post::postReportCount($post['id'])<3){
+                    $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+                    array_push($recentPosts, $newPost->toArray());
+                }
             }
             return $recentPosts;
         }
