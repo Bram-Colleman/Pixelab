@@ -335,6 +335,7 @@ class Post
         return $result;
     }
     public static function deletePost($postId){
+        Post::deleteStrikes($postId);
         Post::deletePostImage($postId);
         Post::deletePostComments($postId);
         Post::deletePostLikes($postId);

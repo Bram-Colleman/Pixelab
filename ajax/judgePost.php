@@ -10,7 +10,6 @@
                 'message' => 'Strikes got deleted.'
             ];
         }else{
-            Post::deleteStrikes($_POST['postId']);
             Post::deletePost($_POST['postId']);
             $response = [
                 'status' => 'Success',
