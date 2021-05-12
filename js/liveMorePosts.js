@@ -82,8 +82,8 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
 
     div1.appendChild(divHeader1);
     divHeader1.appendChild(divHeader2);
-    divHeader2.appendChild(imgHeader);
     divHeader2.appendChild(aHeader1);
+    aHeader1.appendChild(imgHeader);
     divHeader1.appendChild(divHeader3);
     divHeader3.appendChild(aHeader2);
     divHeader1.appendChild(divHeader4);
