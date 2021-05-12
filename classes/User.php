@@ -234,10 +234,14 @@ class User
     public static function login($email, $password){
 
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT * FROM users WHERE email = :email");
+        $statement = $conn->prepare("select u.*, r.*
+        from users u
+        inner join (select id, name as userRole from user_roles) r
+        on u.user_role = r.id
+        WHERE u.email = :email");
         $statement->bindValue(":email", $email);
         $statement->execute();
-        
+        var_dump($email);
         // get user connected to email
         $user = $statement->fetch();
         if(!$user){
@@ -252,6 +256,7 @@ class User
             $_SESSION["user"] = $user['username'];
             $_SESSION["email"] = $email;
             $_SESSION["userId"] = $user['id'];
+            $_SESSION["userRole"] = $user['userRole'];
             header("Location: feed.php");
         }else{
             throw new Exception('Incorrect password');
