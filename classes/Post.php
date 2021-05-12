@@ -164,8 +164,10 @@ class Post
         $fetchedPosts = array();
 
         foreach ($posts as $post) {
-            array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
+            if(Post::postReportCount($post['id'])<3){
+                array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
         }
         return $fetchedPosts;
     }
