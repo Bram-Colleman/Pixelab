@@ -304,6 +304,25 @@ class Post
 
         return (int)$report["amount"];
     }
+    public static function loadReportedPosts(){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC");
+        $statement->execute();
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }
+        $reportedPosts = array();
+
+        foreach ($posts as $post) {   
+            if(Post::postReportCount($post['id'])>2){
+                array_push($reportedPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+        }
+        return $reportedPosts;
+        
+    }
     private static function loadPosts($statement){
         $posts = $statement->fetchAll();
         if (!$posts) {
