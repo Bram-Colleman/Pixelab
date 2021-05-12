@@ -1,4 +1,4 @@
-//onload
+// Onload
 document.addEventListener('load', function () {
     let likeButtons = [];
 })
@@ -11,7 +11,7 @@ for (let i = 0; i < likeButtons.length; i++) {
             formData.append('postId', this.dataset.postid);
             formData.append('userId', this.dataset.userid);
             formData.append('isLiked', this.dataset.liked);
-            fetch('ajax/likepost.php', {
+            fetch('ajax/likePost.php', {
                 method: 'POST',
                 body: formData
             })

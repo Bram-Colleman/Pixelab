@@ -1,3 +1,4 @@
+// Onload
 document.addEventListener('load', function () {
     let reportButtons = document.querySelectorAll(".btn-report");
 })

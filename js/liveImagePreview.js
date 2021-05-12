@@ -1,3 +1,4 @@
+// Onload
 let reader = new FileReader();
 reader.onload = function (e) {
     $('#uploadedImage').attr('src', e.target.result);

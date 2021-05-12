@@ -1,4 +1,4 @@
-//onload
+// Onload
 document.addEventListener('load', function () {
     let inputFields = [];
     let comments = [];
