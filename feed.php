@@ -49,22 +49,27 @@ $newComment = new Comment();
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
             <div class="row h-5 mb-1">
-                <div class="col-1 align-self-center max-w-6">
-                    <?php if (!empty($user)) {
-                        if (!empty($user->getAvatar())) : ?>
-                            <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle avatarIcon" role='button' alt="avatar image"/>
-                        <?php else: ?>
-                            <img src="./images/blank_avatar.png" class="rounded-circle max-w-1-half-vw" role='button' alt="blank avatar"/>
-                        <?php endif;
-                    } ?>
+                <div class="col-auto flex-fill align-self-center text-center p-0">
+                    <a href="./profilePage.php?user=<?php try {
+                        echo htmlspecialchars($post->getUser());
+                    } catch (Exception $e) {
+                    } ?>"><?php if (!empty($user)) {
+                            if (!empty($user->getAvatar())) : ?>
+                                <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle avatarIcon" alt="avatar image"/>
+                            <?php else: ?>
+                                <img src="./images/blank_avatar.png" class="rounded-circle max-w-1-half-vw" role='button' alt="blank avatar"/>
+                            <?php endif;
+                        } ?></a>
                 </div>
-                <div class="col-8 align-self-center">
+                <div class="col-3 flex-fill align-self-center p-0">
                     <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
                         echo htmlspecialchars($post->getUser());
                     } catch (Exception $e) {
                     } ?>"><?php echo htmlspecialchars($post->getUser()); ?></a>
                 </div>
-                <div class="col-3 align-self-center justify-content-end timestamp-post"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></div>
+                <div class="col-7 d-flex flex-fill align-self-center justify-content-end timestamp-post">
+                    <p class="mb-0"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></p>
+                </div>
             </div>
             <!--    post:-->
             <div class="row">

@@ -50,9 +50,11 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
 
     // Username and avatar
     let divHeader1 = document.createElement("div");
-    divHeader1.className = "row h-5 mb-2";
+    divHeader1.className = "row h-5 mb-1";
     let divHeader2 = document.createElement("div");
-    divHeader2.className = "col-1 align-self-center max-w-6";
+    divHeader2.className = "col-auto flex-fill align-self-center text-center p-0";
+    let aHeader1 = document.createElement("a");
+    aHeader1.setAttribute("href", "./profilePage.php?user="+posterName);
     let imgHeader = document.createElement("img");
     if (avatar !== null) {
         imgHeader.src = "./uploads/avatars/"+avatar;
@@ -66,22 +68,26 @@ function createPost(avatar, posterName, postImg, sessionUsername, likes, postId,
     }
     imgHeader.setAttribute("role", "button");
     let divHeader3 = document.createElement("div");
-    divHeader3.className = "col-8 align-self-center";
-    let aHeader = document.createElement("a");
-    aHeader.innerText = " " + posterName;
-    aHeader.className = "text-decoration-none text-black fw-bold";
-    aHeader.setAttribute("href", "./profilePage.php?user="+posterName);
+    divHeader3.className = "col-3 flex-fill align-self-center p-0";
+    let aHeader2 = document.createElement("a");
+    aHeader2.innerText = " " + posterName;
+    aHeader2.className = "text-decoration-none text-black fw-bold";
+    aHeader2.setAttribute("href", "./profilePage.php?user="+posterName);
     let divHeader4 = document.createElement("div");
-    divHeader4.className = "col-3 align-self-center justify-content-end timestamp-post";
-    divHeader4.innerText = "Posted "+ timeAgo +" ago";
+    divHeader4.className = "col-7 d-flex flex-fill align-self-center justify-content-end timestamp-post";
+    let pPostedTimeAgo = document.createElement("p");
+    pPostedTimeAgo.className = "mb-0";
+    pPostedTimeAgo.innerText = "Posted "+ timeAgo +" ago";
 
 
     div1.appendChild(divHeader1);
     divHeader1.appendChild(divHeader2);
     divHeader2.appendChild(imgHeader);
+    divHeader2.appendChild(aHeader1);
     divHeader1.appendChild(divHeader3);
-    divHeader3.appendChild(aHeader);
+    divHeader3.appendChild(aHeader2);
     divHeader1.appendChild(divHeader4);
+    divHeader4.appendChild(pPostedTimeAgo);
 
 
     // Post
