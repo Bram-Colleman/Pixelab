@@ -7,9 +7,9 @@ include_once(__DIR__ . "/includes/checkSession.php");
 if(empty($_POST)){
     try {
         $posts = Post::loadReportedPosts();
+        //var_dump(Post::loadReportedPosts());
     } catch (Exception $e) {
         $error = $e->getMessage();
-
     }
 }
 ?>

@@ -10,7 +10,12 @@
                 'message' => 'Strikes got deleted.'
             ];
         }else{
-            $response = "post weg";
+            Post::deleteStrikes($_POST['postId']);
+            Post::deletePost($_POST['postId']);
+            $response = [
+                'status' => 'Success',
+                'message' => 'Post got deleted.'
+            ];
         }
         header('Content-Type: application/json');
         echo json_encode($response);

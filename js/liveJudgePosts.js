@@ -37,6 +37,10 @@ for (let i = 0; i < deletePostButtons.length; i++) {
         
         // Getting post id
         let postId = e.path[3].attributes[1].nodeValue;
+        console.log("deleted");
+
+        // Hide post
+        e.path[3].style.display = "none";
         
         // Post to database
         let formData = new FormData();
