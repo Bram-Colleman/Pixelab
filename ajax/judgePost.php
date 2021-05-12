@@ -4,7 +4,11 @@
 
     if(!empty($_POST)){
         if(!$keepPost == false){
-            $response = "post behouden";
+            Post::deleteStrikes($_POST['postId']);
+            $response = [
+                'status' => 'Success',
+                'message' => 'Strikes got deleted.'
+            ];
         }else{
             $response = "post weg";
         }

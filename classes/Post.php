@@ -323,6 +323,13 @@ class Post
         return $reportedPosts;
         
     }
+    public static function deleteStrikes($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM `post_strikes` WHERE post_id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
     private static function loadPosts($statement){
         $posts = $statement->fetchAll();
         if (!$posts) {

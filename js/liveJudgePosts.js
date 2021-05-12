@@ -3,15 +3,18 @@ deletePostButtons = document.querySelectorAll(".btn-deletePost");
 
 for (let i = 0; i < keepPostButtons.length; i++) {
     keepPostButtons[i].addEventListener('click', (e) => {
-        
         // Getting post id
         let postId = e.path[3].attributes[1].nodeValue;
+
+        // Hide post
+        e.path[3].style.display = "none";
         
         // Post to database
         let formData = new FormData();
         formData.append('postId', postId);
         formData.append('keepPost', 1);
 
+        
         fetch('ajax/judgePost.php', {
             method: 'POST',
             body: formData
@@ -23,7 +26,7 @@ for (let i = 0; i < keepPostButtons.length; i++) {
         .catch(error => {
             console.error('Error:', error);
         });
-
+        console.log(e.path[3]);
 
         e.preventDefault();
     });
