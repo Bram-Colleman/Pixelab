@@ -57,6 +57,9 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="./profilePage.php?user=<?php echo $_SESSION['user']; ?>">Profile</a></li>
                         <li><a class="dropdown-item" href="./profile.php">Settings</a></li>
+                        <?php if($_SESSION["userRole"] == "admin"): ?>
+                            <li><a class="dropdown-item" href="./reportedFeed.php" id="btn-reportedPosts">Reported posts</a></li>
+                        <?php endif; ?>
                         <li><a class="dropdown-item" href="./login.php">Log out</a></li>
                     </ul>
                 </li>

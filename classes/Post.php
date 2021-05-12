@@ -164,8 +164,10 @@ class Post
         $fetchedPosts = array();
 
         foreach ($posts as $post) {
-            array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
+            if(Post::postReportCount($post['id'])<3){
+                array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
         }
         return $fetchedPosts;
     }
@@ -298,11 +300,94 @@ class Post
     private static function postReportCount($postId){
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT COUNT(*) AS amount FROM `post_strikes` WHERE post_id = :postId");
-        $statement->bindValue(":postId", $postId, PDO::PARAM_INT);
+        $statement->bindValue(":postId", $postId);
         $statement->execute();
         $report = $statement->fetch();
 
-        return (int)$report["amount"];
+        return $report["amount"];
+    }
+    public static function loadReportedPosts(){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("select p.*, u.*
+        from posts p
+        inner join (select id as userId, username from users) u
+        on p.user_id = u.userId");
+        $statement->execute();
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            throw new Exception('There are no posts found');
+        }
+        $reportedPosts = array();
+
+        foreach ($posts as $post) {   
+            $reportCount = Post::postReportCount($post['id']);
+            if((int)$reportCount>2){
+                array_push($reportedPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+            }
+        }
+        return $reportedPosts;
+        
+    }
+    public static function deleteStrikes($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM `post_strikes` WHERE post_id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
+    public static function deletePost($postId){
+        Post::deleteStrikes($postId);
+        Post::deletePostImage($postId);
+        Post::deleteCommentLikes($postId);
+        Post::deletePostComments($postId);
+        Post::deletePostLikes($postId);
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM `posts` WHERE id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
+    private static function deletePostComments($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM `comments` WHERE post_id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
+    private static function deleteCommentLikes($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE cl
+        from comment_likes cl
+        inner JOIN comments c
+        on cl.comment_id=c.id
+        WHERE c.post_id = :postId");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
+    private static function deletePostLikes($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("DELETE FROM `post_likes` WHERE post_id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $result = $statement->execute();
+        return $result;
+    }
+    private static function deletePostImage($postId){
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT * FROM `posts` WHERE id = :postId;");
+        $statement->bindValue(":postId", $postId);
+        $statement->execute();
+        $post = $statement->fetch();
+        if(!$post){
+            throw new Exception('This user does not exist');
+        }
+        $imageName = $post["image"];
+        $imagePath = "../uploads/posts/$imageName";
+        // Delete file from folder
+        if(!unlink($imagePath)){
+            throw new Exception('This image does not exist');
+        }        
     }
     private static function loadPosts($statement){
         $posts = $statement->fetchAll();
