@@ -36,12 +36,11 @@ if(empty($_POST)){
         } catch (Exception $e) {
         }
     ?>
-        <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
+        <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5" data-postid="<?php echo $post->getId(); ?>">
             <div class="row pt-half">
                 <div class="col-12">
-                    <span>
-                    Test
-                    </span>
+                    <a href="#" class="btn-keepPost">Keep post</a>
+                    <a href="#" class="btn-deletePost">Delete post</a>
                 </div>
             </div>
             <!--    username and avatar:-->
@@ -98,5 +97,6 @@ if(empty($_POST)){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
+<script src="js/liveJudgePosts.js"></script>
 </body>
 </html>
