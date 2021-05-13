@@ -252,6 +252,7 @@ class Post
 
     }
     public static function interactiveDescription($description){
+        $description=htmlspecialchars($description);
         $descriptionPieces = explode("#", $description);
         for($i=1; $i<count($descriptionPieces); $i++){
             if(substr($descriptionPieces[$i], -1)==" "){
