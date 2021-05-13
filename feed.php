@@ -5,7 +5,13 @@ include_once(__DIR__ . "/classes/User.php");
 include_once(__DIR__ . "/classes/Comment.php");
 include_once(__DIR__ . "/includes/checkSession.php");
 
-if(empty($_POST)){
+if(isset($_GET['searchTag'])){
+    try {
+        $posts = Post::search("#".$_GET['searchTag']);
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+}else if(empty($_POST)){
     try {
             $posts = Post::fetchRecentPosts(20,0);
     } catch (Exception $e) {
