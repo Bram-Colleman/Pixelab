@@ -5,16 +5,15 @@ include_once(__DIR__ . "/classes/User.php");
 include_once(__DIR__ . "/classes/Comment.php");
 include_once(__DIR__ . "/includes/checkSession.php");
 
-if(empty($_POST)){
+if(isset($_GET['search'])){
     try {
-            $posts = Post::fetchRecentPosts(20,0);
+        $posts = Post::search($_GET['search']);
     } catch (Exception $e) {
         $error = $e->getMessage();
-
     }
 }else{
     try {
-        $posts = Post::search($_POST['search']);
+        $posts = Post::fetchRecentPosts(20,0);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -45,6 +44,7 @@ $newComment = new Comment();
             $user = User::fetchUserByUsername($post->getUser());
         } catch (Exception $e) {
         }
+
     ?>
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
@@ -116,7 +116,7 @@ $newComment = new Comment();
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
-                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span> <?php echo htmlspecialchars($post->getDescription());?></span>
+                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span> <?php echo Post::interactiveDescription($post->getDescription())?></span>
                         </div>
                     </div>
                 </div>

@@ -242,6 +242,14 @@ class Post
             $statement->bindValue(":username", $userTag);
             $statement->execute();
             return Post::loadPosts($statement);
+        }else if(substr($searchText, 0, 1)=="#"){
+            $splitString = explode(" ", $searchText);
+            $hashtag = substr($splitString[0], 1);
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
+            $statement->bindValue(":searchText", $hashtag);
+            $statement->execute();
+            return Post::loadPosts($statement);
         }else{
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
@@ -250,6 +258,42 @@ class Post
             return Post::loadPosts($statement);
         }
 
+    }
+    public static function interactiveDescription($description){
+        $description=htmlspecialchars($description);
+        $descriptionPieces = explode("#", $description);
+        for($i=1; $i<count($descriptionPieces); $i++){
+            if(substr($descriptionPieces[$i], -1)==" "){
+                $descriptionPieces[$i] = substr($descriptionPieces[$i], -strlen($descriptionPieces[$i]), -1);
+            }
+        }
+        $descriptionTags = array();
+        $descriptionText = array();
+        for($i=1; $i<count($descriptionPieces); $i++){
+            // If the tag has a space
+            if(strpos($descriptionPieces[$i], " ")){
+                // Split on the space
+                $tagPieces = explode(" ", $descriptionPieces[$i]);
+                // Push to different arrays
+                array_push($descriptionTags, '<a href="feed.php?search=%23'.$tagPieces[0].'" class="btn-tag">#'.$tagPieces[0].'</a>');
+                array_push($descriptionText, $tagPieces[1]);
+            }else{
+                array_push($descriptionTags, '<a href="feed.php?search=%23'.$descriptionPieces[$i].'" class="btn-tag">#'.$descriptionPieces[$i].'</a>');
+            }
+        }
+        $allDescriptionPieces = array();
+        // Combine descriptionTags and descriptionText in one array
+        for($i=0; $i<count($descriptionTags); $i++){
+            array_push($allDescriptionPieces,  $descriptionTags[$i]);
+            // Add if there is a value in descriptionText
+            if(isset($descriptionText[$i])){
+                array_push($allDescriptionPieces,  $descriptionText[$i]);
+            }
+        }
+        // combine text with the array
+        // split array values with a space using implode
+        $finalDescription = $descriptionPieces[0].implode(" ", $allDescriptionPieces);
+        return $finalDescription;
     }
     public function postedTimeAgo() {
         date_default_timezone_set('Europe/Brussels');
