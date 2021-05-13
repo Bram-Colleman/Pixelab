@@ -269,7 +269,7 @@ class Post
                 $descriptionPieces[$i] = substr($descriptionPieces[$i], -strlen($descriptionPieces[$i]), -1);
             }
             // Put hashtag in front of hashtag
-            $descriptionPieces[$i] = "#".$descriptionPieces[$i];
+            $descriptionPieces[$i] = '#'.$descriptionPieces[$i];
         }
         $descriptionText = array();
         for($i=1; $i<count($descriptionPieces); $i++){
@@ -280,13 +280,13 @@ class Post
                 // Push to array
                 for($c=0; $c<count($tagPieces); $c++){
                     if(substr($tagPieces[$c], 0, 1)=="#"){
-                        array_push($descriptionText, '<a href="feed.php?search=%23'.$tagPieces[$c].'" class="btn-tag">'.$tagPieces[$c].'</a>');
+                        array_push($descriptionText, '<a href="feed.php?search='.urlencode($tagPieces[$c]).'" class="btn-tag">'.$tagPieces[$c].'</a>');
                     }else{
                         array_push($descriptionText, $tagPieces[$c]);
                     }
                 }
             }else{
-                array_push($descriptionText, '<a href="feed.php?search=%23'.$descriptionPieces[$i].'" class="btn-tag">'.$descriptionPieces[$i].'</a>');
+                array_push($descriptionText, '<a href="feed.php?search='.urlencode($descriptionPieces[$i]).'" class="btn-tag">'.$descriptionPieces[$i].'</a>');
             }
         }
         //var_dump($text);
