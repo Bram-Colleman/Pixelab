@@ -251,6 +251,20 @@ class Post
         }
 
     }
+    public static function interactiveDescription($description){
+        $descriptionPieces = explode("#", $description);
+        for($i=1; $i<count($descriptionPieces); $i++){
+            if(substr($descriptionPieces[$i], -1)==" "){
+                $descriptionPieces[$i] = substr($descriptionPieces[$i], -strlen($descriptionPieces[$i]), -1);
+            }
+        }
+        $descriptionTags = array();
+        for($i=1; $i<count($descriptionPieces); $i++){
+            array_push($descriptionTags, '<a class="btn-tag">#'.$descriptionPieces[$i].'</a>');
+        }
+        $finalDescription = $descriptionPieces[0].implode(" ", $descriptionTags);
+        return $finalDescription;
+    }
     public function postedTimeAgo() {
         date_default_timezone_set('Europe/Brussels');
 

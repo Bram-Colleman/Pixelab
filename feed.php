@@ -45,6 +45,7 @@ $newComment = new Comment();
             $user = User::fetchUserByUsername($post->getUser());
         } catch (Exception $e) {
         }
+
     ?>
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
@@ -116,7 +117,7 @@ $newComment = new Comment();
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 pb-2">
-                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span> <?php echo htmlspecialchars($post->getDescription());?></span>
+                            <span class="fw-bold"><?php echo htmlspecialchars($post->getUser()); ?></span><span> <?php echo Post::interactiveDescription($post->getDescription())?></span>
                         </div>
                     </div>
                 </div>
