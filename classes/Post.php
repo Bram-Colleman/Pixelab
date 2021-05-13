@@ -261,7 +261,7 @@ class Post
         }
         $descriptionTags = array();
         for($i=1; $i<count($descriptionPieces); $i++){
-            array_push($descriptionTags, '<a href="feed.php?searchTag='.$descriptionPieces[$i].'" class="btn-tag">#'.$descriptionPieces[$i].'</a>');
+            array_push($descriptionTags, '<a href="feed.php?search=%23'.$descriptionPieces[$i].'" class="btn-tag">#'.$descriptionPieces[$i].'</a>');
         }
         $finalDescription = $descriptionPieces[0].implode(" ", $descriptionTags);
         return $finalDescription;

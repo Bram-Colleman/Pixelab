@@ -20,7 +20,7 @@
         <div class="collapse navbar-collapse justify-content-center w-100" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item align-self-md-end">
-                    <form class="d-flex m-0" method="post">
+                    <form class="d-flex m-0" method="get">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
                     </form>
                 </li>

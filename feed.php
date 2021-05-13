@@ -5,22 +5,15 @@ include_once(__DIR__ . "/classes/User.php");
 include_once(__DIR__ . "/classes/Comment.php");
 include_once(__DIR__ . "/includes/checkSession.php");
 
-if(isset($_GET['searchTag'])){
+if(isset($_GET['search'])){
     try {
-        $posts = Post::search("#".$_GET['searchTag']);
+        $posts = Post::search($_GET['search']);
     } catch (Exception $e) {
         $error = $e->getMessage();
-    }
-}else if(empty($_POST)){
-    try {
-            $posts = Post::fetchRecentPosts(20,0);
-    } catch (Exception $e) {
-        $error = $e->getMessage();
-
     }
 }else{
     try {
-        $posts = Post::search($_POST['search']);
+        $posts = Post::fetchRecentPosts(20,0);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
