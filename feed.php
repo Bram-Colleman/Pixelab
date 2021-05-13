@@ -14,7 +14,7 @@ if(empty($_POST)){
     }
 }else{
     try {
-        $posts = Post::search('description', $_POST['search']);
+        $posts = Post::search($_POST['search']);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }

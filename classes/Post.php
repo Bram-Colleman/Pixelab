@@ -232,13 +232,23 @@ class Post
         $result = $statement->execute();
         return $result;
     }
-    public static function search($searchFor, $searchText): array
+    public static function search($searchText): array
     {
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE $searchFor LIKE CONCAT('%', :searchText, '%')");
-        $statement->bindValue(":searchText", $searchText);
-        $statement->execute();
-        return Post::loadPosts($statement);
+        if(substr($searchText, 0, 1)=="@"){
+            $splitString = explode(" ", $searchText);
+            $userTag = substr($splitString[0], 1);
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE u.username = :username ORDER BY timestamp DESC");
+            $statement->bindValue(":username", $userTag);
+            $statement->execute();
+            return Post::loadPosts($statement);
+        }else{
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
+            $statement->bindValue(":searchText", $searchText);
+            $statement->execute();
+            return Post::loadPosts($statement);
+        }
 
     }
     public function postedTimeAgo() {
