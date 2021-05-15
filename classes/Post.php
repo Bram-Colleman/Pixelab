@@ -477,7 +477,7 @@ class Post
             "posterImage" => $poster->getAvatar(),
             "sessionUser" => $_SESSION['user'],
             "sessionUserId" => User::fetchUserByUsername($_SESSION['user'])->getId(),
-            "timeAgo" => $this->postedTimeAgo(),
+            "timeAgo" => $this->postedTimeAgo($this->getId()),
             "commentsAgo" => $timesAgo,
         );
     }
