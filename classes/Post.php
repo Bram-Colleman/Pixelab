@@ -191,7 +191,7 @@ class Post
             (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
             (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
     }
-    public static function uploadPost($description): void
+    public static function uploadPost($description): void // SHOULD CHECK IF IMAGE FILE SIZE IS LARGER THAN 500000 (500kb)
     {
 
         $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";
@@ -259,6 +259,7 @@ class Post
         }
 
     }
+
     public static function interactiveDescription($description){
         $description=htmlspecialchars($description);
         // Pieces to array, split on #
@@ -293,12 +294,13 @@ class Post
         $finalDescription = $descriptionPieces[0].implode(" ", $descriptionText);
         return $finalDescription;
     }
-    public function postedTimeAgo() {
+  
+    public function postedTimeAgo($postId) {
         date_default_timezone_set('Europe/Brussels');
 
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT timestamp FROM posts WHERE id = :id");
-        $statement->bindValue(":id", $this->getId());
+        $statement->bindValue(":id", $postId);
         $statement->execute();
         $data = $statement->fetch();
 
@@ -435,7 +437,7 @@ class Post
             throw new Exception('This user does not exist');
         }
         $imageName = $post["image"];
-        $imagePath = "../uploads/posts/$imageName";
+        $imagePath = "uploads/posts/$imageName";
         // Delete file from folder
         if(!unlink($imagePath)){
             throw new Exception('This image does not exist');

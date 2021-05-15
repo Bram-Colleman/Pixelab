@@ -84,6 +84,10 @@
     width: 10vw;
 }
 
+.w-65 {
+    width: 65%;
+}
+
 .h-10-vw {
     height: 10vw;
 }
@@ -110,6 +114,14 @@
 
 .h-15-rem {
     height: 15rem;
+}
+
+.h-35 {
+    height: 35px;
+}
+
+.max-h-600-px {
+    max-height: 600px;
 }
 
 .max-w-1-half-vw {
@@ -184,6 +196,22 @@
     margin-bottom: 0;
 }
 
+.pt-0 {
+    padding-top: 0;
+}
+
+.pr-0 {
+    padding-right: 0;
+}
+
+.pb-0 {
+    padding-bottom: 0;
+}
+
+.pl-0 {
+    padding-left: 0;
+}
+
 .py-half-rem {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -220,4 +248,28 @@
 
 .border-top-gray {
     border-top: 1px solid #757575;
+}
+
+.border-bottom-gray {
+    border-bottom: 1px solid #757575;
+}
+
+.overflow-x-disabled {
+    overflow-x: hidden;
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+
+.bottom-40 {
+    bottom: 40px;
+}
+
+.right-12 {
+    right: 12px;
+}
+
+.top-5-half {
+    top: 5.5px;
 }

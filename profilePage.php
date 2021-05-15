@@ -52,7 +52,10 @@ try {
     <?php try {
         foreach (Post::fetchPostsByUserId($user->getId()) as $post) : ?>
             <?php if (!empty($post->getImage())) : ?>
-                <div class="postPreview">
+                <a href="./postDetail.php?<?php try {
+                    echo "u=" . htmlspecialchars($_GET['user']) . "&" . "pid=" . htmlspecialchars($post->getId());
+                } catch (Exception $e) {
+                } ?>" class="postPreview text-white">
                     <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage(); ?>"
                          alt="post image">
                     <div class="centered">
@@ -63,9 +66,12 @@ try {
                         <?php echo "  " . sizeof($post->getComments()); ?>
                     </span>
                     </div>
-                </div>
+                </a>
             <?php else: ?>
-                <div class="postPreview">
+                <a href="./postDetail.php?<?php try {
+                    echo "u=" . htmlspecialchars($_GET['user']) . "&" . "pid=" . htmlspecialchars($post->getId());
+                } catch (Exception $e) {
+                } ?>" class="postPreview text-white">
                     <img class="profilePagePost w-256-px h-256-px" src="./images/blank_post.jpg" alt="blank post">
                     <div class="centered">
                     <span class="overlay d-none">
@@ -75,7 +81,7 @@ try {
                         <?php echo sizeof($post->getComments()); ?>
                     </span>
                     </div>
-                </div>
+                </a>
             <?php endif; ?>
         <?php endforeach;
     } catch (Exception $e) {
