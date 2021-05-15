@@ -95,7 +95,7 @@ $newComment = new Comment();
 <!--                    --><?php //var_dump(Post::fetchPostById(44)); ?>
                 </div>
                 <div class="col-11 d-flex justify-content-end">
-                    <a href="#" class="border-0 outline-none bg-none text-blac btn-report text-end"
+                    <a href="#" class="border-0 outline-none bg-none text-black btn-report text-end"
                        data-postid="<?php echo $post->getId();?>"
                     >Report</a>
                 </div>
