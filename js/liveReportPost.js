@@ -1,8 +1,3 @@
-// Onload
-document.addEventListener('load', function () {
-    let reportButtons = document.querySelectorAll(".btn-report");
-})
-
 reportButtons = document.querySelectorAll(".btn-report");
 for (let i = 0; i < reportButtons.length; i++) {
     reportButtons[i].addEventListener('click', function report(e) {
