@@ -242,6 +242,14 @@ class Post
             $statement->bindValue(":username", $userTag);
             $statement->execute();
             return Post::loadPosts($statement);
+        }else if(substr($searchText, 0, 1)=="#"){
+            $splitString = explode(" ", $searchText);
+            $hashtag = substr($splitString[0], 1);
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
+            $statement->bindValue(":searchText", $hashtag);
+            $statement->execute();
+            return Post::loadPosts($statement);
         }else{
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
@@ -251,6 +259,42 @@ class Post
         }
 
     }
+
+    public static function interactiveDescription($description){
+        $description=htmlspecialchars($description);
+        // Pieces to array, split on #
+        $descriptionPieces = explode("#", $description);
+        for($i=1; $i<count($descriptionPieces); $i++){
+            // If there is a space after the hashtag, delete it
+            if(substr($descriptionPieces[$i], -1)==" "){
+                $descriptionPieces[$i] = substr($descriptionPieces[$i], -strlen($descriptionPieces[$i]), -1);
+            }
+            // Put hashtag in front of hashtag
+            $descriptionPieces[$i] = '#'.$descriptionPieces[$i];
+        }
+        $descriptionText = array();
+        for($i=1; $i<count($descriptionPieces); $i++){
+            // If the tag has a space
+            if(strpos($descriptionPieces[$i], " ")){
+                // Split on the space
+                $tagPieces = explode(" ", $descriptionPieces[$i]);
+                // Push to array
+                for($c=0; $c<count($tagPieces); $c++){
+                    if(substr($tagPieces[$c], 0, 1)=="#"){
+                        array_push($descriptionText, '<a href="feed.php?search='.urlencode($tagPieces[$c]).'" class="btn-tag">'.$tagPieces[$c].'</a>');
+                    }else{
+                        array_push($descriptionText, $tagPieces[$c]);
+                    }
+                }
+            }else{
+                array_push($descriptionText, '<a href="feed.php?search='.urlencode($descriptionPieces[$i]).'" class="btn-tag">'.$descriptionPieces[$i].'</a>');
+            }
+        }
+        //var_dump($text);
+        $finalDescription = $descriptionPieces[0].implode(" ", $descriptionText);
+        return $finalDescription;
+    }
+  
     public function postedTimeAgo($postId) {
         date_default_timezone_set('Europe/Brussels');
 
