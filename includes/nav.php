@@ -10,7 +10,7 @@
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid" style="height: 5%">
-        <a class="navbar-brand" href="./feed.php">
+        <a class="navbar-brand" href="./index.php">
             <img class="logo" src="images/pixelab_logo.png" alt="pixelab_logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"

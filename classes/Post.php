@@ -281,13 +281,13 @@ class Post
                 // Push to array
                 for($c=0; $c<count($tagPieces); $c++){
                     if(substr($tagPieces[$c], 0, 1)=="#"){
-                        array_push($descriptionText, '<a href="feed.php?search='.urlencode($tagPieces[$c]).'" class="btn-tag">'.$tagPieces[$c].'</a>');
+                        array_push($descriptionText, '<a href="index.php?search='.urlencode($tagPieces[$c]).'" class="btn-tag">'.$tagPieces[$c].'</a>');
                     }else{
                         array_push($descriptionText, $tagPieces[$c]);
                     }
                 }
             }else{
-                array_push($descriptionText, '<a href="feed.php?search='.urlencode($descriptionPieces[$i]).'" class="btn-tag">'.$descriptionPieces[$i].'</a>');
+                array_push($descriptionText, '<a href="index.php?search='.urlencode($descriptionPieces[$i]).'" class="btn-tag">'.$descriptionPieces[$i].'</a>');
             }
         }
         //var_dump($text);

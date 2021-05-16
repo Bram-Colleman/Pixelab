@@ -216,7 +216,7 @@ class User
                 $_SESSION["user"] = $username;
                 $_SESSION["email"] = $email;
                 $_SESSION["userId"] = $this->getId();
-                header('Location: feed.php');
+                header('Location: index.php');
             }
         }
     }
@@ -229,7 +229,7 @@ class User
         $statement->bindValue(":id", $this->getId());
         $statement->execute();
 
-        header('Location: feed.php');
+        header('Location: index.php');
     }
     public static function login($email, $password){
 
@@ -256,7 +256,7 @@ class User
             $_SESSION["email"] = $email;
             $_SESSION["userId"] = $user['id'];
             $_SESSION["userRole"] = $user['userRole'];
-            header("Location: feed.php");
+            header("Location: index.php");
         }else{
             throw new Exception('Incorrect password');
         }
