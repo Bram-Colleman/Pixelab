@@ -252,7 +252,7 @@ class User
     public static function login($email, $password){
 
         $conn = Db::getConnection();
-        $statement = $conn->prepare("select u.*, r.*
+        $statement = $conn->prepare("select u.*, u.id as userId, r.*
         from users u
         inner join (select id, name as userRole from user_roles) r
         on u.user_role = r.id
@@ -272,7 +272,7 @@ class User
             session_start();
             $_SESSION["user"] = $user['username'];
             $_SESSION["email"] = $email;
-            $_SESSION["userId"] = $user['id'];
+            $_SESSION["userId"] = $user['userId'];
             $_SESSION["userRole"] = $user['userRole'];
             header("Location: index.php");
         }else{
