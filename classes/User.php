@@ -14,7 +14,6 @@ class User
     private $target_file;
     private $target_dir;
     private $imageFileType;
-    private $uploadOk;
 
     // Constructor
     public function __construct($id = null, $username = null, $email = null, $bio = null, $avatar = null, $password = null, $followers = array())
@@ -165,6 +164,20 @@ class User
         }
         return $postLikes;
     }
+
+    private static function getRole($id) {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("select r.*
+        from users u
+        inner join (select id, name from user_roles) r
+        on u.user_role = r.id
+        WHERE u.id = :id");
+        $statement->bindValue(":id", $id);
+        $statement->execute();
+        $result = $statement->fetch();
+        return $result['name'];
+    }
+
     public function updateUser($username, $bio, $email, $currentPassword, $newPassword)
     {
         if (password_verify($currentPassword, $this->getPassword())){
@@ -207,7 +220,7 @@ class User
             }
 
             if ($this->checkIfUserExists($email, $username) <= 1) {
-                $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail, avatar = :avatar WHERE email = :email");
+                $statement = $conn->prepare("UPDATE users SET username = :username, bio = :bio, email = :newEmail, avatar = :avatar, user_role = user_role WHERE email = :email");
                 $statement->bindValue(":username", $username);
                 $statement->bindValue(":bio", $bio);
                 $statement->bindValue(":newEmail", $email);
@@ -220,6 +233,7 @@ class User
                 $_SESSION["user"] = $username;
                 $_SESSION["email"] = $email;
                 $_SESSION["userId"] = $this->getId();
+                $_SESSION['userRole'] = User::getRole($this->getId());
                 header('Location: index.php');
             }
         }
