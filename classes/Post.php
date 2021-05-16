@@ -436,7 +436,7 @@ class Post
             throw new Exception('This user does not exist');
         }
         $imageName = $post["image"];
-        $imagePath = "uploads/posts/$imageName";
+        $imagePath = "../uploads/posts/$imageName";
         // Delete file from folder
         if(!unlink($imagePath)){
             throw new Exception('This image does not exist');
