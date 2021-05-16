@@ -20,7 +20,12 @@ if (!empty($_POST)) {
     if (!empty($user)) {
 //        $user->uploadAvatar($_POST['oldPassword']);
         if(isset($_POST['updateProfile'])) {
-            $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+            try {
+                $user->updateUser($_POST['username'], $_POST['bio'], $_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+            } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
         }
 
         if(isset($_POST['deleteAvatar'])) {
@@ -46,19 +51,23 @@ if (!empty($_POST)) {
     <body>
     <?php if (!empty($_POST)): ?>
         <?php if (password_verify($_POST['oldPassword'], $user->getPassword()) === false): ?>
-
             <div class="container-fluid w-25 pt-1 text-center">
                 <div class="alert alert-danger" id="invalidPassword" role="alert">
                     Incorrect password.
                 </div>
             </div>
-        <?php  else: ?>
+<!--        <?php /* else: */?>
             <div class="container-fluid w-25 pt-1 text-center">
                 <div class="alert alert-danger" id="invalidPassword" role="alert">
                     The username or email you entered already exists.
                 </div>
-            </div>
+            </div>-->
         <?php endif; ?>
+    <?php endif; ?>
+    <?php if (isset($error)): ?>
+        <div class="alert alert-danger text-center">
+            <p><?php echo $error ?></p>
+        </div>
     <?php endif; ?>
     <div class="flexbox">
         <div class="justify-content-center w-50 m-5-auto-auto">

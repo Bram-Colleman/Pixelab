@@ -25,14 +25,15 @@ if (!empty($_POST)) {
     <title>Login</title>
 </head>
 <body>
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger text-center">
+        <p><?php echo $error ?></p>
+    </div>
+<?php endif; ?>
 <div class="flexbox ">
     <img src="./images/pixelab_logo.png" alt="" class="w-20-vw h-centered mt-5-rem">
-    <?php if (isset($error)): ?>
-        <p><?php echo $error ?></p>
-    <?php endif; ?>
     <div class="container w-25">
         <form method="post" class="h-centered v-centered translate-50-50 mt-5">
-
             <label for="email" class="form-label fw-bold pt-5">Email</label>
             <input id="email" name="email" placeholder="Email" type="email" required autofocus class="form-control"/>
 

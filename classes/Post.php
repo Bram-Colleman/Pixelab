@@ -200,19 +200,18 @@ class Post
         //$imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
         // Check if image file is a actual image or fake image
-        if ($_FILES["file"]["error"] == 4) {
-            //means there is no file uploaded
-            throw new Exception("This is not an image");
+        if ($_FILES["postImage"]["size"] > 2000000) {
+            throw new Exception("File is too large, it can't be bigger than 2MB");
+        } else {
+            move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
+
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
+            $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
+            $statement->bindValue(":image", $fileName);
+            $statement->bindValue(":description", $description);
+            $statement->execute();
         }
-
-        move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
-
-        $conn = Db::getConnection();
-        $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
-        $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
-        $statement->bindValue(":image", $fileName);
-        $statement->bindValue(":description", $description);
-        $statement->execute();
     }
     public function like(): bool
     {

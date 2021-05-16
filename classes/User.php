@@ -99,7 +99,7 @@ class User
     {
         $this->password = $password;
     }
-    private function setFollowers(array $followers): void
+    private function setFollowers($followers): void
     {
         $this->followers = $followers;
     }
@@ -176,17 +176,21 @@ class User
             $statement->execute();
             $check = $statement->fetch()['COUNT(*)'];
 
-            if ($_FILES['avatar']['size'] != 0 && $_FILES['avatar']['error'] == 0)
-            {
-                $fileName = $this->getUsername() . "_" . date('YmdHis') . ".jpg";
-                $this->setTargetDir( "uploads/avatars/");
-                $this->setImageFileType(strtolower(pathinfo($this->getTargetFile(), PATHINFO_EXTENSION)));
+            if($_FILES['avatar']['size'] > 2000000) {
+                throw new Exception("File is too large, it can't be bigger than 2MB");
+            } else {
+                if ($_FILES['avatar']['size'] != 0 && $_FILES['avatar']['error'] == 0)
+                {
+                    $fileName = $this->getUsername() . "_" . date('YmdHis') . ".jpg";
+                    $this->setTargetDir( "uploads/avatars/");
+                    $this->setImageFileType(strtolower(pathinfo($this->getTargetFile(), PATHINFO_EXTENSION)));
 
-                $this->setTargetFile($this->getTargetDir() . basename($fileName));
+                    $this->setTargetFile($this->getTargetDir() . basename($fileName));
 
-                move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile());
-                if (!empty($this->getAvatar())){
-                    unlink("uploads/avatars/" . $this->getAvatar());
+                    move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile());
+                    if (!empty($this->getAvatar())){
+                        unlink("uploads/avatars/" . $this->getAvatar());
+                    }
                 }
             }
 
@@ -283,6 +287,8 @@ class User
 
             $result = $statement->execute();
             return $result;
+        } else {
+            throw new Exception("User already exists");
         }
     }
     public function checkIfUserExists($email, $username)
@@ -311,57 +317,4 @@ class User
         $result = $statement->execute();
         return $result;
     }
-
-//    public function uploadAvatar() {
-//        $fileName = $this->getUsername() . "_" . date('YmdHis') . ".jpg";
-//        $this->setTargetDir( "uploads/avatars/");
-//        $this->setImageFileType(strtolower(pathinfo($this->getTargetFile(), PATHINFO_EXTENSION)));
-//        $this->setUploadOk(0);
-//        if(strpos($_FILES["avatar"]["name"], ".jpg") || strpos($_FILES["avatar"]["name"], ".png") || strpos($_FILES["avatar"]["name"], ".jpeg") ) {
-//            $this->setTargetFile($this->getTargetDir() . basename($fileName));
-//        }
-//        if(isset($_POST["submit"])) {
-//            $check = getimagesize($_FILES["avatar"]["tmp_name"]);
-//            if($check !== false) {
-//                $this->setUploadOk(0);
-//            } else {
-//                $this->setUploadOk(1);
-//            }
-//        }
-//        if ($_FILES["avatar"]["size"] > 2000000) {
-//            $this->setUploadOk(2);
-//        }
-//
-//        if ($this->getImageFileType() != "jpg" && $this->getImageFileType() != "png" && $this->getImageFileType() != "jpeg") {
-//            $this->setUploadOk(3);
-//        }
-//
-//        switch ($this->getUploadOk()) {
-//            case 0:
-//                if (move_uploaded_file($_FILES["avatar"]["tmp_name"], $this->getTargetFile())) {
-//                    $this->setUploadOk(0);
-//
-//                    $conn = Db::getConnection();
-//                    $statement = $conn->prepare("UPDATE users SET avatar = :avatar where username = :username");
-//                    $statement->bindValue(":username", $this->getUsername());
-//                    $statement->bindValue(":avatar", $fileName);
-//                    return $statement->execute();
-//
-//                } else {
-//                    $this->setUploadOk(1);
-//                }
-//                break;
-//            case 1:
-//                $this->setUploadOk(1);
-//                break;
-//            case 2:
-//                $this->setUploadOk(2);
-//                break;
-//            case 3:
-//                $this->setUploadOk(3);
-//                break;
-//        }
-//        return false;
-//    }
-
 }

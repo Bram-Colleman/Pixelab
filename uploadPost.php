@@ -13,7 +13,6 @@ if (!empty($_POST)) {
         Post::uploadPost($_POST['description']);
         header("Location: index.php");
     } catch (Exception $e) {
-        var_dump($_SESSION);
         $error = $e->getMessage();
     }
 }
@@ -31,6 +30,11 @@ if (!empty($_POST)) {
     <title>Upload Post</title>
 </head>
 <body>
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger text-center">
+        <p><?php echo $error ?></p>
+    </div>
+<?php endif; ?>
 <div class="container">
     <form class="form-inline" method="post" enctype="multipart/form-data">
         <div class="row w-75 ml-12-half mt-10">

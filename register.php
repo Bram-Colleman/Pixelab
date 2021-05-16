@@ -7,7 +7,7 @@ session_destroy();
 
 if (!empty($_POST)) {
     try {
-        $user = new User(null, $_POST['username'], $_POST['email'], null, null, $_POST['password']);
+        $user = new User(null, $_POST['username'], $_POST['email'], null, null, $_POST['password'], null, 2);
         $user->register();
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -26,6 +26,11 @@ if (!empty($_POST)) {
     <title>Sign Up</title>
 </head>
 <body class="login-body">
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger text-center">
+        <p><?php echo $error ?></p>
+    </div>
+<?php endif; ?>
 <img src="./images/pixelab_logo.png" alt="" class="w-20-vw h-centered mt-5-rem">
 <form method="post" class="h-centered v-centered translate-50-50 mt-5">
     <label for="email" class="form-label fw-bold pt-5">Email</label>
