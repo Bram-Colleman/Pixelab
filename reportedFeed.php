@@ -39,8 +39,8 @@ if(empty($_POST)){
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5" data-postid="<?php echo $post->getId(); ?>">
             <div class="row pt-half">
                 <div class="col-12">
-                    <a href="#" class="btn-keepPost">Keep post</a>
-                    <a href="#" class="btn-deletePost">Delete post</a>
+                    <a href="#" class="btn btn-success btn-keepPost">Keep post</a>
+                    <a href="#" class="btn btn-danger btn-deletePost">Delete post</a>
                 </div>
             </div>
             <!--    username and avatar:-->
