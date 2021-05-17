@@ -37,10 +37,10 @@ if (!empty($_POST)) {
 <?php endif; ?>
 <div class="container">
     <form class="form-inline" method="post" enctype="multipart/form-data">
-        <div class="row w-75 ml-12-half mt-10">
-            <div class="col-md-6">
-                <label for="file-input">
-                    <img id="uploadedImage" src="./images/blank_post.jpg" class="rounded-circle w-20-vw h-20-vw object-fit-cover" role='button'
+        <div class="row w-75 ml-12-half mt-10  ">
+            <div class="col-md-6 d-flex ">
+                <label for="file-input" >
+                    <img id="uploadedImage" src="./images/blank_post.jpg" class="rounded-circle w-20-vw h-20-vw object-fit-cover justify-content-center" role='button'
                          alt=""/>
                 </label>
                 <input class="d-none" type="file" id="file-input" name="postImage" required>
