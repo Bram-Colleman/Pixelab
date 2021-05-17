@@ -24,15 +24,15 @@ try {
 </head>
 <body>
     <div class="container">
-        <div class="row pb-5 pt-5">
+        <div class="row pb-5 pt-5 profile-info">
             <div class="col-3 text-center">
                 <?php if (!empty($user->getAvatar())) : ?>
-                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle w-10-vw h-10-vw object-fit-cover alt="uploaded avatar"/>
+                    <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle w-10-vw h-10-vw object-fit-cover avatar-img" alt="uploaded avatar"/>
                 <?php else: ?>
-                    <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw" alt="blank avatar"/>
+                    <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw  avatar-img" alt="blank avatar"/>
                 <?php endif; ?>
             </div>
-            <div class="col-6 align-self-center">
+            <div class="col-5 align-self-center">
                 <h1 class="d-inline"><?php echo htmlspecialchars($user->getUsername());?></h1>
                 <p id="followerCount"><?php echo sizeof($user->fetchFollowers()); ?> Followers</p>
             </div>
@@ -48,7 +48,7 @@ try {
             <?php endif; ?>
         </div>
     </div>
-    <div class="container d-flex flex-wrap m-auto">
+    <div class="container d-flex flex-wrap m-auto posts-container">
     <?php try {
         foreach (Post::fetchPostsByUserId($user->getId()) as $post) : ?>
             <?php if (!empty($post->getImage())) : ?>

@@ -120,6 +120,48 @@ class Post
         }
 
     }
+    public static function fetchRecentPostsFromFollowers($limit, $offset)
+    {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp, p.user_id 
+                                                FROM posts p 
+                                                JOIN users u ON u.id = p.user_id 
+                                                WHERE p.user_id IN ( 
+                                                    SELECT f.following_id 
+                                                    FROM followers f 
+                                                    JOIN users u ON f.follower_id = u.id 
+                                                    WHERE u.id = :userId) 
+                                                ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
+        $statement->bindValue(":userId", $_SESSION['userId']);
+        $statement->execute();
+        $posts = $statement->fetchAll();
+        if (!$posts) {
+            echo "tyest";
+            throw new Exception('There are no posts found');
+
+        }
+        $recentPosts = array();
+
+        if ($offset === 0 ){
+            foreach ($posts as $post) {
+                if(Post::postReportCount($post['id'])<3){
+                    array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                }
+            }
+            return $recentPosts;
+        } else {
+            foreach ($posts as $post) {
+                if(Post::postReportCount($post['id'])<3){
+                    $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+                    array_push($recentPosts, $newPost->toArray());
+                }
+            }
+            return $recentPosts;
+        }
+
+    }
     public static function fetchLikes($postId): array
     {
         $conn = Db::getConnection();

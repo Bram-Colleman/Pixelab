@@ -50,8 +50,8 @@
 }
 
 .avatarIcon {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
     object-fit: cover;
 }
 
@@ -65,16 +65,82 @@
     font-size: 0.7rem;
     color: #757575;
 }
+.posts-container {
+    justify-content: center;
+}
+@media only screen and (max-width: 992px) {
+    .navbar-nav {
+        width: 100%;
+        flex-direction: inherit!important;
+        justify-content: flex-end;
+    }
+    .navbar-nav li {
+        padding: 8px;
+    }
+    .post-content {
+        flex-direction: column;
+    }
+    #postImage {
+        width: 90vw!important;
+        padding-bottom: .5rem!important;
+    }
+    .post-card {
+        width: 90vw!important;
+        margin: auto!important;
+        margin-top: 1rem!important;
+        margin-bottom: 1rem!important;
+    }
+    .comment-section {
+        width: 100%!important;
+    }
+}
 
+@media only screen and (max-width: 767px) {
+    #uploadedImage {
+        width: 75vw;
+        height: 75vw;
+        margin-left: auto!important;
+        margin-right: auto!important;
+    }
+    .row>* {
+        justify-content: center;
+    }
+    .postPreview img {
+        max-width: 30vw;
+        max-height: 30vw;
+    }
+    .avatar-img {
+        min-width: 25vw;
+        min-height: 25vw;
+    }
+    .profile-info {
+        justify-content: space-between;
+        width: 100vw;
+    }
+    #followButton {
+        margin-right: 8px;
+    }
+}
 /* utility classes */
 
 .w-10-rem {
     width: 10rem;
 }
-
 .w-35 {
     width: 35%;
 }
+@media only screen and (max-width: 992px) {
+    .w-35 {
+        width: 90%!important;
+    }
+    .w-75 {
+        width: 100%!important;
+    }
+    .ml-12-half {
+        margin-left: 0!important;
+    }
+}
+
 
 .w-20-vw {
     width: 20vw;

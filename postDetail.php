@@ -34,7 +34,7 @@ if(!empty($_POST['btn-delete'])) {
 <body>
 
 <div>
-    <div class="container-fluid shadow w-65 mt-5 mb-5">
+    <div class="container-fluid shadow w-65 mt-5 mb-5 post-card">
         <!-- Username and avatar: -->
         <div class="row h-5 mb-1">
             <div class="col-auto flex-fill align-self-center text-center p-0">
@@ -42,8 +42,12 @@ if(!empty($_POST['btn-delete'])) {
                     echo htmlspecialchars($_GET['u']);
                 } catch (Exception $e) {
                 } ?>">
-                    <img src="./uploads/avatars/<?php echo $user->getAvatar() ?>" class="rounded-circle avatarIcon"
-                         alt="uploaded avatar">
+                    <?php if (!empty($user->getAvatar())) : ?>
+                        <img src="./uploads/avatars/<?php echo $user->getAvatar() ?>" class="rounded-circle avatarIcon"
+                             alt="uploaded avatar">
+                    <?php else: ?>
+                        <img id="uploadedImage" src="./images/blank_avatar.png" class="rounded-circle avatarIcon" role='button' alt="blank avatar"/>
+                    <?php endif; ?>
                 </a>
             </div>
             <div class="col-3 flex-fill align-self-center p-0">
@@ -57,14 +61,14 @@ if(!empty($_POST['btn-delete'])) {
             </div>
         </div>
         <!-- Post: -->
-        <div class="row">
+        <div class="row post-content">
             <!-- Post image: -->
             <div class="col-6 flex-fill px-0">
                 <img id="postImage" src="./uploads/posts/<?php echo $post->getImage(); ?>"
                      class="w-100" alt="blank post">
             </div>
             <!-- Comments: -->
-            <div class="col-5 flex-fill position-relative">
+            <div class="col-5 flex-fill position-relative comment-section">
                 <div class="pb-2 border-bottom-gray">
                     <span class="fw-bold"><?php echo htmlspecialchars($_GET['u']); ?></span><span> <?php echo htmlspecialchars($post->getDescription());?></span>
                 </div>

@@ -13,7 +13,7 @@ if(isset($_GET['search'])){
     }
 }else{
     try {
-        $posts = Post::fetchRecentPostsFromFollowers(20,0);
+        $posts = Post::fetchRecentPosts(20,0);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -57,7 +57,7 @@ $newComment = new Comment();
                             if (!empty($user->getAvatar())) : ?>
                                 <img src="./uploads/avatars/<?php echo $user->getAvatar();?>" class="rounded-circle avatarIcon" alt="avatar image"/>
                             <?php else: ?>
-                                <img src="./images/blank_avatar.png" class="rounded-circle avatarIcon" role='button' alt="blank avatar"/>
+                                <img src="./images/blank_avatar.png" class="rounded-circle max-w-1-half-vw avatarIcon" role='button' alt="blank avatar"/>
                             <?php endif;
                         } ?></a>
                 </div>
