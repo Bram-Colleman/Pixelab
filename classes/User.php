@@ -189,8 +189,8 @@ class User
             $statement->execute();
             $check = $statement->fetch()['COUNT(*)'];
 
-            if($_FILES['avatar']['size'] > 2000000) {
-                throw new Exception("File is too large, it can't be bigger than 2MB");
+            if($_FILES['avatar']['size'] > 700000) {
+                throw new Exception("File is too large, it can't be bigger than 700KB");
             } else {
                 if ($_FILES['avatar']['size'] != 0 && $_FILES['avatar']['error'] == 0)
                 {

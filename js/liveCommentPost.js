@@ -26,7 +26,7 @@ for (let i = 0; i < inputFields.length; i++) {
                     .then(result => {
                         console.log("Success:", result);
                         // Get function
-                        if(document.URL.includes("index")) {
+                        if(document.URL.includes("index") || document.URL.includes("explore")) {
                             successFeed(result, i, this);
                         }
                         if(document.URL.includes("postDetail")) {

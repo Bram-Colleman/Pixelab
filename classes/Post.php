@@ -136,9 +136,7 @@ class Post
         $statement->execute();
         $posts = $statement->fetchAll();
         if (!$posts) {
-            echo "tyest";
-            throw new Exception('There are no posts found');
-
+            throw new Exception('You are currently not following anyone.');
         }
         $recentPosts = array();
 
@@ -242,8 +240,8 @@ class Post
         //$imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
         // Check if image file is a actual image or fake image
-        if ($_FILES["postImage"]["size"] > 2000000) {
-            throw new Exception("File is too large, it can't be bigger than 2MB");
+        if ($_FILES["postImage"]["size"] > 700000) {
+            throw new Exception("File is too large, it can't be bigger than 700KB");
         } else {
             move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
 
@@ -300,7 +298,6 @@ class Post
         }
 
     }
-
     public static function interactiveDescription($description){
         $description=htmlspecialchars($description);
         // Pieces to array, split on #
@@ -335,7 +332,6 @@ class Post
         $finalDescription = $descriptionPieces[0].implode(" ", $descriptionText);
         return $finalDescription;
     }
-  
     public function postedTimeAgo($postId) {
         date_default_timezone_set('Europe/Brussels');
 
