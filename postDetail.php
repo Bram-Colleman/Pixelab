@@ -14,8 +14,9 @@ try {
     $error = $e->getMessage();
 }
 
+
 if(!empty($_POST['btn-delete'])) {
-    $post::deletePost($_GET['pid']);
+    Post::deletePost($_GET['pid']);
     header('Location: ' . 'profilePage.php?user=' . $_GET['u']);
 }
 
