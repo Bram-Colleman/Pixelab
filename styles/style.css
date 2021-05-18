@@ -4,16 +4,17 @@
 }
 
 .profilePagePost {
-    width: 256px;
-    height: 256px;
     object-fit: cover;
-    padding: 1% !important;
+    margin: .4% 0 !important;
+    width: 12vw!important;
+    height: 12vw!important;
 }
 
 .postPreview {
     position: relative;
     text-align: center;
     color: white;
+
 }
 
 .profilePagePostHover {
@@ -65,9 +66,7 @@
     font-size: 0.7rem;
     color: #757575;
 }
-.posts-container {
-    justify-content: center;
-}
+
 @media only screen and (max-width: 992px) {
     .navbar-nav {
         width: 100%;
@@ -106,8 +105,8 @@
         justify-content: center;
     }
     .postPreview img {
-        max-width: 30vw;
-        max-height: 30vw;
+        width: 30vw!important;
+        height: 30vw!important;
     }
     .avatar-img {
         min-width: 25vw;
