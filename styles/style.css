@@ -4,16 +4,17 @@
 }
 
 .profilePagePost {
-    width: 256px;
-    height: 256px;
     object-fit: cover;
     margin: .4% 0 !important;
+    width: 12vw!important;
+    height: 12vw!important;
 }
 
 .postPreview {
     position: relative;
     text-align: center;
     color: white;
+
 }
 
 .profilePagePostHover {
