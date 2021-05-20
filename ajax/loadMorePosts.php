@@ -5,7 +5,7 @@ if (!empty($_POST)) {
     session_start();
 
     try {
-        $posts = Post::fetchRecentPosts(20, $_POST['currentAmount']);
+        $posts = (strpos($_SERVER['REQUEST_URI'], "explore")) ? $posts = Post::fetchRecentPosts(20, $_POST['currentAmount']) : $posts = Post::fetchRecentPostsFromFollowing(20, $_POST['currentAmount']);
         $postAmount = sizeof($posts);
 
         $response = [

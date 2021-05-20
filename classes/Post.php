@@ -120,7 +120,7 @@ class Post
         }
 
     }
-    public static function fetchRecentPostsFromFollowers($limit, $offset)
+    public static function fetchRecentPostsFromFollowing($limit, $offset)
     {
         $conn = Db::getConnection();
         $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp, p.user_id 
@@ -131,6 +131,7 @@ class Post
                                                     FROM followers f 
                                                     JOIN users u ON f.follower_id = u.id 
                                                     WHERE u.id = :userId) 
+                                                OR p.user_id = :userId
                                                 ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
         $statement->bindValue(":userId", $_SESSION['userId']);
         $statement->execute();
