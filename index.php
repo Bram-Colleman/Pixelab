@@ -39,8 +39,9 @@ if (isset($_GET['search'])) {
 <div id="PostContainer">
     <?php if (isset($error)): ?>
         <div class="mt-5 text-center">
+            <h3 class="mb-3" >Welcome to Pixelab!</h3>
             <p><?php echo $error ?></p>
-            <h3>Start following people to check out their amazing desings on your feed!</h3>
+            <p>Start following people to check out their amazing desings on your feed!</p>
             <a class="btn btn-primary" href="explore.php">Explore designs</a>
         </div>
         <?php else: ?>
