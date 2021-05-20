@@ -349,7 +349,6 @@ class User
         $statement->bindValue(":userId", $userId);
         $statement->execute();
         $result = $statement->fetch();
-
-        return $result != 0;
+        return $result[0] != 0;
     }
 }
