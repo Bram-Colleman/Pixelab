@@ -16,6 +16,10 @@
     color: white;
 
 }
+.profilePageFigure {
+    display: inline-flex;
+    justify-content: stretch;
+}
 
 .profilePagePostHover {
     filter: blur(4px) brightness(.3);

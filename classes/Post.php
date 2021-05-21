@@ -13,10 +13,11 @@ class Post
     private $timestamp;
     private $likes = array();
     private $comments = array();
+    private $filter;
 
 
     // Constructor
-    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array())
+    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array(), $filter = null)
     {
         $this->setId($id);
         $this->setUser($user);
@@ -25,6 +26,7 @@ class Post
         $this->setTimestamp($timestamp);
         $this->setLikes($likes);
         $this->setComments($comments);
+        $this->setFilter($filter);
     }
 
     // Getters
@@ -56,6 +58,10 @@ class Post
     {
         return $this->comments;
     }
+    public function getFilter()
+    {
+        return $this->filter;
+    }
 
     // Setters
     private function setId($id): void
@@ -72,7 +78,12 @@ class Post
     }
     private function setDescription($description): void
     {
-        $this->description = $description;
+        if (!empty($description)) {
+            $this->description = $description;
+        }
+        else {
+            throw new Exception("Description can not be empty!");
+        }
     }
     private function setTimestamp($timestamp): void
     {
@@ -85,6 +96,12 @@ class Post
     public function setComments(array $comments): void
     {
         $this->comments = $comments;
+
+    }
+    public function setFilter($filter): void
+    {
+        $this->filter = $filter;
+
     }
 
     // Methods
@@ -92,7 +109,7 @@ class Post
 
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
         $statement->execute();
         $posts = $statement->fetchAll();
         if (!$posts) {
@@ -104,7 +121,7 @@ class Post
             foreach ($posts as $post) {   
                 if(Post::postReportCount($post['id'])<3){
                     array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
                 }
             }
             return $recentPosts;
@@ -112,7 +129,7 @@ class Post
             foreach ($posts as $post) {
                 if(Post::postReportCount($post['id'])<3){
                     $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
                     array_push($recentPosts, $newPost->toArray());
                 }
             }
@@ -123,7 +140,7 @@ class Post
     public static function fetchRecentPostsFromFollowers($limit, $offset)
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp, p.user_id 
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, p.user_id 
                                                 FROM posts p 
                                                 JOIN users u ON u.id = p.user_id 
                                                 WHERE p.user_id IN ( 
@@ -144,7 +161,7 @@ class Post
             foreach ($posts as $post) {
                 if(Post::postReportCount($post['id'])<3){
                     array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
                 }
             }
             return $recentPosts;
@@ -152,7 +169,7 @@ class Post
             foreach ($posts as $post) {
                 if(Post::postReportCount($post['id'])<3){
                     $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+                        (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
                     array_push($recentPosts, $newPost->toArray());
                 }
             }
@@ -193,7 +210,7 @@ class Post
     public static function fetchPostsByUserId($userId): array
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE user_id = :userId ORDER BY timestamp DESC");
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE user_id = :userId ORDER BY timestamp DESC");
         $statement->bindValue(":userId", $userId);
         $statement->execute();
 
@@ -206,7 +223,7 @@ class Post
         foreach ($posts as $post) {
             if(Post::postReportCount($post['id'])<3){
                 array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
-                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
             }
         }
         return $fetchedPosts;
@@ -231,7 +248,7 @@ class Post
             (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
             (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
     }
-    public static function uploadPost($description): void // SHOULD CHECK IF IMAGE FILE SIZE IS LARGER THAN 500000 (500kb)
+    public static function uploadPost($description, $filter): void // SHOULD CHECK IF IMAGE FILE SIZE IS LARGER THAN 500000 (500kb)
     {
 
         $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";
@@ -246,10 +263,11 @@ class Post
             move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
 
             $conn = Db::getConnection();
-            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description) VALUES (:userId, :image, :description)");
+            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description, filter) VALUES (:userId, :image, :description, :filter)");
             $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
             $statement->bindValue(":image", $fileName);
             $statement->bindValue(":description", $description);
+            $statement->bindValue(":filter", $filter);
             $statement->execute();
         }
     }
@@ -520,6 +538,7 @@ class Post
             "sessionUserId" => User::fetchUserByUsername($_SESSION['user'])->getId(),
             "timeAgo" => $this->postedTimeAgo($this->getId()),
             "commentsAgo" => $timesAgo,
+            "filter" => $this->getFilter()
         );
     }
 }

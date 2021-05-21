@@ -68,10 +68,6 @@ class User
     {
         return $this->imageFileType;
     }
-    public function getUploadOk()
-    {
-        return $this->uploadOk;
-    }
 
     // Setters
     private function setId($id): void
@@ -113,10 +109,6 @@ class User
     private function setImageFileType($imageFileType): void
     {
         $this->imageFileType = $imageFileType;
-    }
-    private function setUploadOk($uploadOk): void
-    {
-        $this->uploadOk = $uploadOk;
     }
 
     // Methods
@@ -261,8 +253,6 @@ class User
         $statement->execute();
         // get user connected to email
         $user = $statement->fetch();
-        echo $user . "test";
-
         if(!$user){
             throw new Exception('This user does not exist');
         }

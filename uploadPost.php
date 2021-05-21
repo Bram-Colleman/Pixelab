@@ -10,7 +10,7 @@ if (!isset($_SESSION)) {
 
 if (!empty($_POST)) {
     try {
-        Post::uploadPost($_POST['description']);
+        Post::uploadPost($_POST['description'], $_POST['filter']);
         header("Location: index.php");
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -46,33 +46,33 @@ if (!empty($_POST)) {
                              alt=""/>
                     </figure>
                     <div >
-                        <input type="radio" id="contactChoice1"
+                        <input type="radio" id="filter1"
                                name="filter" value="" class="d-none">
-                        <label for="contactChoice1" class="btn-radio" data-filter="">No filter</label>
-                        <input type="radio" id="contactChoice2"
+                        <label for="filter1" class="btn-radio" data-filter="">No filter</label>
+                        <input type="radio" id="filter2"
                                name="filter" value="_1977" class="d-none">
-                        <label for="contactChoice2" class="btn-radio" data-filter="_1977">1977</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter2" class="btn-radio" data-filter="_1977">1977</label>
+                        <input type="radio" id="filter3"
                                name="filter" value="aden" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="aden">aden</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter3" class="btn-radio" data-filter="aden">aden</label>
+                        <input type="radio" id="filter4"
                                name="filter" value="brannan" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="brannan">Brannan</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter4" class="btn-radio" data-filter="brannan">Brannan</label>
+                        <input type="radio" id="filter5"
                                name="filter" value="brooklyn" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="brooklyn">Brooklyn</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter5" class="btn-radio" data-filter="brooklyn">Brooklyn</label>
+                        <input type="radio" id="filter6"
                                name="filter" value="clarendon" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="clarendon">Clarendon</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter6" class="btn-radio" data-filter="clarendon">Clarendon</label>
+                        <input type="radio" id="filter7"
                                name="filter" value="earlybird" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="earlybird">Earlybird</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter7" class="btn-radio" data-filter="earlybird">Earlybird</label>
+                        <input type="radio" id="filter8"
                                name="filter" value="gingham" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="gingham">Gingham</label>
-                        <input type="radio" id="contactChoice3"
+                        <label for="filter8" class="btn-radio" data-filter="gingham">Gingham</label>
+                        <input type="radio" id="filter9"
                                name="filter" value="hudson" class="d-none">
-                        <label for="contactChoice3" class="btn-radio" data-filter="hudson">Hudson</label>
+                        <label for="filter9" class="btn-radio" data-filter="hudson">Hudson</label>
                     </div>
                 </label>
                 <input class="d-none" type="file" id="file-input" name="postImage" required>
