@@ -49,8 +49,7 @@ try {
             <?php endif; ?>
         </div>
     </div>
-    <div class="container d-flex flex-wrap m-auto justify-content-center">
-        <div class="justify-content-start">
+    <div class="container d-flex flex-wrap m-auto posts-container">
     <?php try {
         foreach (Post::fetchPostsByUserId($user->getId()) as $post) : ?>
             <?php if (!empty($post->getImage())) : ?>
@@ -90,7 +89,6 @@ try {
         <?php endforeach;
     } catch (Exception $e) {
     } ?>
-        </div>
     </div>
 
 <script src="https://use.fontawesome.com/2dd2522a24.js"></script>

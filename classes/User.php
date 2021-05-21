@@ -147,16 +147,29 @@ class User
         $statement = $conn->prepare("SELECT username FROM followers f JOIN users u ON u.id = follower_id WHERE following_id = :followingId");
         $statement->bindValue(":followingId", $this->getId());
         $statement->execute();
-        $fetchedLikes = $statement->fetchAll();
-        $postLikes = array();
-        if (!empty($fetchedLikes)) {
-            foreach ($fetchedLikes as $fetchedLike) {
-                array_push($postLikes, $fetchedLike['username']);
+        $fetchedFollowers = $statement->fetchAll();
+        $followers = array();
+        if (!empty($fetchedFollowers)) {
+            foreach ($fetchedFollowers as $fetchedFollower) {
+                array_push($followers, $fetchedFollower['username']);
             }
         }
-        return $postLikes;
+        return $followers;
     }
-
+    public function fetchFollowing() {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT username FROM followers f JOIN users u ON u.id = follower_id WHERE follower_id = :followerId");
+        $statement->bindValue(":followerId", $this->getId());
+        $statement->execute();
+        $fetchedFollowings = $statement->fetchAll();
+        $followings = array();
+        if (!empty($fetchedFollowings)) {
+            foreach ($fetchedFollowings as $fetchedFollowing) {
+                array_push($followings, $fetchedFollowing['username']);
+            }
+        }
+        return $followings;
+    }
     private static function getRole($id) {
         $conn = Db::getConnection();
         $statement = $conn->prepare("select r.*
@@ -169,7 +182,6 @@ class User
         $result = $statement->fetch();
         return $result['name'];
     }
-
     public function updateUser($username, $bio, $email, $currentPassword, $newPassword)
     {
         if (password_verify($currentPassword, $this->getPassword())){
@@ -322,5 +334,13 @@ class User
         $statement->bindValue(":followerId", User::fetchUserByUsername($_SESSION['user'])->getId());
         $result = $statement->execute();
         return $result;
+    }
+    public static function hasPosts($userId) {
+        $conn = Db::getConnection();
+        $statement = $conn->prepare("SELECT COUNT(*) FROM posts WHERE user_id = :userId");
+        $statement->bindValue(":userId", $userId);
+        $statement->execute();
+        $result = $statement->fetch();
+        return $result[0] != 0;
     }
 }

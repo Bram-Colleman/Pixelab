@@ -1,13 +1,9 @@
 <?php
-
 include_once(__DIR__ . "/../classes/Db.php");
-include_once(__DIR__ . "/../classes/User.php");
 include_once(__DIR__ . "/../classes/Comment.php");
 
 if (!empty($_POST)) {
     session_start();
-
-    $user = new User();
 
     $c = new Comment();
     $c->setPostId($_POST['postId']);
