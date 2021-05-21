@@ -13,3 +13,13 @@ function readURL(input) {
 $("#file-input").on("change", function(){
     readURL(this);
 });
+
+
+//filters
+let filters = document.querySelectorAll(".btn-radio");
+for (let i = 0; i < filters.length; i++) {
+    filters[i].addEventListener("click", function () {
+        $("#previewImage").removeClass("_1977 aden brannan brooklyn clarendon earlybird gingham hudson");
+        $("#previewImage").addClass(this.dataset.filter);
+    })
+}

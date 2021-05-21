@@ -20,6 +20,7 @@ try {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -56,8 +57,10 @@ try {
                     echo "u=" . htmlspecialchars($_GET['user']) . "&" . "pid=" . htmlspecialchars($post->getId());
                 } catch (Exception $e) {
                 } ?>" class="postPreview text-white">
+                    <figure class="profilePageFigure <?php echo $post->getFilter();?>">
                     <img class="profilePagePost" src="./uploads/posts/<?php echo $post->getImage(); ?>"
                          alt="post image">
+                    </figure>
                     <div class="centered">
                     <span class="overlay d-none">
                         <i class="fa fa-heart btn-icon font-size-1-rem" aria-hidden="true"></i>

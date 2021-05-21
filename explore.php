@@ -32,6 +32,7 @@ $newComment = new Comment();
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -76,7 +77,9 @@ $newComment = new Comment();
                 <div class="col-12 text-center p-0">
                     <?php if (!empty($post)) {
                         if (!empty($post->getImage())) : ?>
-                            <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
+                    <figure class="<?php echo $post->getFilter();?>">
+                        <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
+                    </figure>
                         <?php else: ?>
                             <img class="max-w-100 min-w-100" src="./images/blank_post.jpg" alt="blank post image">
                         <?php endif;

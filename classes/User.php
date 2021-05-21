@@ -68,10 +68,6 @@ class User
     {
         return $this->imageFileType;
     }
-    public function getUploadOk()
-    {
-        return $this->uploadOk;
-    }
 
     // Setters
     private function setId($id): void
@@ -113,10 +109,6 @@ class User
     private function setImageFileType($imageFileType): void
     {
         $this->imageFileType = $imageFileType;
-    }
-    private function setUploadOk($uploadOk): void
-    {
-        $this->uploadOk = $uploadOk;
     }
 
     // Methods

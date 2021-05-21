@@ -33,6 +33,7 @@ if (isset($_GET['search'])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -53,7 +54,6 @@ if (isset($_GET['search'])) {
                     $user = User::fetchUserByUsername($post->getUser());
                 } catch (Exception $e) {
                 }
-
                 ?>
                 <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
                     <!--    username and avatar:-->
@@ -64,11 +64,9 @@ if (isset($_GET['search'])) {
                             } catch (Exception $e) {
                             } ?>"><?php if (!empty($user)) {
                                     if (!empty($user->getAvatar())) : ?>
-                                        <img src="./uploads/avatars/<?php echo $user->getAvatar(); ?>"
-                                             class="rounded-circle avatarIcon" alt="avatar image"/>
+                                        <img src="./uploads/avatars/<?php echo $user->getAvatar(); ?>" class="rounded-circle avatarIcon" alt="avatar image"/>
                                     <?php else: ?>
-                                        <img src="./images/blank_avatar.png" class="rounded-circle avatarIcon" role='button'
-                                             alt="blank avatar"/>
+                                        <img src="./images/blank_avatar.png" class="rounded-circle avatarIcon" role='button' alt="blank avatar"/>
                                     <?php endif;
                                 } ?></a>
                         </div>
@@ -87,8 +85,9 @@ if (isset($_GET['search'])) {
                         <div class="col-12 text-center p-0">
                             <?php if (!empty($post)) {
                                 if (!empty($post->getImage())) : ?>
-                                    <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage(); ?>"
-                                         alt="post image">
+                                <figure class="<?php echo $post->getFilter();?>">
+                                    <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
+                                </figure>
                                 <?php else: ?>
                                     <img class="max-w-100 min-w-100" src="./images/blank_post.jpg" alt="blank post image">
                                 <?php endif;
@@ -105,7 +104,6 @@ if (isset($_GET['search'])) {
                                 <i class="fa <?php echo in_array($_SESSION['user'], $post->getLikes()) ? "fa-heart" : "fa-heart-o"; ?> btn-icon"
                                    aria-hidden="true"></i>
                             </a>
-                            <!--                    --><?php //var_dump(Post::fetchPostById(44)); ?>
                         </div>
                         <div class="col-11 d-flex justify-content-end">
                             <a href="#" class="border-0 outline-none bg-none text-black btn-report text-end"
