@@ -30,6 +30,7 @@ if(!empty($_POST['btn-delete'])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -65,8 +66,10 @@ if(!empty($_POST['btn-delete'])) {
         <div class="row post-content">
             <!-- Post image: -->
             <div class="col-6 flex-fill px-0">
+                <figure class="<?php echo $post->getFilter();?>">
                 <img id="postImage" src="./uploads/posts/<?php echo $post->getImage(); ?>"
                      class="w-100" alt="blank post">
+                </figure>
             </div>
             <!-- Comments: -->
             <div class="col-5 flex-fill position-relative comment-section">

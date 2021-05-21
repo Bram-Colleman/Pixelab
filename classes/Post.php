@@ -232,7 +232,7 @@ class Post
     public static function fetchPostById($id): Post
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
         $statement->bindValue(":postId", $id);
         $statement->execute();
 
@@ -247,7 +247,7 @@ class Post
             $post['description'],
             $post['timestamp'],
             (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
-            (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']));
+            (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
     }
     public static function uploadPost($description, $filter): void // SHOULD CHECK IF IMAGE FILE SIZE IS LARGER THAN 500000 (500kb)
     {
