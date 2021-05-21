@@ -261,6 +261,8 @@ class User
         $statement->execute();
         // get user connected to email
         $user = $statement->fetch();
+        echo $user . "test";
+
         if(!$user){
             throw new Exception('This user does not exist');
         }
