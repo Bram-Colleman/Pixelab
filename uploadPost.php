@@ -10,7 +10,7 @@ if (!isset($_SESSION)) {
 
 if (!empty($_POST)) {
     try {
-        Post::uploadPost($_POST['description'], $_POST['filter']);
+        Post::uploadPost($_POST['description'], $_POST['filter'], $_POST['long'], $_POST['lat']);
         header("Location: index.php");
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -74,6 +74,13 @@ if (!empty($_POST)) {
                                name="filter" value="hudson" class="d-none">
                         <label for="filter9" class="btn-radio" data-filter="hudson">Hudson</label>
                     </div>
+                    <div class="d-none">
+                        <label for="long"></label>
+                        <input type="text" name="long" id="long" value="">
+
+                        <label for="lat"></label>
+                        <input type="text" name="lat" id="lat" value="">
+                    </div>
                 </label>
                 <input class="d-none" type="file" id="file-input" name="postImage" required>
             </div>
@@ -81,7 +88,7 @@ if (!empty($_POST)) {
                 <label for="inputDescription" class="form-label">Description</label>
                 <textarea class="form-control h-15-rem resize-none" id="inputDescription"
                           name="description" required></textarea>
-                <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                <button type="submit" class="btn btn-primary mt-2" id="btn-post">Submit</button>
             </div>
         </div>
     </form>
@@ -91,6 +98,6 @@ if (!empty($_POST)) {
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
 <script src="js/liveImagePreview.js"></script>
-
+<script src="scripts/getPostLocation.js"></script>
 </body>
 </html>

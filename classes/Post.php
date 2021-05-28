@@ -249,7 +249,7 @@ class Post
             (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']),
             (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
     }
-    public static function uploadPost($description, $filter): void // SHOULD CHECK IF IMAGE FILE SIZE IS LARGER THAN 500000 (500kb)
+    public static function uploadPost($description, $filter, $longitude, $latitude): void // SHOULD CHECK IF IMAGE FILE SIZE IS LARGER THAN 500000 (500kb)
     {
 
         $fileName = $_SESSION["user"] . "_" . date('YmdHis') . ".jpg";
@@ -264,11 +264,13 @@ class Post
             move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
 
             $conn = Db::getConnection();
-            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description, filter) VALUES (:userId, :image, :description, :filter)");
+            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description, filter, longitude, latitude) VALUES (:userId, :image, :description, :filter, :longitude, :latitude)");
             $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
             $statement->bindValue(":image", $fileName);
             $statement->bindValue(":description", $description);
             $statement->bindValue(":filter", $filter);
+            $statement->bindValue(":longitude", $longitude);
+            $statement->bindValue(":latitude", $latitude);
             $statement->execute();
         }
     }
