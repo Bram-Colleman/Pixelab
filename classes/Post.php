@@ -300,14 +300,6 @@ class Post
             $statement->bindValue(":username", $userTag);
             $statement->execute();
             return Post::loadPosts($statement);
-        }else if(substr($searchText, 0, 1)=="#"){
-            $splitString = explode(" ", $searchText);
-            $hashtag = substr($splitString[0], 1);
-            $conn = Db::getConnection();
-            $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
-            $statement->bindValue(":searchText", $hashtag);
-            $statement->execute();
-            return Post::loadPosts($statement);
         }else{
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
@@ -513,7 +505,7 @@ class Post
             $postReportCount = Post::postReportCount($post['id']);
             if($postReportCount<3){
                 array_push($selectedPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
-                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
             }
             
         }
