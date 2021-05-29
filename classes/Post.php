@@ -17,10 +17,11 @@ class Post
 
 
     // Constructor
-    public function __construct($id = null, $user = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array(), $filter = null)
+    public function __construct($id = null, $user = null, $location = null, $image = null, $description = null, $timestamp = null, $likes = array(), $comments = array(), $filter = null)
     {
         $this->setId($id);
         $this->setUser($user);
+        $this->setLocation($location);
         $this->setImage($image);
         $this->setDescription($description);
         $this->setTimestamp($timestamp);
@@ -33,6 +34,10 @@ class Post
     public function getUser()
     {
         return $this->user;
+    }
+    public function getLocation()
+    {
+        return $this->location;
     }
     public function getImage()
     {
@@ -72,6 +77,10 @@ class Post
     {
         $this->user = $user;
     }
+    private function setLocation($location): void
+    {
+        $this->location = $location;
+    }
     private function setImage($image): void
     {
         $this->image = $image;
@@ -109,7 +118,7 @@ class Post
 
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, location FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
         $statement->execute();
         $posts = $statement->fetchAll();
         if (!$posts) {
@@ -120,7 +129,7 @@ class Post
         if ($offset === 0 ){
             foreach ($posts as $post) {   
                 if(Post::postReportCount($post['id'])<3){
-                    array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                    array_push($recentPosts, new Post($post['id'],$post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
                         (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
                 }
             }
@@ -128,7 +137,7 @@ class Post
         } else {
             foreach ($posts as $post) {
                 if(Post::postReportCount($post['id'])<3){
-                    $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                    $newPost = new Post($post['id'],$post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
                         (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
                     array_push($recentPosts, $newPost->toArray());
                 }
@@ -140,7 +149,7 @@ class Post
     public static function fetchRecentPostsFromFollowing($limit, $offset)
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, p.user_id 
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, location, p.user_id 
                                                 FROM posts p 
                                                 JOIN users u ON u.id = p.user_id 
                                                 WHERE p.user_id IN ( 
@@ -161,7 +170,7 @@ class Post
         if ($offset === 0 ){
             foreach ($posts as $post) {
                 if(Post::postReportCount($post['id'])<3){
-                    array_push($recentPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                    array_push($recentPosts, new Post($post['id'],$post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
                         (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
                 }
             }
@@ -169,7 +178,7 @@ class Post
         } else {
             foreach ($posts as $post) {
                 if(Post::postReportCount($post['id'])<3){
-                    $newPost = new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                    $newPost = new Post($post['id'],$post['username'],  $post['location'], $post['image'], $post['description'], $post['timestamp'],
                         (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
                     array_push($recentPosts, $newPost->toArray());
                 }
@@ -211,7 +220,7 @@ class Post
     public static function fetchPostsByUserId($userId): array
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE user_id = :userId ORDER BY timestamp DESC");
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, location FROM posts p JOIN users u ON u.id = p.user_id WHERE user_id = :userId ORDER BY timestamp DESC");
         $statement->bindValue(":userId", $userId);
         $statement->execute();
 
@@ -223,7 +232,7 @@ class Post
 
         foreach ($posts as $post) {
             if(Post::postReportCount($post['id'])<3){
-                array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['image'], $post['description'], $post['timestamp'],
+                array_push($fetchedPosts, new Post($post['id'], $post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
             }
         }
@@ -232,7 +241,7 @@ class Post
     public static function fetchPostById($id): Post
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
+        $statement = $conn->prepare("SELECT p.id, username, location, image, filter, description, timestamp FROM posts p JOIN users u ON u.id = p.user_id WHERE p.id = :postId");
         $statement->bindValue(":postId", $id);
         $statement->execute();
 
@@ -243,6 +252,7 @@ class Post
 
         return new Post($post['id'],
             $post['username'],
+            $post['location'],
             $post['image'],
             $post['description'],
             $post['timestamp'],
