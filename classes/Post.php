@@ -264,15 +264,35 @@ class Post
             move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile);
 
             $conn = Db::getConnection();
-            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description, filter, longitude, latitude) VALUES (:userId, :image, :description, :filter, :longitude, :latitude)");
+            $statement = $conn->prepare("INSERT INTO posts (user_id, image, description, filter, location) VALUES (:userId, :image, :description, :filter, :location)");
             $statement->bindValue(":userId", User::fetchUserByUsername($_SESSION["user"])->getId());
             $statement->bindValue(":image", $fileName);
-            $statement->bindValue(":description", $description);
+            $statement->bindValue(":description",$description);
             $statement->bindValue(":filter", $filter);
-            $statement->bindValue(":longitude", $longitude);
-            $statement->bindValue(":latitude", $latitude);
+            $statement->bindValue(":location", Post::findLocation($longitude, $latitude));
             $statement->execute();
+
+            print_r(Post::findLocation($longitude, $latitude));
         }
+    }
+    private static function findLocation($long, $lat){
+        $key = "0f79d74a19c5eec308a2580a7b53794c";
+        $searchQuery = $lat.','.$long;
+
+        $buildQuery = http_build_query([
+        'access_key' => $key,
+        'query' => $searchQuery
+        ]);
+
+        $ch = curl_init(sprintf('%s?%s', 'http://api.positionstack.com/v1/reverse', $buildQuery));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        return $result['data'][0]['administrative_area'].", ".$result['data'][0]['region'];
     }
     public function like(): bool
     {
