@@ -43,7 +43,7 @@ try {
                         data-isfollowing="<?php echo(in_array($_SESSION['user'],User::fetchUserByUsername($_GET['user'])->getFollowers()))?"1":"0"; ?>"
                         data-follower="<?php echo $_SESSION['user']?>"
                         data-following="<?php echo $_GET['user']?>">
-                    <?php echo(in_array($_SESSION['user'],User::fetchUserByUsername($_GET['user'])->getFollowers())? "Unfollow":"Follow"); ?>
+                    <?php echo htmlspecialchars((in_array($_SESSION['user'],User::fetchUserByUsername($_GET['user'])->getFollowers())? "Unfollow":"Follow")); ?>
                 </button>
             </div>
             <?php endif; ?>
