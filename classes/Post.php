@@ -536,7 +536,7 @@ class Post
         foreach ($posts as $post) {
             $postReportCount = Post::postReportCount($post['id']);
             if($postReportCount<3){
-                array_push($selectedPosts, new Post($post['id'],$post['username'], $post['image'], $post['description'], $post['timestamp'],
+                array_push($selectedPosts, new Post($post['id'],$post['username'],$post['location'], $post['image'], $post['description'], $post['timestamp'],
                 (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
             }
             
