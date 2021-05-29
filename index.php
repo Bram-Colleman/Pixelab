@@ -14,7 +14,7 @@ if (isset($_GET['search'])) {
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
-} else {
+}else{
     try {
         $posts = Post::fetchRecentPostsFromFollowing(20, 0);
     } catch (Exception $e) {
@@ -75,7 +75,7 @@ if (isset($_GET['search'])) {
                                 echo htmlspecialchars($post->getUser());
                             } catch (Exception $e) {
                             } ?>"><?php echo htmlspecialchars($post->getUser()); ?></a>
-                            <a href="#" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
+                            <a href="?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
                         </div>
                         <div class="col-6 d-flex flex-fill align-self-center justify-content-end timestamp-post">
                             <p class="mb-0"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></p>

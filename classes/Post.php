@@ -332,6 +332,14 @@ class Post
             $statement->bindValue(":username", $userTag);
             $statement->execute();
             return Post::loadPosts($statement);
+        }else if(substr($searchText, 0, 4)=="loc:"){
+            $splitString = explode("loc:", $searchText);
+            $location = $splitString[1];
+            $conn = Db::getConnection();
+            $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE p.location = :location ORDER BY timestamp DESC");
+            $statement->bindValue(":location", $location);
+            $statement->execute();
+            return Post::loadPosts($statement);
         }else{
             $conn = Db::getConnection();
             $statement = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON u.id = p.user_id WHERE description LIKE CONCAT('%', :searchText, '%') ORDER BY timestamp DESC");
