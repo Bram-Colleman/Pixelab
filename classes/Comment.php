@@ -3,6 +3,8 @@
 include_once(__DIR__ . "/Db.php");
 include_once(__DIR__ . "/User.php");
 
+ini_set("display_errors", false);
+
 class Comment
 {
     private $user_id;

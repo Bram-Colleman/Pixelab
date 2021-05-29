@@ -2,6 +2,8 @@
 
 include_once(__DIR__ . "/Db.php");
 
+ini_set("display_errors", false);
+
 class User
 {
     private $id;

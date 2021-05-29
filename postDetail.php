@@ -56,7 +56,7 @@ if(!empty($_POST['btn-delete'])) {
                 <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
                     echo htmlspecialchars($_GET['u']);
                 } catch (Exception $e) {
-                } ?>"><?php echo $_GET['u'] ?></a>
+                } ?>"><?php /*echo $_GET['u'] */?></a>
                 <a href="explore.php?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
             </div>
             <div class="col-6 d-flex flex-fill align-self-center justify-content-end timestamp-post">
@@ -75,7 +75,7 @@ if(!empty($_POST['btn-delete'])) {
             <!-- Comments: -->
             <div class="col-5 flex-fill position-relative comment-section">
                 <div class="pb-2 border-bottom-gray">
-                    <span class="fw-bold"><?php echo htmlspecialchars($_GET['u']); ?></span><span> <?php echo htmlspecialchars($post->getDescription());?></span>
+                    <span class="fw-bold"><?php echo htmlspecialchars($_GET['u']); ?></span><span> <?php echo Post::interactiveDescription($post->getDescription()) ?></span>
                 </div>
                 <div id="setHeight" class="overflow-y-scroll overflow-x-disabled commentList">
                     <?php if (!empty($post::fetchComments($_GET['pid']))): ?>
