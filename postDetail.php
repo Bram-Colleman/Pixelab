@@ -63,7 +63,7 @@ if(!empty($_POST['btn-delete'])) {
                 <a class="text-decoration-none text-black fw-bold" href="./profilePage.php?user=<?php try {
                     echo htmlspecialchars($_GET['u']);
                 } catch (Exception $e) {
-                } ?>"><?php /*echo $_GET['u'] */?></a>
+                } ?>"><?php echo htmlspecialchars($_GET['u']) ?></a>
                 <a href="explore.php?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
             </div>
             <div class="col-6 d-flex flex-fill align-self-center justify-content-end timestamp-post">
