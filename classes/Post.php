@@ -471,7 +471,7 @@ class Post
             $reportCount = Post::postReportCount($post['id']);
             if((int)$reportCount>2){
                 array_push($reportedPosts, new Post($post['id'],$post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
-                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id'])));
+                (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
             }
         }
         return $reportedPosts;

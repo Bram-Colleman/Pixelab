@@ -9,7 +9,7 @@ include_once(__DIR__ . "/includes/checkSession.php");
 
 if (isset($_GET['search'])) {
     try {
-        $posts = Post::search($_GET['search']);
+        $posts = Post::search(urlencode($_GET['search']));
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -34,6 +34,7 @@ if(empty($_POST)){
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/style.css">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
     <title>Pixelab</title>
 </head>
 <body>
@@ -76,9 +77,11 @@ if(empty($_POST)){
             <!--    post:-->
             <div class="row">
                 <div class="col-12 text-center p-0">
-                    <?php if (!empty($post)) {
+                    <?php if (!empty($post)) {  
                         if (!empty($post->getImage())) : ?>
-                            <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
+                            <figure class="<?php echo $post->getFilter();?>">
+                                    <img class="max-w-100 min-w-100" src="./uploads/posts/<?php echo $post->getImage();?>" alt="post image">
+                            </figure>
                         <?php else: ?>
                             <img class="max-w-100 min-w-100" src="./images/blank_post.jpg" alt="blank post image">
                         <?php endif;
