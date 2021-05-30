@@ -50,7 +50,7 @@ $newComment = new Comment();
     ?>
         <div class="container-fluid shadow w-35 pt-1 pb-1 mt-5">
             <!--    username and avatar:-->
-            <div class="row h-5 mb-1">
+            <div class="row h-5">
                 <div class="col-auto flex-fill align-self-center text-center p-0">
                     <a href="./profilePage.php?user=<?php try {
                         echo htmlspecialchars($post->getUser());
@@ -68,10 +68,14 @@ $newComment = new Comment();
                         echo htmlspecialchars($post->getUser());
                     } catch (Exception $e) {
                     } ?>"><?php echo htmlspecialchars($post->getUser()); ?></a>
-                    <a href="?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
                 </div>
                 <div class="col-6 d-flex flex-fill align-self-center justify-content-end timestamp-post">
                     <p class="mb-0"><?php echo "Posted " . $post->postedTimeAgo($post->getId()) . " ago"; ?></p>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-12">
+                    <a href="?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
                 </div>
             </div>
             <!--    post:-->

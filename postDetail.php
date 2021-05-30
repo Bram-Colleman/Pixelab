@@ -46,7 +46,7 @@ if(!empty($_POST['btn-delete'])) {
 <div>
     <div class="container-fluid shadow w-65 mt-5 mb-5 post-card">
         <!-- Username and avatar: -->
-        <div class="row h-5 mb-1">
+        <div class="row h-5">
             <div class="col-auto flex-fill align-self-center text-center p-0">
                 <a href="./profilePage.php?user=<?php try {
                     echo htmlspecialchars($_GET['u']);
@@ -65,10 +65,14 @@ if(!empty($_POST['btn-delete'])) {
                     echo htmlspecialchars($_GET['u']);
                 } catch (Exception $e) {
                 } ?>"><?php echo htmlspecialchars($_GET['u']) ?></a>
-                <a href="explore.php?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
             </div>
             <div class="col-6 d-flex flex-fill align-self-center justify-content-end timestamp-post">
                 <p class="mb-0"><?php echo "Posted " . $post->postedTimeAgo($_GET['pid']) . " ago"; ?></p>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <a href="?search=loc:<?php echo urlencode(htmlspecialchars($post->getLocation())); ?>" class="text-decoration-none text-black"><?php echo htmlspecialchars($post->getLocation()); ?></a>
             </div>
         </div>
         <!-- Post: -->
