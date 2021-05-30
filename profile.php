@@ -5,7 +5,7 @@ include_once(__DIR__ . "/includes/checkSession.php");
 
 if (isset($_GET['search'])) {
     try {
-        $posts = Post::search(urlencode($_GET['search']));
+        $posts = Post::search($_GET['search']);
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
