@@ -162,10 +162,10 @@ class User
         }
         return $followers;
     }
-    public function fetchFollowing() {
+    public static function fetchFollowingUsernames($userId) {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT username FROM followers f JOIN users u ON u.id = follower_id WHERE follower_id = :followerId");
-        $statement->bindValue(":followerId", $this->getId());
+        $statement = $conn->prepare("SELECT username FROM followers f JOIN users u ON u.id = following_id WHERE follower_id = :followerId");
+        $statement->bindValue(":followerId", $userId);
         $statement->execute();
         $fetchedFollowings = $statement->fetchAll();
         $followings = array();

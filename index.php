@@ -166,7 +166,7 @@ try {
         } ?>
     <?php endif; ?>
 </div>
-<?php if(sizeof($sessionUser->fetchFollowing()) > 0 || $sessionUser::hasPosts($_SESSION['userId'])) : ?>
+<?php if(sizeof(User::fetchFollowingUsernames($_SESSION['userId'])) > 0 || $sessionUser::hasPosts($_SESSION['userId'])) : ?>
     <div class="d-flex justify-content-center pt-5 pb-5">
         <button class="btn btn-primary m-4" data-currentpostamount="20" id="btn-loadmore">Load more</button>
     </div>

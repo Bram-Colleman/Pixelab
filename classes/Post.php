@@ -120,7 +120,8 @@ class Post
 
     {
         $conn = Db::getConnection();
-        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, location FROM posts p JOIN users u ON u.id = p.user_id ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
+        $statement = $conn->prepare("SELECT p.id, username, image, filter, description, timestamp, location FROM posts p JOIN users u ON u.id = p.user_id WHERE p.user_id != :sessionUserId ORDER BY timestamp DESC LIMIT $limit OFFSET $offset");
+        $statement->bindValue(":sessionUserId", $_SESSION['userId']);
         $statement->execute();
         $posts = $statement->fetchAll();
         if (!$posts) {
@@ -130,7 +131,7 @@ class Post
 
         if ($offset === 0 ){
             foreach ($posts as $post) {   
-                if(Post::postReportCount($post['id'])<3){
+                if(Post::postReportCount($post['id'])<3 && !in_array($post['username'], User::fetchFollowingUsernames($_SESSION['userId']))){
                     array_push($recentPosts, new Post($post['id'],$post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
                         (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']));
                 }
@@ -138,7 +139,7 @@ class Post
             return $recentPosts;
         } else {
             foreach ($posts as $post) {
-                if(Post::postReportCount($post['id'])<3){
+                if(Post::postReportCount($post['id'])<3 && !in_array($post['username'], User::fetchFollowingUsernames($_SESSION['userId']))){
                     $newPost = new Post($post['id'],$post['username'], $post['location'], $post['image'], $post['description'], $post['timestamp'],
                         (empty(Post::fetchLikes($post['id']))) ? array() : Post::fetchLikes($post['id']), (empty(Post::fetchComments($post['id']))) ? array() : Post::fetchComments($post['id']), $post['filter']);
                     array_push($recentPosts, $newPost->toArray());
@@ -165,7 +166,7 @@ class Post
         $statement->execute();
         $posts = $statement->fetchAll();
         if (!$posts) {
-            throw new Exception('You are currently not following anyone.');
+            throw new Exception('There are no more posts.');
         }
         $recentPosts = array();
 
