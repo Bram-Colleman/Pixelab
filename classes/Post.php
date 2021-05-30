@@ -326,6 +326,9 @@ class Post
     }
     public static function search($searchText): array
     {
+        if(!strpos($_SERVER['REQUEST_URI'], "explore")){
+            header("Location: explore.php?search=".$searchText);
+        }
         if(substr($searchText, 0, 1)=="@"){
             $splitString = explode(" ", $searchText);
             $userTag = substr($splitString[0], 1);

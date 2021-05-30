@@ -61,7 +61,7 @@
                         <li><a class="dropdown-item" href="./profilePage.php?user=<?php echo $_SESSION['user']; ?>">Profile</a></li>
                         <li><a class="dropdown-item" href="./profile.php">Settings</a></li>
                         <?php if(isset($_SESSION["userRole"])): ?>
-                        <?php if($_SESSION["userRole"] == "admin"): ?>
+                        <?php if($_SESSION["userRole"] === "admin"): ?>
                             <li><a class="dropdown-item" href="./reportedFeed.php" id="btn-reportedPosts">Reported posts</a></li>
                         <?php endif;?>
                         <?php endif;?>

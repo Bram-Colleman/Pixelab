@@ -4,10 +4,18 @@ include_once(__DIR__."/classes/Post.php");
 include_once(__DIR__."/classes/User.php");
 include_once(__DIR__."/includes/checkSession.php");
 
-try {
-    $user = User::fetchUserByUsername($_GET["user"]);
-} catch (Exception $e) {
-    $error = $e->getMessage();
+if (isset($_GET['search'])) {
+    try {
+        $posts = Post::search($_GET['search']);
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+}else{
+    try {
+        $user = User::fetchUserByUsername($_GET["user"]);
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
 }
 ?>
 

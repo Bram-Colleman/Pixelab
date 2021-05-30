@@ -8,6 +8,14 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+if (isset($_GET['search'])) {
+    try {
+        $posts = Post::search($_GET['search']);
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+}
+
 if (!empty($_POST)) {
     try {
         Post::uploadPost($_POST['description'], $_POST['filter'], $_POST['long'], $_POST['lat']);

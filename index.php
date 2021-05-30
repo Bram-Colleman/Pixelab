@@ -14,13 +14,13 @@ if (isset($_GET['search'])) {
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
-}else{
-    try {
-        $posts = Post::fetchRecentPostsFromFollowing(20, 0);
-    } catch (Exception $e) {
-        $error = $e->getMessage();
-    }
 }
+try {
+    $posts = Post::fetchRecentPostsFromFollowing(20, 0);
+} catch (Exception $e) {
+    $error = $e->getMessage();
+}
+
 
 ?>
 
