@@ -21,7 +21,8 @@ if (!empty($_POST)) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
-        <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
     <title>Login</title>
 </head>
 <body>

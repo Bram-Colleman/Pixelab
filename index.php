@@ -34,6 +34,7 @@ try {
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
     <title>Pixelab</title>
 </head>
 <body>
