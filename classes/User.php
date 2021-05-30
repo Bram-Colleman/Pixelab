@@ -82,7 +82,11 @@ class User
     }
     private function setEmail($email): void
     {
-        $this->email = $email;
+        if(strpos($email, "@")) {
+            $this->email = $email;
+        } else {
+            throw new Exception("Email must contain @");
+        }
     }
     private function setBio($bio): void
     {
