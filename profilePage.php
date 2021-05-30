@@ -42,9 +42,12 @@ if (isset($_GET['search'])) {
                     <img src="./images/blank_avatar.png" class="rounded-circle max-w-10-vw  avatar-img" alt="blank avatar"/>
                 <?php endif; ?>
             </div>
-            <div class="col-5 align-self-center">
+            <div class="col-3 align-self-center">
                 <h1 class="d-inline"><?php echo htmlspecialchars($user->getUsername());?></h1>
                 <p id="followerCount"><?php echo sizeof($user->fetchFollowers()); ?> Followers</p>
+            </div>
+            <div class="col-3 align-self-center">
+                <p><?php echo htmlspecialchars($user->getBio());?></p>
             </div>
             <?php if ($_GET['user'] != $_SESSION['user']): ?>
             <div class="col-3 align-self-center text-center">
